@@ -1,0 +1,58 @@
+# vcs / docs / sprints
+.git
+**/*.md
+sprints/
+
+# other services / training (NOT runtime)
+vehicle_classification/
+live_inference/
+training/
+vehicle_class1/
+
+# plate_recognition: keep only runtime modules + models/{best_matricule,tounes_word_detector}.pt
+plate_recognition/cls_dataset/
+plate_recognition/synthetic_data/
+plate_recognition/tounes_word_dataset/
+plate_recognition/runs/
+plate_recognition/runs_cls/
+plate_recognition/runs_word/
+plate_recognition/civilian_crops/
+plate_recognition/test_outputs/
+plate_recognition/Tunisian license plate/
+plate_recognition/tunisian_plate/
+plate_recognition/synthetic_generator.py
+plate_recognition/cluster_classify.py
+plate_recognition/civilian_oneclass.py
+plate_recognition/word_classify.py
+plate_recognition/extract_plate_crops.py
+plate_recognition/train_classifier.py
+plate_recognition/train_word_detector.py
+plate_recognition/test_plate_detection.py
+plate_recognition/*.jpg
+plate_recognition/yolo26n.pt
+plate_recognition/yolo26n-cls.pt
+plate_recognition/models/plate_category_cls.pt
+
+# common/models: bake only .pt; drop .engine (GPU-specific, volume-persisted) and .onnx
+common/models/*.engine
+common/models/*.onnx
+
+# frontend (separate; team owns the real UI)
+live_feed/frontend/
+
+# built TRT engine — GPU-specific, built at startup into a volume (never bake)
+**/*.engine
+
+# Sprint H training datasets + runtime state (provided via volumes, not baked)
+datasets/
+live_feed/logs/
+live_feed/crops/
+live_feed/review_agent/state/
+live_feed/review_agent/out/
+live_feed/review_agent/dataset/
+
+# python / common results
+**/__pycache__/
+**/*.pyc
+common/results/
+.venv*/

@@ -1,0 +1,63 @@
+services:
+  live-feed:
+    build: .
+    image: vehicle-livefeed:latest
+    env_file: .env
+    network_mode: host          # reach VMS (host) + RTSP cameras (LAN 10.0.0.78:554)
+    environment:
+      - AUTO_START=1
+      - LF_PORT=5034            # host networking → bind the real host port
+      # engine + dataset live on volumes (see below); point the code at them:
+      - VEHICLE_ENGINE_PATH=/app/engine_cache/vehicle_yolo26.engine
+      - DATASET_ROOT=/app/datasets
+    volumes:
+      - ./live_feed/rois:/app/live_feed/rois               # calibration (bind; persists + seeds ch*.json)
+      - lf_engine:/app/engine_cache                        # built TRT engine — persists across restarts
+      - lf_datasets:/app/datasets                          # Sprint H training data (GROWS — big disk)
+      - lf_logs:/app/live_feed/logs
+      - lf_crops:/app/live_feed/crops                      # review-agent crops
+      - lf_review_state:/app/live_feed/review_agent/state
+      - lf_review_out:/app/live_feed/review_agent/out
+      - lf_review_dataset:/app/live_feed/review_agent/dataset
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  # ── Frontend — static Vite bundle served by nginx ───────────────────────────
+  # VITE_* vars are baked at build time (import.meta.env). Rebuild the image
+  # whenever VITE_CAMERAS or the backend URL changes:
+  #   docker compose build frontend
+  frontend:
+    build:
+      context: ./live_feed/frontend
+      dockerfile: Dockerfile
+      args:
+        # Browser talks directly to the backend on the host — always localhost:5034.
+        VITE_API_URL: http://localhost:5034
+        # Must match the CHANNELS + RTSP_CAMERAS ids set in .env for the backend.
+        # Example: "4,1,hik1" — comma-separated, order = left-to-right on the dashboard.
+        VITE_CAMERAS: ${VITE_CAMERAS:-4,1,hik1}
+    image: vehicle-livefeed-frontend:latest
+    network_mode: host          # serves on host port 5173; same network as the backend
+    environment:
+      - NGINX_PORT=5173
+    # Override nginx listen port to match the dev convention (5173).
+    # A tiny entrypoint sed replaces the default port 80 before nginx starts.
+    command: >
+      sh -c "sed -i 's/listen 80/listen 5173/g' /etc/nginx/conf.d/default.conf
+             && nginx -g 'daemon off;'"
+    restart: unless-stopped
+
+volumes:
+  lf_engine: {}
+  lf_datasets: {}
+  lf_logs: {}
+  lf_crops: {}
+  lf_review_state: {}
+  lf_review_out: {}
+  lf_review_dataset: {}

@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Frontend dependencies/build
+node_modules/
+dist/
+build/
+.vite/
+
+# Runtime outputs
+live_feed/logs/
+live_feed/crops/
+live_feed/output/
+live_feed/outputs/
+live_feed/review_agent/out/
+
+# Generated local colour/video evaluation outputs
+/hsv_*.mp4
+/hsv_*_tracks.jsonl
+/hsv_*_comparison.csv
+/colour_verifications.jsonl
+/test_result*.mp4
+/output*.mp4
+
+# Temporary training outputs
+training/runs/
+runs/
+artifacts/
+checkpoints/
+
+# Temporary files
+*.log
+*.tmp

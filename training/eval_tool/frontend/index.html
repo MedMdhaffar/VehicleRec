@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vehicle Eval Tool</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: monospace; background: #111; color: #e0e0e0; padding: 16px; }
+    h1 { font-size: 1.2rem; margin-bottom: 12px; color: #7ecfff; }
+    h2 { font-size: 1rem; margin-bottom: 8px; color: #aaa; }
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ---- Setup ---- */
+    .field { margin-bottom: 10px; }
+    .field label { display: block; font-size: 0.8rem; color: #aaa; margin-bottom: 3px; }
+    .field input { width: 100%; max-width: 600px; padding: 6px 8px; background: #222;
+                   border: 1px solid #444; color: #e0e0e0; border-radius: 3px; }
+    button.primary { background: #2a6edb; color: #fff; border: none; padding: 8px 20px;
+                     border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+    button.primary:hover { background: #3a7eeb; }
+    button.secondary { background: #333; color: #ccc; border: 1px solid #555; padding: 6px 14px;
+                       border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+    button.secondary:hover { background: #444; }
+
+    /* ---- Review ---- */
+    #review-layout { display: flex; gap: 16px; flex-wrap: wrap; }
+    #frame-panel { flex: 0 0 auto; }
+    #frame-panel img { max-width: 720px; width: 100%; border: 1px solid #333; }
+    #frame-info { font-size: 0.8rem; color: #888; margin-top: 4px; }
+    #side-panel { flex: 1; min-width: 280px; }
+
+    .detection-row { background: #1a1a1a; border: 1px solid #333; padding: 8px;
+                     margin-bottom: 6px; border-radius: 4px; }
+    .det-header { font-size: 0.8rem; color: #aaa; margin-bottom: 4px; }
+    .det-header span.predicted { color: #7ecfff; font-weight: bold; }
+    .det-header span.conf { color: #888; }
+    select.gt-select { width: 100%; background: #222; color: #e0e0e0; border: 1px solid #444;
+                       padding: 4px; border-radius: 3px; }
+    select.gt-select.false-positive { border-color: #c44; }
+    select.gt-select.correct { border-color: #3c3; }
+    select.gt-select.wrong { border-color: #fa0; }
+
+    #missed-section { margin-top: 12px; }
+    #missed-section h3 { font-size: 0.85rem; color: #aaa; margin-bottom: 6px; }
+    .missed-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+                  font-size: 0.82rem; }
+    .missed-row label { width: 90px; color: #bbb; }
+    .missed-row button { padding: 1px 8px; background: #333; border: 1px solid #555;
+                         color: #ccc; border-radius: 3px; cursor: pointer; font-size: 1rem; }
+    .missed-count { min-width: 24px; text-align: center; }
+    .missed-row label.van-label { color: #ffca6a; font-weight: bold; }
+
+    #nav-bar { margin-top: 14px; display: flex; gap: 10px; align-items: center; }
+    #nav-bar span { font-size: 0.85rem; color: #888; }
+
+    /* ---- Metrics ---- */
+    table { border-collapse: collapse; width: 100%; max-width: 700px; }
+    th, td { border: 1px solid #333; padding: 6px 10px; text-align: left; font-size: 0.82rem; }
+    th { background: #1e1e1e; color: #aaa; }
+    tr.van-row { background: #1a1500; }
+    td.highlight { color: #ffca6a; font-weight: bold; }
+    .status { color: #888; font-size: 0.82rem; margin-top: 6px; }
+    #download-btn { margin-top: 12px; }
+  </style>
+</head>
+<body>
+
+<h1>Vehicle Eval Tool</h1>
+
+<!-- ================================================================ SETUP -->
+<div id="screen-setup" class="screen active">
+  <h2>Setup</h2>
+  <div class="field">
+    <label>Video path (absolute)</label>
+    <input id="video-path" type="text" placeholder="/home/malek/footage/test.mp4" />
+  </div>
+  <div class="field">
+    <label>Model path</label>
+    <input id="model-path" type="text" value="common/models/vehicle_yolo26.pt" />
+  </div>
+  <div class="field">
+    <label>Sample rate (frames/sec)</label>
+    <input id="sample-rate" type="number" value="1" min="0.1" step="0.1" />
+  </div>
+  <div class="field">
+    <label>Confidence threshold</label>
+    <input id="conf" type="number" value="0.35" min="0.05" max="1" step="0.05" />
+  </div>
+  <button class="primary" onclick="startSession()">Start session</button>
+  <div id="setup-status" class="status"></div>
+</div>
+
+<!-- =============================================================== REVIEW -->
+<div id="screen-review" class="screen">
+  <h2>Frame review — <span id="review-title"></span></h2>
+  <div id="review-layout">
+    <div id="frame-panel">
+      <img id="frame-img" src="" alt="frame" />
+      <div id="frame-info"></div>
+    </div>
+    <div id="side-panel">
+      <h3 style="font-size:0.85rem;color:#aaa;margin-bottom:6px;">Detections</h3>
+      <div id="det-list"></div>
+
+      <div id="missed-section">
+        <h3>Missed vehicles (not detected)</h3>
+        <div id="missed-rows"></div>
+      </div>
+
+      <div id="nav-bar">
+        <button class="secondary" onclick="prevFrame()">◀ Prev</button>
+        <button class="secondary" onclick="nextFrame()">Next ▶</button>
+        <span id="frame-counter"></span>
+        <button class="primary" onclick="finalize()" style="margin-left:auto;">Finalize &amp; Score</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =============================================================== METRICS -->
+<div id="screen-metrics" class="screen">
+  <h2>Metrics — <span id="metrics-session-id"></span></h2>
+  <table id="metrics-table">
+    <thead>
+      <tr><th>Class</th><th>TP</th><th>FP</th><th>FN</th><th>Precision</th><th>Recall</th><th>F1</th></tr>
+    </thead>
+    <tbody id="metrics-body"></tbody>
+  </table>
+  <div id="confusion-section" style="margin-top:20px;">
+    <h3 style="font-size:0.85rem;color:#aaa;margin-bottom:6px;">Confusion (predicted → actual count)</h3>
+    <pre id="confusion-pre" style="background:#1a1a1a;padding:10px;font-size:0.78rem;border:1px solid #333;border-radius:4px;"></pre>
+  </div>
+  <button class="secondary" id="download-btn" onclick="downloadTestSet()">Download test_set JSON</button>
+  <button class="secondary" style="margin-top:8px;" onclick="newSession()">New session</button>
+</div>
+
+<script>
+// -------------------------------------------------------------------------
+const API = "http://127.0.0.1:5021";
+const CLASS_NAMES = ["bus","camper","car","cyclist","motorcycle","person","tractor","truck","van","false_positive"];
+
+let sessionId = null;
+let totalFrames = 0;
+let currentFrame = 0;
+// {frameIdx: {det_id: gt_string}}
+let labels = {};
+// {frameIdx: {class_name: count}}
+let missedCounts = {};
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+// ---- Setup ----------------------------------------------------------------
+async function startSession() {
+  const status = document.getElementById("setup-status");
+  status.textContent = "Starting session…";
+  const body = {
+    video_path:  document.getElementById("video-path").value.trim(),
+    model_path:  document.getElementById("model-path").value.trim(),
+    sample_rate: parseFloat(document.getElementById("sample-rate").value),
+    conf:        parseFloat(document.getElementById("conf").value),
+  };
+  try {
+    const resp = await fetch(`${API}/session/start`, {
+      method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify(body)
+    });
+    if (!resp.ok) { const e = await resp.json(); throw new Error(e.detail || resp.statusText); }
+    const data = await resp.json();
+    sessionId   = data.session_id;
+    totalFrames = data.frame_count;
+    status.textContent = `Session ${sessionId} — ${totalFrames} sampled frames.`;
+    currentFrame = 0;
+    labels = {}; missedCounts = {};
+    buildMissedRows();
+    showScreen("screen-review");
+    loadFrame(0);
+  } catch (e) {
+    status.textContent = `ERROR: ${e.message}`;
+  }
+}
+
+// ---- Review ---------------------------------------------------------------
+function buildMissedRows() {
+  const container = document.getElementById("missed-rows");
+  container.innerHTML = "";
+  CLASS_NAMES.slice(0,-1).forEach(cls => {
+    const row = document.createElement("div");
+    row.className = "missed-row";
+    const isVan = cls === "van";
+    row.innerHTML = `
+      <label class="${isVan ? 'van-label' : ''}">${cls}</label>
+      <button onclick="changeMissed('${cls}',-1)">−</button>
+      <span class="missed-count" id="missed-${cls}">0</span>
+      <button onclick="changeMissed('${cls}',+1)">+</button>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function changeMissed(cls, delta) {
+  if (!missedCounts[currentFrame]) missedCounts[currentFrame] = {};
+  const cur = missedCounts[currentFrame][cls] || 0;
+  const next = Math.max(0, cur + delta);
+  missedCounts[currentFrame][cls] = next;
+  document.getElementById(`missed-${cls}`).textContent = next;
+}
+
+function updateMissedDisplay() {
+  CLASS_NAMES.slice(0,-1).forEach(cls => {
+    const el = document.getElementById(`missed-${cls}`);
+    if (el) el.textContent = (missedCounts[currentFrame] || {})[cls] || 0;
+  });
+}
+
+async function loadFrame(n) {
+  await saveCurrentLabels();
+  currentFrame = n;
+  document.getElementById("frame-counter").textContent = `Frame ${n+1} / ${totalFrames}`;
+  document.getElementById("review-title").textContent = `Session ${sessionId}`;
+
+  const resp = await fetch(`${API}/session/${sessionId}/frame/${n}`);
+  if (!resp.ok) { alert("Frame load error"); return; }
+  const data = await resp.json();
+
+  document.getElementById("frame-img").src = `data:image/jpeg;base64,${data.frame_b64}`;
+  document.getElementById("frame-info").textContent =
+    `Video frame index: ${data.frame_index}  |  Detections: ${data.detections.length}`;
+
+  renderDetections(data.detections);
+  updateMissedDisplay();
+}
+
+function renderDetections(detections) {
+  const container = document.getElementById("det-list");
+  container.innerHTML = "";
+  if (!detections.length) {
+    container.innerHTML = '<div style="color:#666;font-size:0.8rem;">No detections in this frame.</div>';
+    return;
+  }
+  const frameLabels = labels[currentFrame] || {};
+  detections.forEach(det => {
+    const currentGt = frameLabels[det.det_id] ?? det.predicted;
+    const div = document.createElement("div");
+    div.className = "detection-row";
+    div.innerHTML = `
+      <div class="det-header">
+        #${det.det_id} — predicted: <span class="predicted">${det.predicted}</span>
+        <span class="conf">(${(det.confidence*100).toFixed(1)}%)</span>
+      </div>
+      <select class="gt-select" id="gt-${det.det_id}" onchange="updateSelectStyle(this,'${det.predicted}')">
+        ${CLASS_NAMES.map(c => `<option value="${c}" ${c===currentGt?'selected':''}>${c}</option>`).join('')}
+      </select>
+    `;
+    container.appendChild(div);
+    const sel = div.querySelector(`#gt-${det.det_id}`);
+    updateSelectStyle(sel, det.predicted);
+  });
+}
+
+function updateSelectStyle(sel, predicted) {
+  sel.className = "gt-select";
+  const v = sel.value;
+  if (v === "false_positive") sel.classList.add("false-positive");
+  else if (v === predicted)   sel.classList.add("correct");
+  else                        sel.classList.add("wrong");
+}
+
+async function saveCurrentLabels() {
+  if (sessionId === null) return;
+  const frameLabels = labels[currentFrame] || {};
+  const labelEntries = [];
+  document.querySelectorAll("[id^='gt-']").forEach(sel => {
+    const det_id = parseInt(sel.id.replace("gt-",""));
+    frameLabels[det_id] = sel.value;
+    labelEntries.push({det_id, ground_truth: sel.value});
+  });
+  labels[currentFrame] = frameLabels;
+  if (!labelEntries.length) return;
+  await fetch(`${API}/session/${sessionId}/frame/${currentFrame}/label`, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({
+      labels: labelEntries,
+      missed_counts: missedCounts[currentFrame] || {}
+    })
+  });
+}
+
+async function nextFrame() {
+  if (currentFrame < totalFrames - 1) loadFrame(currentFrame + 1);
+}
+async function prevFrame() {
+  if (currentFrame > 0) loadFrame(currentFrame - 1);
+}
+
+// ---- Finalize -------------------------------------------------------------
+let finalizeData = null;
+
+async function finalize() {
+  await saveCurrentLabels();
+  const resp = await fetch(`${API}/session/${sessionId}/finalize`, {method:"POST"});
+  if (!resp.ok) { alert("Finalize error"); return; }
+  finalizeData = await resp.json();
+  renderMetrics(finalizeData.metrics);
+  document.getElementById("metrics-session-id").textContent = sessionId;
+  showScreen("screen-metrics");
+}
+
+function renderMetrics(metrics) {
+  const tbody = document.getElementById("metrics-body");
+  tbody.innerHTML = "";
+  metrics.per_class.forEach(m => {
+    const isVan = m.class === "van";
+    const tr = document.createElement("tr");
+    if (isVan) tr.className = "van-row";
+    tr.innerHTML = `
+      <td class="${isVan?'highlight':''}">${m.class}${isVan?' ← gap':''}</td>
+      <td>${m.TP}</td><td>${m.FP}</td><td>${m.FN}</td>
+      <td>${(m.precision*100).toFixed(1)}%</td>
+      <td>${(m.recall*100).toFixed(1)}%</td>
+      <td>${(m.F1*100).toFixed(1)}%</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  const pre = document.getElementById("confusion-pre");
+  pre.textContent = JSON.stringify(metrics.confusion, null, 2);
+}
+
+function downloadTestSet() {
+  if (!finalizeData) return;
+  const blob = new Blob([JSON.stringify(finalizeData, null, 2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `eval_${sessionId}.json`;
+  a.click();
+}
+
+function newSession() {
+  sessionId = null; totalFrames = 0; currentFrame = 0;
+  labels = {}; missedCounts = {};
+  showScreen("screen-setup");
+}
+</script>
+</body>
+</html>

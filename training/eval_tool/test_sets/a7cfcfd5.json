@@ -1,0 +1,152 @@
+{
+  "session_id": "a7cfcfd5",
+  "video_path": "/home/malek/workflow/vehicle_services/plate_recognition/image2.jpg",
+  "model_path": "/home/malek/workflow/vehicle_services/training/runs/streetdet_v1/weights/best.pt",
+  "sample_rate": 1.0,
+  "conf": 0.35,
+  "frames": [
+    {
+      "frame_index": 0,
+      "missed_counts": {},
+      "detections": [
+        {
+          "det_id": 0,
+          "bbox": [
+            1872,
+            879,
+            2719,
+            1620
+          ],
+          "predicted": "car",
+          "confidence": 0.9542,
+          "ground_truth": "car"
+        },
+        {
+          "det_id": 1,
+          "bbox": [
+            2383,
+            384,
+            2715,
+            662
+          ],
+          "predicted": "car",
+          "confidence": 0.9482,
+          "ground_truth": "car"
+        },
+        {
+          "det_id": 2,
+          "bbox": [
+            1955,
+            289,
+            2331,
+            552
+          ],
+          "predicted": "car",
+          "confidence": 0.9356,
+          "ground_truth": "car"
+        },
+        {
+          "det_id": 3,
+          "bbox": [
+            2012,
+            86,
+            2184,
+            198
+          ],
+          "predicted": "car",
+          "confidence": 0.9085,
+          "ground_truth": "car"
+        },
+        {
+          "det_id": 4,
+          "bbox": [
+            1492,
+            170,
+            1907,
+            383
+          ],
+          "predicted": "car",
+          "confidence": 0.8988,
+          "ground_truth": "car"
+        },
+        {
+          "det_id": 5,
+          "bbox": [
+            2623,
+            226,
+            2812,
+            365
+          ],
+          "predicted": "car",
+          "confidence": 0.7555,
+          "ground_truth": "car"
+        },
+        {
+          "det_id": 6,
+          "bbox": [
+            1129,
+            308,
+            1831,
+            791
+          ],
+          "predicted": "car",
+          "confidence": 0.5367,
+          "ground_truth": "truck"
+        },
+        {
+          "det_id": 7,
+          "bbox": [
+            929,
+            189,
+            1215,
+            499
+          ],
+          "predicted": "car",
+          "confidence": 0.5046,
+          "ground_truth": "van"
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "per_class": [
+      {
+        "class": "car",
+        "TP": 6,
+        "FP": 2,
+        "FN": 0,
+        "precision": 0.75,
+        "recall": 1.0,
+        "F1": 0.8571,
+        "van_highlight": false
+      },
+      {
+        "class": "truck",
+        "TP": 0,
+        "FP": 0,
+        "FN": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "F1": 0.0,
+        "van_highlight": false
+      },
+      {
+        "class": "van",
+        "TP": 0,
+        "FP": 0,
+        "FN": 1,
+        "precision": 0.0,
+        "recall": 0.0,
+        "F1": 0.0,
+        "van_highlight": true
+      }
+    ],
+    "confusion": {
+      "car": {
+        "car": 6,
+        "truck": 1,
+        "van": 1
+      }
+    }
+  }
+}

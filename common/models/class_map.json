@@ -1,0 +1,27 @@
+{
+  "model_classes": {
+    "0": "bus",
+    "1": "camper",
+    "2": "car",
+    "3": "cyclist",
+    "4": "motorcycle",
+    "5": "person",
+    "6": "tractor",
+    "7": "truck",
+    "8": "van"
+  },
+  "service_taxonomy": {
+    "0": "bus",
+    "1": "van",
+    "2": "car",
+    "3": "bicycle",
+    "4": "motorcycle",
+    "5": "unknown",
+    "6": "truck",
+    "7": "truck",
+    "8": "van"
+  },
+  "trained_weights": "yolo26m.pt",
+  "epochs": 100,
+  "imgsz": 640
+}
