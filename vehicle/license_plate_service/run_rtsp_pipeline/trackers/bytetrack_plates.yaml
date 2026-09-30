@@ -1,0 +1,11 @@
+# BYTETrack settings for small, fast-moving license-plate boxes.
+# Association boxes receive an 18% margin in run_video_prototype.py; OCR crops
+# always use the original detector box. Score fusion is disabled because a
+# single low-confidence frame otherwise destroys tentative fast tracks.
+tracker_type: bytetrack
+track_high_thresh: 0.30
+track_low_thresh: 0.10
+new_track_thresh: 0.25
+track_buffer: 75
+match_thresh: 0.80
+fuse_score: False

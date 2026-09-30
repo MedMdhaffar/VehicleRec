@@ -1,0 +1,65 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# requirements.txt — live_feed real-time service (single container, all cameras, shared TRT engine)
+#
+# Pinned to the versions verified working in workflow/.venv_linux (Python 3.11.15),
+# derived by scanning the live_feed RUNTIME import closure
+# (live_feed + common + plate_recognition runtime modules) and resolving each import
+# to its installed distribution. NOT a `pip freeze` — that venv is shared across ~19
+# projects, so a freeze would drag in unrelated packages.
+#
+# Why some packages that paddleocr/ultralytics DON'T auto-install are pinned here:
+#   - paddleocr does not declare paddlepaddle → native OCR inference breaks without it
+#   - ultralytics does not declare lap                          → ByteTrack breaks without it
+#
+# EXCLUDED on purpose (not in the runtime path):
+#   - arabic-reshaper, python-bidi, direct Pillow → only plate_recognition training/viz
+#     scripts (cluster_classify.py, civilian_oneclass.py, synthetic_generator.py)
+#   - opencv-contrib-python → runtime uses base cv2 ops only (and two cv2 providers conflict)
+#   - the separate vehicle_classification REST service (its own image if ever deployed)
+#
+# GPU NOTE: torch/torchvision are CUDA 12.8 builds pulled from the PyTorch index below.
+# PyPI ships CPU-only torch wheels, so keep the --extra-index-url line first. The CUDA
+# 12.8 base image / NVIDIA Container Toolkit must match.
+# ─────────────────────────────────────────────────────────────────────────────
+
+--extra-index-url https://download.pytorch.org/whl/cu128
+
+# ── GPU runtime (CUDA 12.8) ──
+torch==2.11.0+cu128
+torchvision==0.26.0+cu128
+tensorrt-cu12>=10.8,<11            # YOLO .engine export/inference. MUST be 10.x: TRT 11 removed
+                                   # NetworkDefinitionCreationFlag.EXPLICIT_BATCH which ultralytics 8.4.46 still uses;
+                                   # 10.8+ supports Blackwell (sm_120 / RTX 50xx). ~4 GB libs; build the .engine at
+                                   # container startup, do NOT bake it (GPU-specific). Pin the exact resolved 10.x after install.
+
+# ── Web service ──
+fastapi==0.136.1
+uvicorn[standard]==0.46.0
+python-multipart==0.0.32          # fastapi form parsing (currently unused; cheap, future-proof)
+pydantic==2.13.3
+
+# ── Detection + tracking ──
+numpy==2.3.5
+opencv-python==4.13.0.92          # base cv2 only — do NOT add opencv-contrib (conflicts)
+ultralytics==8.4.46
+lap==0.5.13                       # ByteTrack linear assignment — NOT auto-installed by ultralytics
+onnx>=1.12.0,<2.0.0               # TRT engine export (ultralytics auto-installs if missing — bake it)
+onnxslim>=0.1.71                  # TRT engine export
+onnxruntime-gpu                   # TRT engine export
+
+# ── Plate OCR stack (NONE auto-installed by paddleocr) ──
+paddleocr==3.7.0
+paddlepaddle==3.3.1               # OCR inference backend (CPU build; use paddlepaddle-gpu only if needed)
+transformers==4.57.0              # Review/experimental model utilities; native plate OCR uses Paddle
+
+# ── Review agent (Gemini via OpenRouter / LangChain) ──
+langchain-openai==1.3.2
+langchain==1.2.17
+python-dotenv==1.2.2
+
+# ── Dahua VMS HTTP client ──
+requests==2.33.1
+
+# Deep transitive deps (pillow, PyYAML, paddlex, langchain-core, scipy, tqdm, psutil, …)
+# are resolved automatically from the pins above. For a fully-reproducible lock, run
+# pip-compile on this file (follow-up).
