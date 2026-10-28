@@ -1,0 +1,17 @@
+{
+  "51152971-c98c-4132-ad59-3a5529b8ea09.jpg": {
+    "bbox_xyxy": [724.16, 742.21, 1450.38, 886.22],
+    "basis": "best.pt proposal at confidence 0.037141, below the strict 0.25 threshold",
+    "note": "Reviewed visually; the low-confidence proposal encloses the complete red-on-white plate."
+  },
+  "8e625e7f-2316-4148-8ec7-42b73a77a881.jpg": {
+    "bbox_xyxy": [786.66, 603.74, 1404.10, 747.78],
+    "basis": "best.pt proposal at confidence 0.001373, below the strict 0.25 threshold",
+    "note": "Reviewed visually; selected the full-plate proposal instead of a higher-confidence false-positive box."
+  },
+  "961bcf99-da73-4d1d-9f51-5a4571cbbff8.jpg": {
+    "bbox_xyxy": [690.0, 620.0, 1390.0, 880.0],
+    "basis": "manual completion around best.pt partial proposal [776.38, 724.07, 1071.06, 857.69] at confidence 0.013190",
+    "note": "The detector proposal covered only part of the red-on-white plate; the reviewed box encloses the complete visible plate."
+  }
+}

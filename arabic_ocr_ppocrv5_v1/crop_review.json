@@ -1,0 +1,41 @@
+{
+  "status": "pending_visual_review",
+  "instruction": "Review marker_contact_sheet.png. Record complete/ambiguous per image without changing coordinates.",
+  "images": {
+    "4": {
+      "complete_marking": null,
+      "ambiguous": null,
+      "notes": ""
+    },
+    "5": {
+      "complete_marking": null,
+      "ambiguous": null,
+      "notes": ""
+    },
+    "6": {
+      "complete_marking": null,
+      "ambiguous": null,
+      "notes": ""
+    },
+    "7": {
+      "complete_marking": null,
+      "ambiguous": null,
+      "notes": ""
+    },
+    "8": {
+      "complete_marking": null,
+      "ambiguous": null,
+      "notes": ""
+    },
+    "9": {
+      "complete_marking": null,
+      "ambiguous": null,
+      "notes": ""
+    },
+    "10": {
+      "complete_marking": null,
+      "ambiguous": null,
+      "notes": ""
+    }
+  }
+}
