@@ -1,0 +1,4910 @@
+[
+  {
+    "schema_version": 1,
+    "input": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/references/images/1.png",
+      "sha256": "4bc69f7b6e0fb6a200109bfa45cd48ed30e971395a27c20fc76e406cd252cc38",
+      "width": 680,
+      "height": 159
+    },
+    "visual": {
+      "visual_category": "idara",
+      "nearest_reference_id": "3",
+      "nearest_reference_category": "idara",
+      "nearest_similarity": 0.8626164197921753,
+      "predicted_category_margin": 0.15825939178466797,
+      "tie_flag": false,
+      "eligible_reference_count": 11,
+      "best_same_category_reference_id": "3",
+      "best_same_category_similarity": 0.8626164197921753,
+      "best_different_category_reference_id": "4",
+      "best_different_category_similarity": 0.7043570280075073,
+      "correct_category_margin": 0.15825939178466797,
+      "representation": "r2_global_regional",
+      "feature_dimension": 1536,
+      "feature_metadata": {
+        "view_order": [
+          "whole",
+          "left",
+          "centre",
+          "right"
+        ],
+        "weights": {
+          "whole": 0.25,
+          "left": 0.25,
+          "centre": 0.25,
+          "right": 0.25
+        },
+        "dimension": 1536,
+        "l2_norm": 1.0,
+        "views": {
+          "whole": {
+            "source_xyxy": [
+              0,
+              0,
+              680,
+              159
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                159,
+                680
+              ],
+              "requested_scale": 0.6812319366671905,
+              "scale_after_long_edge_limit": 0.6812319366671905,
+              "scale_used_before_integer_rounding": 0.6812319366671905,
+              "effective_scale_xy": [
+                0.6808823529411765,
+                0.6792452830188679
+              ],
+              "resized_dimensions_hw": [
+                108,
+                463
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                0,
+                2,
+                1,
+                2
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                112,
+                464
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                7,
+                29
+              ],
+              "patch_count": 203,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                112,
+                464
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 203,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.08418935199733824
+          },
+          "left": {
+            "source_xyxy": [
+              0,
+              0,
+              340,
+              159
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                159,
+                340
+              ],
+              "requested_scale": 0.9634074439564302,
+              "scale_after_long_edge_limit": 0.9634074439564302,
+              "scale_used_before_integer_rounding": 0.9634074439564302,
+              "effective_scale_xy": [
+                0.9647058823529412,
+                0.9622641509433962
+              ],
+              "resized_dimensions_hw": [
+                153,
+                328
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                4,
+                3,
+                4,
+                4
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                160,
+                336
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                10,
+                21
+              ],
+              "patch_count": 210,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                160,
+                336
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 210,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.0517126639970229
+          },
+          "centre": {
+            "source_xyxy": [
+              170,
+              0,
+              510,
+              159
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                159,
+                340
+              ],
+              "requested_scale": 0.9634074439564302,
+              "scale_after_long_edge_limit": 0.9634074439564302,
+              "scale_used_before_integer_rounding": 0.9634074439564302,
+              "effective_scale_xy": [
+                0.9647058823529412,
+                0.9622641509433962
+              ],
+              "resized_dimensions_hw": [
+                153,
+                328
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                4,
+                3,
+                4,
+                4
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                160,
+                336
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                10,
+                21
+              ],
+              "patch_count": 210,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                160,
+                336
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999999403953552,
+              "spatial_patch_tokens": 210,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.05456218199833529
+          },
+          "right": {
+            "source_xyxy": [
+              340,
+              0,
+              680,
+              159
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                159,
+                340
+              ],
+              "requested_scale": 0.9634074439564302,
+              "scale_after_long_edge_limit": 0.9634074439564302,
+              "scale_used_before_integer_rounding": 0.9634074439564302,
+              "effective_scale_xy": [
+                0.9647058823529412,
+                0.9622641509433962
+              ],
+              "resized_dimensions_hw": [
+                153,
+                328
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                4,
+                3,
+                4,
+                4
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                160,
+                336
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                10,
+                21
+              ],
+              "patch_count": 210,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                160,
+                336
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 210,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.05009000700010802
+          }
+        },
+        "total_feature_seconds": 0.24519251600213465
+      },
+      "seconds": 0.24543825999717228
+    },
+    "ocr": {
+      "inference_status": "completed",
+      "failure_reason": "",
+      "raw_text": "17 - 138957",
+      "native_confidence": 0.9179226160049438,
+      "native_payload": {
+        "res": {
+          "input_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/1/submitted_ocr/1_budget_unpadded.png",
+          "page_index": null,
+          "rec_text": "17 - 138957",
+          "rec_score": 0.9179226160049438
+        }
+      },
+      "recognition_seconds": 0.14189336099661887,
+      "submitted_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/1/submitted_ocr/1_budget_unpadded.png",
+      "submitted_width": 463,
+      "submitted_height": 108,
+      "normalized_text": "17-138957",
+      "parser_boundary_text": "17 - 138957",
+      "nt_evidence": "absent",
+      "parser_reason": "no_unambiguous_nt_match",
+      "conflicting_categories": [],
+      "external_budget_geometry": {
+        "original_dimensions_hw": [
+          159,
+          680
+        ],
+        "requested_scale": 0.6812319366671905,
+        "scale_after_long_edge_limit": 0.6812319366671905,
+        "scale_used_before_integer_rounding": 0.6812319366671905,
+        "effective_scale_xy": [
+          0.6808823529411765,
+          0.6792452830188679
+        ],
+        "resized_dimensions_hw": [
+          108,
+          463
+        ],
+        "rounding_rule": "round-half-up; each dimension at least one pixel",
+        "padding_ltrb": [
+          0,
+          2,
+          1,
+          2
+        ],
+        "odd_padding_rule": "extra pixel goes to right or bottom",
+        "final_dimensions_hw": [
+          112,
+          464
+        ],
+        "patch_size_hw": [
+          16,
+          16
+        ],
+        "patch_grid_hw": [
+          7,
+          29
+        ],
+        "patch_count": 203,
+        "long_edge_limit_applied": false,
+        "patch_count_limit_applied": false,
+        "pixels_cropped": 0
+      }
+    },
+    "decision": {
+      "visual_category": "idara",
+      "final_category": "idara",
+      "source": "visual_r2",
+      "override_applied": false,
+      "conflict_flag": false,
+      "ocr_failure_flag": false,
+      "tie_flag": false,
+      "uncertainty_threshold_applied": false
+    },
+    "timing": {
+      "visual_feature_and_match_seconds": 0.24543825999717228,
+      "ocr_recognition_seconds": 0.14189336099661887,
+      "total_classification_seconds": 0.4337410180014558
+    },
+    "index": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/reference_index/reference_r2.npz",
+      "compatibility_fingerprint": "ff5483e3633f97e7601da3386023b140c729c9bea201ab33b35e3774a7c6f8ec"
+    },
+    "evaluation": {
+      "expected_category": "idara",
+      "visual_correct": true,
+      "final_correct": true
+    }
+  },
+  {
+    "schema_version": 1,
+    "input": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/references/images/2.png",
+      "sha256": "53cccd1ddcc6f0c70c90bf66ea4019e65ba2f79633439c3812ef8701a959c6f1",
+      "width": 650,
+      "height": 203
+    },
+    "visual": {
+      "visual_category": "idara",
+      "nearest_reference_id": "1",
+      "nearest_reference_category": "idara",
+      "nearest_similarity": 0.8188412189483643,
+      "predicted_category_margin": 0.15530115365982056,
+      "tie_flag": false,
+      "eligible_reference_count": 11,
+      "best_same_category_reference_id": "1",
+      "best_same_category_similarity": 0.8188412189483643,
+      "best_different_category_reference_id": "4",
+      "best_different_category_similarity": 0.6635400652885437,
+      "correct_category_margin": 0.15530115365982056,
+      "representation": "r2_global_regional",
+      "feature_dimension": 1536,
+      "feature_metadata": {
+        "view_order": [
+          "whole",
+          "left",
+          "centre",
+          "right"
+        ],
+        "weights": {
+          "whole": 0.25,
+          "left": 0.25,
+          "centre": 0.25,
+          "right": 0.25
+        },
+        "dimension": 1536,
+        "l2_norm": 1.0,
+        "views": {
+          "whole": {
+            "source_xyxy": [
+              0,
+              0,
+              650,
+              203
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                203,
+                650
+              ],
+              "requested_scale": 0.6166565105383952,
+              "scale_after_long_edge_limit": 0.6166565105383952,
+              "scale_used_before_integer_rounding": 0.6166565105383952,
+              "effective_scale_xy": [
+                0.6169230769230769,
+                0.6157635467980296
+              ],
+              "resized_dimensions_hw": [
+                125,
+                401
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                7,
+                1,
+                8,
+                2
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                128,
+                416
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                8,
+                26
+              ],
+              "patch_count": 208,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                128,
+                416
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 208,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.07564169200122706
+          },
+          "left": {
+            "source_xyxy": [
+              0,
+              0,
+              325,
+              203
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                203,
+                325
+              ],
+              "requested_scale": 0.8720840005290659,
+              "scale_after_long_edge_limit": 0.8720840005290659,
+              "scale_used_before_integer_rounding": 0.8720840005290659,
+              "effective_scale_xy": [
+                0.8707692307692307,
+                0.8719211822660099
+              ],
+              "resized_dimensions_hw": [
+                177,
+                283
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                2,
+                7,
+                3,
+                8
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                192,
+                288
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                12,
+                18
+              ],
+              "patch_count": 216,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                192,
+                288
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999999403953552,
+              "spatial_patch_tokens": 216,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.07383443599974271
+          },
+          "centre": {
+            "source_xyxy": [
+              162,
+              0,
+              488,
+              203
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                203,
+                326
+              ],
+              "requested_scale": 0.870745421074612,
+              "scale_after_long_edge_limit": 0.870745421074612,
+              "scale_used_before_integer_rounding": 0.870745421074612,
+              "effective_scale_xy": [
+                0.8711656441717791,
+                0.8719211822660099
+              ],
+              "resized_dimensions_hw": [
+                177,
+                284
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                2,
+                7,
+                2,
+                8
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                192,
+                288
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                12,
+                18
+              ],
+              "patch_count": 216,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                192,
+                288
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 216,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.05014971499986132
+          },
+          "right": {
+            "source_xyxy": [
+              325,
+              0,
+              650,
+              203
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                203,
+                325
+              ],
+              "requested_scale": 0.8720840005290659,
+              "scale_after_long_edge_limit": 0.8720840005290659,
+              "scale_used_before_integer_rounding": 0.8720840005290659,
+              "effective_scale_xy": [
+                0.8707692307692307,
+                0.8719211822660099
+              ],
+              "resized_dimensions_hw": [
+                177,
+                283
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                2,
+                7,
+                3,
+                8
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                192,
+                288
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                12,
+                18
+              ],
+              "patch_count": 216,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                192,
+                288
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999999403953552,
+              "spatial_patch_tokens": 216,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.05836389899923233
+          }
+        },
+        "total_feature_seconds": 0.26165029000185314
+      },
+      "seconds": 0.26186901799883344
+    },
+    "ocr": {
+      "inference_status": "completed",
+      "failure_reason": "",
+      "raw_text": "17-148885",
+      "native_confidence": 0.9611903429031372,
+      "native_payload": {
+        "res": {
+          "input_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/2/submitted_ocr/2_budget_unpadded.png",
+          "page_index": null,
+          "rec_text": "17-148885",
+          "rec_score": 0.9611903429031372
+        }
+      },
+      "recognition_seconds": 0.06850788999872748,
+      "submitted_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/2/submitted_ocr/2_budget_unpadded.png",
+      "submitted_width": 401,
+      "submitted_height": 125,
+      "normalized_text": "17-148885",
+      "parser_boundary_text": "17-148885",
+      "nt_evidence": "absent",
+      "parser_reason": "no_unambiguous_nt_match",
+      "conflicting_categories": [],
+      "external_budget_geometry": {
+        "original_dimensions_hw": [
+          203,
+          650
+        ],
+        "requested_scale": 0.6166565105383952,
+        "scale_after_long_edge_limit": 0.6166565105383952,
+        "scale_used_before_integer_rounding": 0.6166565105383952,
+        "effective_scale_xy": [
+          0.6169230769230769,
+          0.6157635467980296
+        ],
+        "resized_dimensions_hw": [
+          125,
+          401
+        ],
+        "rounding_rule": "round-half-up; each dimension at least one pixel",
+        "padding_ltrb": [
+          7,
+          1,
+          8,
+          2
+        ],
+        "odd_padding_rule": "extra pixel goes to right or bottom",
+        "final_dimensions_hw": [
+          128,
+          416
+        ],
+        "patch_size_hw": [
+          16,
+          16
+        ],
+        "patch_grid_hw": [
+          8,
+          26
+        ],
+        "patch_count": 208,
+        "long_edge_limit_applied": false,
+        "patch_count_limit_applied": false,
+        "pixels_cropped": 0
+      }
+    },
+    "decision": {
+      "visual_category": "idara",
+      "final_category": "idara",
+      "source": "visual_r2",
+      "override_applied": false,
+      "conflict_flag": false,
+      "ocr_failure_flag": false,
+      "tie_flag": false,
+      "uncertainty_threshold_applied": false
+    },
+    "timing": {
+      "visual_feature_and_match_seconds": 0.26186901799883344,
+      "ocr_recognition_seconds": 0.06850788999872748,
+      "total_classification_seconds": 0.3760746760017355
+    },
+    "index": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/reference_index/reference_r2.npz",
+      "compatibility_fingerprint": "ff5483e3633f97e7601da3386023b140c729c9bea201ab33b35e3774a7c6f8ec"
+    },
+    "evaluation": {
+      "expected_category": "idara",
+      "visual_correct": true,
+      "final_correct": true
+    }
+  },
+  {
+    "schema_version": 1,
+    "input": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/references/images/3.png",
+      "sha256": "3598db2a3b98103ece19c78cdd066c35b5b6d8f36d0a345d34465a88f7290999",
+      "width": 800,
+      "height": 159
+    },
+    "visual": {
+      "visual_category": "idara",
+      "nearest_reference_id": "1",
+      "nearest_reference_category": "idara",
+      "nearest_similarity": 0.8626164197921753,
+      "predicted_category_margin": 0.1836174726486206,
+      "tie_flag": false,
+      "eligible_reference_count": 11,
+      "best_same_category_reference_id": "1",
+      "best_same_category_similarity": 0.8626164197921753,
+      "best_different_category_reference_id": "4",
+      "best_different_category_similarity": 0.6789989471435547,
+      "correct_category_margin": 0.1836174726486206,
+      "representation": "r2_global_regional",
+      "feature_dimension": 1536,
+      "feature_metadata": {
+        "view_order": [
+          "whole",
+          "left",
+          "centre",
+          "right"
+        ],
+        "weights": {
+          "whole": 0.25,
+          "left": 0.25,
+          "centre": 0.25,
+          "right": 0.25
+        },
+        "dimension": 1536,
+        "l2_norm": 1.0000001192092896,
+        "views": {
+          "whole": {
+            "source_xyxy": [
+              0,
+              0,
+              800,
+              159
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                159,
+                800
+              ],
+              "requested_scale": 0.6280648125830895,
+              "scale_after_long_edge_limit": 0.6280648125830895,
+              "scale_used_before_integer_rounding": 0.6280648125830895,
+              "effective_scale_xy": [
+                0.6275,
+                0.6289308176100629
+              ],
+              "resized_dimensions_hw": [
+                100,
+                502
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                5,
+                6,
+                5,
+                6
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                112,
+                512
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                7,
+                32
+              ],
+              "patch_count": 224,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                112,
+                512
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 224,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.10626058799971361
+          },
+          "left": {
+            "source_xyxy": [
+              0,
+              0,
+              400,
+              159
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                159,
+                400
+              ],
+              "requested_scale": 0.8882177760043214,
+              "scale_after_long_edge_limit": 0.8882177760043214,
+              "scale_used_before_integer_rounding": 0.8882177760043214,
+              "effective_scale_xy": [
+                0.8875,
+                0.8867924528301887
+              ],
+              "resized_dimensions_hw": [
+                141,
+                355
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                6,
+                1,
+                7,
+                2
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                144,
+                368
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                9,
+                23
+              ],
+              "patch_count": 207,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                144,
+                368
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999999403953552,
+              "spatial_patch_tokens": 207,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.062478488998749526
+          },
+          "centre": {
+            "source_xyxy": [
+              200,
+              0,
+              600,
+              159
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                159,
+                400
+              ],
+              "requested_scale": 0.8882177760043214,
+              "scale_after_long_edge_limit": 0.8882177760043214,
+              "scale_used_before_integer_rounding": 0.8882177760043214,
+              "effective_scale_xy": [
+                0.8875,
+                0.8867924528301887
+              ],
+              "resized_dimensions_hw": [
+                141,
+                355
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                6,
+                1,
+                7,
+                2
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                144,
+                368
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                9,
+                23
+              ],
+              "patch_count": 207,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                144,
+                368
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 207,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.05602526499933447
+          },
+          "right": {
+            "source_xyxy": [
+              400,
+              0,
+              800,
+              159
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                159,
+                400
+              ],
+              "requested_scale": 0.8882177760043214,
+              "scale_after_long_edge_limit": 0.8882177760043214,
+              "scale_used_before_integer_rounding": 0.8882177760043214,
+              "effective_scale_xy": [
+                0.8875,
+                0.8867924528301887
+              ],
+              "resized_dimensions_hw": [
+                141,
+                355
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                6,
+                1,
+                7,
+                2
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                144,
+                368
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                9,
+                23
+              ],
+              "patch_count": 207,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                144,
+                368
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999998807907104,
+              "spatial_patch_tokens": 207,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.05723906899947906
+          }
+        },
+        "total_feature_seconds": 0.2857561130003887
+      },
+      "seconds": 0.28604316899873083
+    },
+    "ocr": {
+      "inference_status": "completed",
+      "failure_reason": "",
+      "raw_text": "17 - 138956",
+      "native_confidence": 0.930962324142456,
+      "native_payload": {
+        "res": {
+          "input_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/3/submitted_ocr/3_budget_unpadded.png",
+          "page_index": null,
+          "rec_text": "17 - 138956",
+          "rec_score": 0.930962324142456
+        }
+      },
+      "recognition_seconds": 0.039409398999850964,
+      "submitted_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/3/submitted_ocr/3_budget_unpadded.png",
+      "submitted_width": 502,
+      "submitted_height": 100,
+      "normalized_text": "17-138956",
+      "parser_boundary_text": "17 - 138956",
+      "nt_evidence": "absent",
+      "parser_reason": "no_unambiguous_nt_match",
+      "conflicting_categories": [],
+      "external_budget_geometry": {
+        "original_dimensions_hw": [
+          159,
+          800
+        ],
+        "requested_scale": 0.6280648125830895,
+        "scale_after_long_edge_limit": 0.6280648125830895,
+        "scale_used_before_integer_rounding": 0.6280648125830895,
+        "effective_scale_xy": [
+          0.6275,
+          0.6289308176100629
+        ],
+        "resized_dimensions_hw": [
+          100,
+          502
+        ],
+        "rounding_rule": "round-half-up; each dimension at least one pixel",
+        "padding_ltrb": [
+          5,
+          6,
+          5,
+          6
+        ],
+        "odd_padding_rule": "extra pixel goes to right or bottom",
+        "final_dimensions_hw": [
+          112,
+          512
+        ],
+        "patch_size_hw": [
+          16,
+          16
+        ],
+        "patch_grid_hw": [
+          7,
+          32
+        ],
+        "patch_count": 224,
+        "long_edge_limit_applied": false,
+        "patch_count_limit_applied": false,
+        "pixels_cropped": 0
+      }
+    },
+    "decision": {
+      "visual_category": "idara",
+      "final_category": "idara",
+      "source": "visual_r2",
+      "override_applied": false,
+      "conflict_flag": false,
+      "ocr_failure_flag": false,
+      "tie_flag": false,
+      "uncertainty_threshold_applied": false
+    },
+    "timing": {
+      "visual_feature_and_match_seconds": 0.28604316899873083,
+      "ocr_recognition_seconds": 0.039409398999850964,
+      "total_classification_seconds": 0.37129024300156743
+    },
+    "index": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/reference_index/reference_r2.npz",
+      "compatibility_fingerprint": "ff5483e3633f97e7601da3386023b140c729c9bea201ab33b35e3774a7c6f8ec"
+    },
+    "evaluation": {
+      "expected_category": "idara",
+      "visual_correct": true,
+      "final_correct": true
+    }
+  },
+  {
+    "schema_version": 1,
+    "input": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/references/images/4.png",
+      "sha256": "aba5f5dfb9dcba8cfdc246301f14de421fbbf5a0d3230eb9a8d230bc8443348f",
+      "width": 823,
+      "height": 200
+    },
+    "visual": {
+      "visual_category": "nt",
+      "nearest_reference_id": "6",
+      "nearest_reference_category": "nt",
+      "nearest_similarity": 0.7082077264785767,
+      "predicted_category_margin": 0.003850698471069336,
+      "tie_flag": false,
+      "eligible_reference_count": 11,
+      "best_same_category_reference_id": "6",
+      "best_same_category_similarity": 0.7082077264785767,
+      "best_different_category_reference_id": "1",
+      "best_different_category_similarity": 0.7043570280075073,
+      "correct_category_margin": 0.003850698471069336,
+      "representation": "r2_global_regional",
+      "feature_dimension": 1536,
+      "feature_metadata": {
+        "view_order": [
+          "whole",
+          "left",
+          "centre",
+          "right"
+        ],
+        "weights": {
+          "whole": 0.25,
+          "left": 0.25,
+          "centre": 0.25,
+          "right": 0.25
+        },
+        "dimension": 1536,
+        "l2_norm": 1.0,
+        "views": {
+          "whole": {
+            "source_xyxy": [
+              0,
+              0,
+              823,
+              200
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                200,
+                823
+              ],
+              "requested_scale": 0.5521195214608235,
+              "scale_after_long_edge_limit": 0.5521195214608235,
+              "scale_used_before_integer_rounding": 0.5521195214608235,
+              "effective_scale_xy": [
+                0.551640340218712,
+                0.55
+              ],
+              "resized_dimensions_hw": [
+                110,
+                454
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                5,
+                1,
+                5,
+                1
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                112,
+                464
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                7,
+                29
+              ],
+              "patch_count": 203,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                112,
+                464
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999999403953552,
+              "spatial_patch_tokens": 203,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.06110295200051041
+          },
+          "left": {
+            "source_xyxy": [
+              0,
+              0,
+              412,
+              200
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                200,
+                412
+              ],
+              "requested_scale": 0.7803409760066118,
+              "scale_after_long_edge_limit": 0.7803409760066118,
+              "scale_used_before_integer_rounding": 0.7803409760066118,
+              "effective_scale_xy": [
+                0.7815533980582524,
+                0.78
+              ],
+              "resized_dimensions_hw": [
+                156,
+                322
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                7,
+                2,
+                7,
+                2
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                160,
+                336
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                10,
+                21
+              ],
+              "patch_count": 210,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                160,
+                336
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 210,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.06054747699818108
+          },
+          "centre": {
+            "source_xyxy": [
+              205,
+              0,
+              618,
+              200
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                200,
+                413
+              ],
+              "requested_scale": 0.7793956807159276,
+              "scale_after_long_edge_limit": 0.7793956807159276,
+              "scale_used_before_integer_rounding": 0.7793956807159276,
+              "effective_scale_xy": [
+                0.7796610169491526,
+                0.78
+              ],
+              "resized_dimensions_hw": [
+                156,
+                322
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                7,
+                2,
+                7,
+                2
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                160,
+                336
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                10,
+                21
+              ],
+              "patch_count": 210,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                160,
+                336
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999999403953552,
+              "spatial_patch_tokens": 210,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.059094075000757584
+          },
+          "right": {
+            "source_xyxy": [
+              411,
+              0,
+              823,
+              200
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                200,
+                412
+              ],
+              "requested_scale": 0.7803409760066118,
+              "scale_after_long_edge_limit": 0.7803409760066118,
+              "scale_used_before_integer_rounding": 0.7803409760066118,
+              "effective_scale_xy": [
+                0.7815533980582524,
+                0.78
+              ],
+              "resized_dimensions_hw": [
+                156,
+                322
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                7,
+                2,
+                7,
+                2
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                160,
+                336
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                10,
+                21
+              ],
+              "patch_count": 210,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                160,
+                336
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0000001192092896,
+              "spatial_patch_tokens": 210,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.059409781999420375
+          }
+        },
+        "total_feature_seconds": 0.24345165900012944
+      },
+      "seconds": 0.24367945099947974
+    },
+    "ocr": {
+      "inference_status": "completed",
+      "failure_reason": "",
+      "raw_text": "ن ت ١١٦٤",
+      "native_confidence": 0.7694334983825684,
+      "native_payload": {
+        "res": {
+          "input_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/4/submitted_ocr/4_budget_unpadded.png",
+          "page_index": null,
+          "rec_text": "ن ت ١١٦٤",
+          "rec_score": 0.7694334983825684
+        }
+      },
+      "recognition_seconds": 0.0445342420025554,
+      "submitted_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/4/submitted_ocr/4_budget_unpadded.png",
+      "submitted_width": 454,
+      "submitted_height": 110,
+      "normalized_text": "نت١١٦٤",
+      "parser_boundary_text": "ن ت ١١٦٤",
+      "nt_evidence": "present",
+      "parser_reason": "explicit_nt_with_valid_arabic_letter_boundaries",
+      "conflicting_categories": [],
+      "external_budget_geometry": {
+        "original_dimensions_hw": [
+          200,
+          823
+        ],
+        "requested_scale": 0.5521195214608235,
+        "scale_after_long_edge_limit": 0.5521195214608235,
+        "scale_used_before_integer_rounding": 0.5521195214608235,
+        "effective_scale_xy": [
+          0.551640340218712,
+          0.55
+        ],
+        "resized_dimensions_hw": [
+          110,
+          454
+        ],
+        "rounding_rule": "round-half-up; each dimension at least one pixel",
+        "padding_ltrb": [
+          5,
+          1,
+          5,
+          1
+        ],
+        "odd_padding_rule": "extra pixel goes to right or bottom",
+        "final_dimensions_hw": [
+          112,
+          464
+        ],
+        "patch_size_hw": [
+          16,
+          16
+        ],
+        "patch_grid_hw": [
+          7,
+          29
+        ],
+        "patch_count": 203,
+        "long_edge_limit_applied": false,
+        "patch_count_limit_applied": false,
+        "pixels_cropped": 0
+      }
+    },
+    "decision": {
+      "visual_category": "nt",
+      "final_category": "nt",
+      "source": "ocr_nt_evidence",
+      "override_applied": false,
+      "conflict_flag": false,
+      "ocr_failure_flag": false,
+      "tie_flag": false,
+      "uncertainty_threshold_applied": false
+    },
+    "timing": {
+      "visual_feature_and_match_seconds": 0.24367945099947974,
+      "ocr_recognition_seconds": 0.0445342420025554,
+      "total_classification_seconds": 0.32917919300234644
+    },
+    "index": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/reference_index/reference_r2.npz",
+      "compatibility_fingerprint": "ff5483e3633f97e7601da3386023b140c729c9bea201ab33b35e3774a7c6f8ec"
+    },
+    "evaluation": {
+      "expected_category": "nt",
+      "visual_correct": true,
+      "final_correct": true
+    }
+  },
+  {
+    "schema_version": 1,
+    "input": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/references/images/5.png",
+      "sha256": "596120d9f02c1f5ebeee64bed0580e79aae451d4a12af33f29741d54cd7aa839",
+      "width": 129,
+      "height": 35
+    },
+    "visual": {
+      "visual_category": "tunis",
+      "nearest_reference_id": "12",
+      "nearest_reference_category": "tunis",
+      "nearest_similarity": 0.673748791217804,
+      "predicted_category_margin": 0.033851027488708496,
+      "tie_flag": false,
+      "eligible_reference_count": 11,
+      "best_same_category_reference_id": "7",
+      "best_same_category_similarity": 0.6398977637290955,
+      "best_different_category_reference_id": "12",
+      "best_different_category_similarity": 0.673748791217804,
+      "correct_category_margin": -0.033851027488708496,
+      "representation": "r2_global_regional",
+      "feature_dimension": 1536,
+      "feature_metadata": {
+        "view_order": [
+          "whole",
+          "left",
+          "centre",
+          "right"
+        ],
+        "weights": {
+          "whole": 0.25,
+          "left": 0.25,
+          "centre": 0.25,
+          "right": 0.25
+        },
+        "dimension": 1536,
+        "l2_norm": 1.0,
+        "views": {
+          "whole": {
+            "source_xyxy": [
+              0,
+              0,
+              129,
+              35
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                35,
+                129
+              ],
+              "requested_scale": 3.3336433964318446,
+              "scale_after_long_edge_limit": 3.3336433964318446,
+              "scale_used_before_integer_rounding": 3.3336433964318446,
+              "effective_scale_xy": [
+                3.3333333333333335,
+                3.342857142857143
+              ],
+              "resized_dimensions_hw": [
+                117,
+                430
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                1,
+                5,
+                1,
+                6
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                128,
+                432
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                8,
+                27
+              ],
+              "patch_count": 216,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                128,
+                432
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 216,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.07072932699884404
+          },
+          "left": {
+            "source_xyxy": [
+              0,
+              0,
+              65,
+              35
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                35,
+                65
+              ],
+              "requested_scale": 4.696316068514194,
+              "scale_after_long_edge_limit": 4.696316068514194,
+              "scale_used_before_integer_rounding": 4.696316068514194,
+              "effective_scale_xy": [
+                4.6923076923076925,
+                4.685714285714286
+              ],
+              "resized_dimensions_hw": [
+                164,
+                305
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                7,
+                6,
+                8,
+                6
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                176,
+                320
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                11,
+                20
+              ],
+              "patch_count": 220,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                176,
+                320
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 220,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.07279937099883682
+          },
+          "centre": {
+            "source_xyxy": [
+              32,
+              0,
+              97,
+              35
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                35,
+                65
+              ],
+              "requested_scale": 4.696316068514194,
+              "scale_after_long_edge_limit": 4.696316068514194,
+              "scale_used_before_integer_rounding": 4.696316068514194,
+              "effective_scale_xy": [
+                4.6923076923076925,
+                4.685714285714286
+              ],
+              "resized_dimensions_hw": [
+                164,
+                305
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                7,
+                6,
+                8,
+                6
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                176,
+                320
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                11,
+                20
+              ],
+              "patch_count": 220,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                176,
+                320
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999999403953552,
+              "spatial_patch_tokens": 220,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.05489786099860794
+          },
+          "right": {
+            "source_xyxy": [
+              64,
+              0,
+              129,
+              35
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                35,
+                65
+              ],
+              "requested_scale": 4.696316068514194,
+              "scale_after_long_edge_limit": 4.696316068514194,
+              "scale_used_before_integer_rounding": 4.696316068514194,
+              "effective_scale_xy": [
+                4.6923076923076925,
+                4.685714285714286
+              ],
+              "resized_dimensions_hw": [
+                164,
+                305
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                7,
+                6,
+                8,
+                6
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                176,
+                320
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                11,
+                20
+              ],
+              "patch_count": 220,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                176,
+                320
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 220,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.05876558499949169
+          }
+        },
+        "total_feature_seconds": 0.2608760879993497
+      },
+      "seconds": 0.26101290000224253
+    },
+    "ocr": {
+      "inference_status": "completed",
+      "failure_reason": "",
+      "raw_text": "نت١0379",
+      "native_confidence": 0.7348999381065369,
+      "native_payload": {
+        "res": {
+          "input_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/5/submitted_ocr/5_budget_unpadded.png",
+          "page_index": null,
+          "rec_text": "نت١0379",
+          "rec_score": 0.7348999381065369
+        }
+      },
+      "recognition_seconds": 0.04092722800123738,
+      "submitted_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/5/submitted_ocr/5_budget_unpadded.png",
+      "submitted_width": 430,
+      "submitted_height": 117,
+      "normalized_text": "نت١0379",
+      "parser_boundary_text": "نت١0379",
+      "nt_evidence": "present",
+      "parser_reason": "explicit_nt_with_valid_arabic_letter_boundaries",
+      "conflicting_categories": [],
+      "external_budget_geometry": {
+        "original_dimensions_hw": [
+          35,
+          129
+        ],
+        "requested_scale": 3.3336433964318446,
+        "scale_after_long_edge_limit": 3.3336433964318446,
+        "scale_used_before_integer_rounding": 3.3336433964318446,
+        "effective_scale_xy": [
+          3.3333333333333335,
+          3.342857142857143
+        ],
+        "resized_dimensions_hw": [
+          117,
+          430
+        ],
+        "rounding_rule": "round-half-up; each dimension at least one pixel",
+        "padding_ltrb": [
+          1,
+          5,
+          1,
+          6
+        ],
+        "odd_padding_rule": "extra pixel goes to right or bottom",
+        "final_dimensions_hw": [
+          128,
+          432
+        ],
+        "patch_size_hw": [
+          16,
+          16
+        ],
+        "patch_grid_hw": [
+          8,
+          27
+        ],
+        "patch_count": 216,
+        "long_edge_limit_applied": false,
+        "patch_count_limit_applied": false,
+        "pixels_cropped": 0
+      }
+    },
+    "decision": {
+      "visual_category": "tunis",
+      "final_category": "nt",
+      "source": "ocr_nt_evidence",
+      "override_applied": true,
+      "conflict_flag": false,
+      "ocr_failure_flag": false,
+      "tie_flag": false,
+      "uncertainty_threshold_applied": false
+    },
+    "timing": {
+      "visual_feature_and_match_seconds": 0.26101290000224253,
+      "ocr_recognition_seconds": 0.04092722800123738,
+      "total_classification_seconds": 0.34866343999965466
+    },
+    "index": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/reference_index/reference_r2.npz",
+      "compatibility_fingerprint": "ff5483e3633f97e7601da3386023b140c729c9bea201ab33b35e3774a7c6f8ec"
+    },
+    "evaluation": {
+      "expected_category": "nt",
+      "visual_correct": false,
+      "final_correct": true
+    }
+  },
+  {
+    "schema_version": 1,
+    "input": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/references/images/6.png",
+      "sha256": "9e037973dbf10e6318dec422d2d744a52d242dea1b88043f6adaa6cc498c50d2",
+      "width": 516,
+      "height": 136
+    },
+    "visual": {
+      "visual_category": "nt",
+      "nearest_reference_id": "7",
+      "nearest_reference_category": "nt",
+      "nearest_similarity": 0.7137609720230103,
+      "predicted_category_margin": 0.05367392301559448,
+      "tie_flag": false,
+      "eligible_reference_count": 11,
+      "best_same_category_reference_id": "7",
+      "best_same_category_similarity": 0.7137609720230103,
+      "best_different_category_reference_id": "2",
+      "best_different_category_similarity": 0.6600870490074158,
+      "correct_category_margin": 0.05367392301559448,
+      "representation": "r2_global_regional",
+      "feature_dimension": 1536,
+      "feature_metadata": {
+        "view_order": [
+          "whole",
+          "left",
+          "centre",
+          "right"
+        ],
+        "weights": {
+          "whole": 0.25,
+          "left": 0.25,
+          "centre": 0.25,
+          "right": 0.25
+        },
+        "dimension": 1536,
+        "l2_norm": 1.0,
+        "views": {
+          "whole": {
+            "source_xyxy": [
+              0,
+              0,
+              516,
+              136
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                136,
+                516
+              ],
+              "requested_scale": 0.8455780744447908,
+              "scale_after_long_edge_limit": 0.8455780744447908,
+              "scale_used_before_integer_rounding": 0.8455780744447908,
+              "effective_scale_xy": [
+                0.8449612403100775,
+                0.8455882352941176
+              ],
+              "resized_dimensions_hw": [
+                115,
+                436
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                6,
+                6,
+                6,
+                7
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                128,
+                448
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                8,
+                28
+              ],
+              "patch_count": 224,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                128,
+                448
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 224,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.07496907799941255
+          },
+          "left": {
+            "source_xyxy": [
+              0,
+              0,
+              258,
+              136
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                136,
+                258
+              ],
+              "requested_scale": 1.1958279809251497,
+              "scale_after_long_edge_limit": 1.1958279809251497,
+              "scale_used_before_integer_rounding": 1.1958279809251497,
+              "effective_scale_xy": [
+                1.197674418604651,
+                1.1985294117647058
+              ],
+              "resized_dimensions_hw": [
+                163,
+                309
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                5,
+                6,
+                6,
+                7
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                176,
+                320
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                11,
+                20
+              ],
+              "patch_count": 220,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                176,
+                320
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 220,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.07633433600130957
+          },
+          "centre": {
+            "source_xyxy": [
+              129,
+              0,
+              387,
+              136
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                136,
+                258
+              ],
+              "requested_scale": 1.1958279809251497,
+              "scale_after_long_edge_limit": 1.1958279809251497,
+              "scale_used_before_integer_rounding": 1.1958279809251497,
+              "effective_scale_xy": [
+                1.197674418604651,
+                1.1985294117647058
+              ],
+              "resized_dimensions_hw": [
+                163,
+                309
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                5,
+                6,
+                6,
+                7
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                176,
+                320
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                11,
+                20
+              ],
+              "patch_count": 220,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                176,
+                320
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 220,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.05958900300174719
+          },
+          "right": {
+            "source_xyxy": [
+              258,
+              0,
+              516,
+              136
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                136,
+                258
+              ],
+              "requested_scale": 1.1958279809251497,
+              "scale_after_long_edge_limit": 1.1958279809251497,
+              "scale_used_before_integer_rounding": 1.1958279809251497,
+              "effective_scale_xy": [
+                1.197674418604651,
+                1.1985294117647058
+              ],
+              "resized_dimensions_hw": [
+                163,
+                309
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                5,
+                6,
+                6,
+                7
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                176,
+                320
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                11,
+                20
+              ],
+              "patch_count": 220,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                176,
+                320
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999999403953552,
+              "spatial_patch_tokens": 220,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.05816585499997018
+          }
+        },
+        "total_feature_seconds": 0.27292034800120746
+      },
+      "seconds": 0.273094301999663
+    },
+    "ocr": {
+      "inference_status": "completed",
+      "failure_reason": "",
+      "raw_text": "نت68",
+      "native_confidence": 0.7468181848526001,
+      "native_payload": {
+        "res": {
+          "input_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/6/submitted_ocr/6_budget_unpadded.png",
+          "page_index": null,
+          "rec_text": "نت68",
+          "rec_score": 0.7468181848526001
+        }
+      },
+      "recognition_seconds": 0.041504893997625913,
+      "submitted_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/6/submitted_ocr/6_budget_unpadded.png",
+      "submitted_width": 436,
+      "submitted_height": 115,
+      "normalized_text": "نت68",
+      "parser_boundary_text": "نت68",
+      "nt_evidence": "present",
+      "parser_reason": "explicit_nt_with_valid_arabic_letter_boundaries",
+      "conflicting_categories": [],
+      "external_budget_geometry": {
+        "original_dimensions_hw": [
+          136,
+          516
+        ],
+        "requested_scale": 0.8455780744447908,
+        "scale_after_long_edge_limit": 0.8455780744447908,
+        "scale_used_before_integer_rounding": 0.8455780744447908,
+        "effective_scale_xy": [
+          0.8449612403100775,
+          0.8455882352941176
+        ],
+        "resized_dimensions_hw": [
+          115,
+          436
+        ],
+        "rounding_rule": "round-half-up; each dimension at least one pixel",
+        "padding_ltrb": [
+          6,
+          6,
+          6,
+          7
+        ],
+        "odd_padding_rule": "extra pixel goes to right or bottom",
+        "final_dimensions_hw": [
+          128,
+          448
+        ],
+        "patch_size_hw": [
+          16,
+          16
+        ],
+        "patch_grid_hw": [
+          8,
+          28
+        ],
+        "patch_count": 224,
+        "long_edge_limit_applied": false,
+        "patch_count_limit_applied": false,
+        "pixels_cropped": 0
+      }
+    },
+    "decision": {
+      "visual_category": "nt",
+      "final_category": "nt",
+      "source": "ocr_nt_evidence",
+      "override_applied": false,
+      "conflict_flag": false,
+      "ocr_failure_flag": false,
+      "tie_flag": false,
+      "uncertainty_threshold_applied": false
+    },
+    "timing": {
+      "visual_feature_and_match_seconds": 0.273094301999663,
+      "ocr_recognition_seconds": 0.041504893997625913,
+      "total_classification_seconds": 0.35507385099845123
+    },
+    "index": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/reference_index/reference_r2.npz",
+      "compatibility_fingerprint": "ff5483e3633f97e7601da3386023b140c729c9bea201ab33b35e3774a7c6f8ec"
+    },
+    "evaluation": {
+      "expected_category": "nt",
+      "visual_correct": true,
+      "final_correct": true
+    }
+  },
+  {
+    "schema_version": 1,
+    "input": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/references/images/7.png",
+      "sha256": "acf135237c7cc2c1b2d188139d5789d8a5eaa827877e77357896fb606cd2c547",
+      "width": 562,
+      "height": 141
+    },
+    "visual": {
+      "visual_category": "nt",
+      "nearest_reference_id": "6",
+      "nearest_reference_category": "nt",
+      "nearest_similarity": 0.7137609720230103,
+      "predicted_category_margin": 0.101207435131073,
+      "tie_flag": false,
+      "eligible_reference_count": 11,
+      "best_same_category_reference_id": "6",
+      "best_same_category_similarity": 0.7137609720230103,
+      "best_different_category_reference_id": "12",
+      "best_different_category_similarity": 0.6125535368919373,
+      "correct_category_margin": 0.101207435131073,
+      "representation": "r2_global_regional",
+      "feature_dimension": 1536,
+      "feature_metadata": {
+        "view_order": [
+          "whole",
+          "left",
+          "centre",
+          "right"
+        ],
+        "weights": {
+          "whole": 0.25,
+          "left": 0.25,
+          "centre": 0.25,
+          "right": 0.25
+        },
+        "dimension": 1536,
+        "l2_norm": 1.0,
+        "views": {
+          "whole": {
+            "source_xyxy": [
+              0,
+              0,
+              562,
+              141
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                141,
+                562
+              ],
+              "requested_scale": 0.7957383777893191,
+              "scale_after_long_edge_limit": 0.7957383777893191,
+              "scale_used_before_integer_rounding": 0.7957383777893191,
+              "effective_scale_xy": [
+                0.7953736654804271,
+                0.7943262411347518
+              ],
+              "resized_dimensions_hw": [
+                112,
+                447
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                0,
+                0,
+                1,
+                0
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                112,
+                448
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                7,
+                28
+              ],
+              "patch_count": 196,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                112,
+                448
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999999403953552,
+              "spatial_patch_tokens": 196,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.06334662900189869
+          },
+          "left": {
+            "source_xyxy": [
+              0,
+              0,
+              281,
+              141
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                141,
+                281
+              ],
+              "requested_scale": 1.1253440059704207,
+              "scale_after_long_edge_limit": 1.1253440059704207,
+              "scale_used_before_integer_rounding": 1.1253440059704207,
+              "effective_scale_xy": [
+                1.1245551601423487,
+                1.127659574468085
+              ],
+              "resized_dimensions_hw": [
+                159,
+                316
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                2,
+                0,
+                2,
+                1
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                160,
+                320
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                10,
+                20
+              ],
+              "patch_count": 200,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                160,
+                320
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 200,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.1036130390020844
+          },
+          "centre": {
+            "source_xyxy": [
+              140,
+              0,
+              422,
+              141
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                141,
+                282
+              ],
+              "requested_scale": 1.1233469431616074,
+              "scale_after_long_edge_limit": 1.1233469431616074,
+              "scale_used_before_integer_rounding": 1.1233469431616074,
+              "effective_scale_xy": [
+                1.124113475177305,
+                1.1205673758865249
+              ],
+              "resized_dimensions_hw": [
+                158,
+                317
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                1,
+                1,
+                2,
+                1
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                160,
+                320
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                10,
+                20
+              ],
+              "patch_count": 200,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                160,
+                320
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 200,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.0569212480004353
+          },
+          "right": {
+            "source_xyxy": [
+              281,
+              0,
+              562,
+              141
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                141,
+                281
+              ],
+              "requested_scale": 1.1253440059704207,
+              "scale_after_long_edge_limit": 1.1253440059704207,
+              "scale_used_before_integer_rounding": 1.1253440059704207,
+              "effective_scale_xy": [
+                1.1245551601423487,
+                1.127659574468085
+              ],
+              "resized_dimensions_hw": [
+                159,
+                316
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                2,
+                0,
+                2,
+                1
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                160,
+                320
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                10,
+                20
+              ],
+              "patch_count": 200,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                160,
+                320
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 200,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.05404785700011416
+          }
+        },
+        "total_feature_seconds": 0.2813560499998857
+      },
+      "seconds": 0.2815378880004573
+    },
+    "ocr": {
+      "inference_status": "completed",
+      "failure_reason": "",
+      "raw_text": "نت٦2٦75",
+      "native_confidence": 0.7305695414543152,
+      "native_payload": {
+        "res": {
+          "input_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/7/submitted_ocr/7_budget_unpadded.png",
+          "page_index": null,
+          "rec_text": "نت٦2٦75",
+          "rec_score": 0.7305695414543152
+        }
+      },
+      "recognition_seconds": 0.037906287998339394,
+      "submitted_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/7/submitted_ocr/7_budget_unpadded.png",
+      "submitted_width": 447,
+      "submitted_height": 112,
+      "normalized_text": "نت٦2٦75",
+      "parser_boundary_text": "نت٦2٦75",
+      "nt_evidence": "present",
+      "parser_reason": "explicit_nt_with_valid_arabic_letter_boundaries",
+      "conflicting_categories": [],
+      "external_budget_geometry": {
+        "original_dimensions_hw": [
+          141,
+          562
+        ],
+        "requested_scale": 0.7957383777893191,
+        "scale_after_long_edge_limit": 0.7957383777893191,
+        "scale_used_before_integer_rounding": 0.7957383777893191,
+        "effective_scale_xy": [
+          0.7953736654804271,
+          0.7943262411347518
+        ],
+        "resized_dimensions_hw": [
+          112,
+          447
+        ],
+        "rounding_rule": "round-half-up; each dimension at least one pixel",
+        "padding_ltrb": [
+          0,
+          0,
+          1,
+          0
+        ],
+        "odd_padding_rule": "extra pixel goes to right or bottom",
+        "final_dimensions_hw": [
+          112,
+          448
+        ],
+        "patch_size_hw": [
+          16,
+          16
+        ],
+        "patch_grid_hw": [
+          7,
+          28
+        ],
+        "patch_count": 196,
+        "long_edge_limit_applied": false,
+        "patch_count_limit_applied": false,
+        "pixels_cropped": 0
+      }
+    },
+    "decision": {
+      "visual_category": "nt",
+      "final_category": "nt",
+      "source": "ocr_nt_evidence",
+      "override_applied": false,
+      "conflict_flag": false,
+      "ocr_failure_flag": false,
+      "tie_flag": false,
+      "uncertainty_threshold_applied": false
+    },
+    "timing": {
+      "visual_feature_and_match_seconds": 0.2815378880004573,
+      "ocr_recognition_seconds": 0.037906287998339394,
+      "total_classification_seconds": 0.36463101099798223
+    },
+    "index": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/reference_index/reference_r2.npz",
+      "compatibility_fingerprint": "ff5483e3633f97e7601da3386023b140c729c9bea201ab33b35e3774a7c6f8ec"
+    },
+    "evaluation": {
+      "expected_category": "nt",
+      "visual_correct": true,
+      "final_correct": true
+    }
+  },
+  {
+    "schema_version": 1,
+    "input": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/references/images/8.png",
+      "sha256": "2bdf3980effb34ba2b539be56511a7af64975eae0b3508fdd2028752e8209d32",
+      "width": 132,
+      "height": 39
+    },
+    "visual": {
+      "visual_category": "shorta",
+      "nearest_reference_id": "9",
+      "nearest_reference_category": "shorta",
+      "nearest_similarity": 0.632048487663269,
+      "predicted_category_margin": 0.05462336540222168,
+      "tie_flag": false,
+      "eligible_reference_count": 11,
+      "best_same_category_reference_id": "9",
+      "best_same_category_similarity": 0.632048487663269,
+      "best_different_category_reference_id": "12",
+      "best_different_category_similarity": 0.5774251222610474,
+      "correct_category_margin": 0.05462336540222168,
+      "representation": "r2_global_regional",
+      "feature_dimension": 1536,
+      "feature_metadata": {
+        "view_order": [
+          "whole",
+          "left",
+          "centre",
+          "right"
+        ],
+        "weights": {
+          "whole": 0.25,
+          "left": 0.25,
+          "centre": 0.25,
+          "right": 0.25
+        },
+        "dimension": 1536,
+        "l2_norm": 1.0,
+        "views": {
+          "whole": {
+            "source_xyxy": [
+              0,
+              0,
+              132,
+              39
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                39,
+                132
+              ],
+              "requested_scale": 3.121970170693139,
+              "scale_after_long_edge_limit": 3.121970170693139,
+              "scale_used_before_integer_rounding": 3.121970170693139,
+              "effective_scale_xy": [
+                3.121212121212121,
+                3.128205128205128
+              ],
+              "resized_dimensions_hw": [
+                122,
+                412
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                2,
+                3,
+                2,
+                3
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                128,
+                416
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                8,
+                26
+              ],
+              "patch_count": 208,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                128,
+                416
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999999403953552,
+              "spatial_patch_tokens": 208,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.06977416299923789
+          },
+          "left": {
+            "source_xyxy": [
+              0,
+              0,
+              66,
+              39
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                39,
+                66
+              ],
+              "requested_scale": 4.415132556718484,
+              "scale_after_long_edge_limit": 4.415132556718484,
+              "scale_used_before_integer_rounding": 4.415132556718484,
+              "effective_scale_xy": [
+                4.409090909090909,
+                4.410256410256411
+              ],
+              "resized_dimensions_hw": [
+                172,
+                291
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                6,
+                2,
+                7,
+                2
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                176,
+                304
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                11,
+                19
+              ],
+              "patch_count": 209,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                176,
+                304
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 209,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.07281293099731556
+          },
+          "centre": {
+            "source_xyxy": [
+              33,
+              0,
+              99,
+              39
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                39,
+                66
+              ],
+              "requested_scale": 4.415132556718484,
+              "scale_after_long_edge_limit": 4.415132556718484,
+              "scale_used_before_integer_rounding": 4.415132556718484,
+              "effective_scale_xy": [
+                4.409090909090909,
+                4.410256410256411
+              ],
+              "resized_dimensions_hw": [
+                172,
+                291
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                6,
+                2,
+                7,
+                2
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                176,
+                304
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                11,
+                19
+              ],
+              "patch_count": 209,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                176,
+                304
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 209,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.053505589999986114
+          },
+          "right": {
+            "source_xyxy": [
+              66,
+              0,
+              132,
+              39
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                39,
+                66
+              ],
+              "requested_scale": 4.415132556718484,
+              "scale_after_long_edge_limit": 4.415132556718484,
+              "scale_used_before_integer_rounding": 4.415132556718484,
+              "effective_scale_xy": [
+                4.409090909090909,
+                4.410256410256411
+              ],
+              "resized_dimensions_hw": [
+                172,
+                291
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                6,
+                2,
+                7,
+                2
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                176,
+                304
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                11,
+                19
+              ],
+              "patch_count": 209,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                176,
+                304
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999999403953552,
+              "spatial_patch_tokens": 209,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.053051443999720505
+          }
+        },
+        "total_feature_seconds": 0.25363246699998854
+      },
+      "seconds": 0.2537749469993287
+    },
+    "ocr": {
+      "inference_status": "completed",
+      "failure_reason": "",
+      "raw_text": "300",
+      "native_confidence": 0.7809286713600159,
+      "native_payload": {
+        "res": {
+          "input_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/8/submitted_ocr/8_budget_unpadded.png",
+          "page_index": null,
+          "rec_text": "300",
+          "rec_score": 0.7809286713600159
+        }
+      },
+      "recognition_seconds": 0.05797314799929154,
+      "submitted_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/8/submitted_ocr/8_budget_unpadded.png",
+      "submitted_width": 412,
+      "submitted_height": 122,
+      "normalized_text": "300",
+      "parser_boundary_text": "300",
+      "nt_evidence": "absent",
+      "parser_reason": "no_unambiguous_nt_match",
+      "conflicting_categories": [],
+      "external_budget_geometry": {
+        "original_dimensions_hw": [
+          39,
+          132
+        ],
+        "requested_scale": 3.121970170693139,
+        "scale_after_long_edge_limit": 3.121970170693139,
+        "scale_used_before_integer_rounding": 3.121970170693139,
+        "effective_scale_xy": [
+          3.121212121212121,
+          3.128205128205128
+        ],
+        "resized_dimensions_hw": [
+          122,
+          412
+        ],
+        "rounding_rule": "round-half-up; each dimension at least one pixel",
+        "padding_ltrb": [
+          2,
+          3,
+          2,
+          3
+        ],
+        "odd_padding_rule": "extra pixel goes to right or bottom",
+        "final_dimensions_hw": [
+          128,
+          416
+        ],
+        "patch_size_hw": [
+          16,
+          16
+        ],
+        "patch_grid_hw": [
+          8,
+          26
+        ],
+        "patch_count": 208,
+        "long_edge_limit_applied": false,
+        "patch_count_limit_applied": false,
+        "pixels_cropped": 0
+      }
+    },
+    "decision": {
+      "visual_category": "shorta",
+      "final_category": "shorta",
+      "source": "visual_r2",
+      "override_applied": false,
+      "conflict_flag": false,
+      "ocr_failure_flag": false,
+      "tie_flag": false,
+      "uncertainty_threshold_applied": false
+    },
+    "timing": {
+      "visual_feature_and_match_seconds": 0.2537749469993287,
+      "ocr_recognition_seconds": 0.05797314799929154,
+      "total_classification_seconds": 0.3624877820002439
+    },
+    "index": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/reference_index/reference_r2.npz",
+      "compatibility_fingerprint": "ff5483e3633f97e7601da3386023b140c729c9bea201ab33b35e3774a7c6f8ec"
+    },
+    "evaluation": {
+      "expected_category": "shorta",
+      "visual_correct": true,
+      "final_correct": true
+    }
+  },
+  {
+    "schema_version": 1,
+    "input": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/references/images/9.png",
+      "sha256": "7f479012a8417a028939461b4d82d1f86113a78c1ccd4e8d52eb70686a97d5ba",
+      "width": 157,
+      "height": 44
+    },
+    "visual": {
+      "visual_category": "shorta",
+      "nearest_reference_id": "8",
+      "nearest_reference_category": "shorta",
+      "nearest_similarity": 0.632048487663269,
+      "predicted_category_margin": 0.11097371578216553,
+      "tie_flag": false,
+      "eligible_reference_count": 11,
+      "best_same_category_reference_id": "8",
+      "best_same_category_similarity": 0.632048487663269,
+      "best_different_category_reference_id": "2",
+      "best_different_category_similarity": 0.5210747718811035,
+      "correct_category_margin": 0.11097371578216553,
+      "representation": "r2_global_regional",
+      "feature_dimension": 1536,
+      "feature_metadata": {
+        "view_order": [
+          "whole",
+          "left",
+          "centre",
+          "right"
+        ],
+        "weights": {
+          "whole": 0.25,
+          "left": 0.25,
+          "centre": 0.25,
+          "right": 0.25
+        },
+        "dimension": 1536,
+        "l2_norm": 1.0,
+        "views": {
+          "whole": {
+            "source_xyxy": [
+              0,
+              0,
+              157,
+              44
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                44,
+                157
+              ],
+              "requested_scale": 2.6950811958079637,
+              "scale_after_long_edge_limit": 2.6950811958079637,
+              "scale_used_before_integer_rounding": 2.6950811958079637,
+              "effective_scale_xy": [
+                2.694267515923567,
+                2.7045454545454546
+              ],
+              "resized_dimensions_hw": [
+                119,
+                423
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                4,
+                4,
+                5,
+                5
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                128,
+                432
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                8,
+                27
+              ],
+              "patch_count": 216,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                128,
+                432
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999999403953552,
+              "spatial_patch_tokens": 216,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.07738646700090612
+          },
+          "left": {
+            "source_xyxy": [
+              0,
+              0,
+              79,
+              44
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                44,
+                79
+              ],
+              "requested_scale": 3.799339776695447,
+              "scale_after_long_edge_limit": 3.799339776695447,
+              "scale_used_before_integer_rounding": 3.799339776695447,
+              "effective_scale_xy": [
+                3.7974683544303796,
+                3.7954545454545454
+              ],
+              "resized_dimensions_hw": [
+                167,
+                300
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                2,
+                4,
+                2,
+                5
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                176,
+                304
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                11,
+                19
+              ],
+              "patch_count": 209,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                176,
+                304
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0000001192092896,
+              "spatial_patch_tokens": 209,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.06850002399733057
+          },
+          "centre": {
+            "source_xyxy": [
+              39,
+              0,
+              118,
+              44
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                44,
+                79
+              ],
+              "requested_scale": 3.799339776695447,
+              "scale_after_long_edge_limit": 3.799339776695447,
+              "scale_used_before_integer_rounding": 3.799339776695447,
+              "effective_scale_xy": [
+                3.7974683544303796,
+                3.7954545454545454
+              ],
+              "resized_dimensions_hw": [
+                167,
+                300
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                2,
+                4,
+                2,
+                5
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                176,
+                304
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                11,
+                19
+              ],
+              "patch_count": 209,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                176,
+                304
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999998807907104,
+              "spatial_patch_tokens": 209,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.05357921000177157
+          },
+          "right": {
+            "source_xyxy": [
+              78,
+              0,
+              157,
+              44
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                44,
+                79
+              ],
+              "requested_scale": 3.799339776695447,
+              "scale_after_long_edge_limit": 3.799339776695447,
+              "scale_used_before_integer_rounding": 3.799339776695447,
+              "effective_scale_xy": [
+                3.7974683544303796,
+                3.7954545454545454
+              ],
+              "resized_dimensions_hw": [
+                167,
+                300
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                2,
+                4,
+                2,
+                5
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                176,
+                304
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                11,
+                19
+              ],
+              "patch_count": 209,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                176,
+                304
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999999403953552,
+              "spatial_patch_tokens": 209,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.054651746002491564
+          }
+        },
+        "total_feature_seconds": 0.2575105319992872
+      },
+      "seconds": 0.2576641759987979
+    },
+    "ocr": {
+      "inference_status": "completed",
+      "failure_reason": "",
+      "raw_text": "a27211",
+      "native_confidence": 0.7739422917366028,
+      "native_payload": {
+        "res": {
+          "input_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/9/submitted_ocr/9_budget_unpadded.png",
+          "page_index": null,
+          "rec_text": "a27211",
+          "rec_score": 0.7739422917366028
+        }
+      },
+      "recognition_seconds": 0.030854479999106843,
+      "submitted_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/9/submitted_ocr/9_budget_unpadded.png",
+      "submitted_width": 423,
+      "submitted_height": 119,
+      "normalized_text": "a27211",
+      "parser_boundary_text": "a27211",
+      "nt_evidence": "absent",
+      "parser_reason": "no_unambiguous_nt_match",
+      "conflicting_categories": [],
+      "external_budget_geometry": {
+        "original_dimensions_hw": [
+          44,
+          157
+        ],
+        "requested_scale": 2.6950811958079637,
+        "scale_after_long_edge_limit": 2.6950811958079637,
+        "scale_used_before_integer_rounding": 2.6950811958079637,
+        "effective_scale_xy": [
+          2.694267515923567,
+          2.7045454545454546
+        ],
+        "resized_dimensions_hw": [
+          119,
+          423
+        ],
+        "rounding_rule": "round-half-up; each dimension at least one pixel",
+        "padding_ltrb": [
+          4,
+          4,
+          5,
+          5
+        ],
+        "odd_padding_rule": "extra pixel goes to right or bottom",
+        "final_dimensions_hw": [
+          128,
+          432
+        ],
+        "patch_size_hw": [
+          16,
+          16
+        ],
+        "patch_grid_hw": [
+          8,
+          27
+        ],
+        "patch_count": 216,
+        "long_edge_limit_applied": false,
+        "patch_count_limit_applied": false,
+        "pixels_cropped": 0
+      }
+    },
+    "decision": {
+      "visual_category": "shorta",
+      "final_category": "shorta",
+      "source": "visual_r2",
+      "override_applied": false,
+      "conflict_flag": false,
+      "ocr_failure_flag": false,
+      "tie_flag": false,
+      "uncertainty_threshold_applied": false
+    },
+    "timing": {
+      "visual_feature_and_match_seconds": 0.2576641759987979,
+      "ocr_recognition_seconds": 0.030854479999106843,
+      "total_classification_seconds": 0.3398335220008448
+    },
+    "index": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/reference_index/reference_r2.npz",
+      "compatibility_fingerprint": "ff5483e3633f97e7601da3386023b140c729c9bea201ab33b35e3774a7c6f8ec"
+    },
+    "evaluation": {
+      "expected_category": "shorta",
+      "visual_correct": true,
+      "final_correct": true
+    }
+  },
+  {
+    "schema_version": 1,
+    "input": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/references/images/10.png",
+      "sha256": "2c9d1965d542093d681a40fc48c0bebe0e7f754a5d0a936720808e4734231be8",
+      "width": 420,
+      "height": 132
+    },
+    "visual": {
+      "visual_category": "tunis",
+      "nearest_reference_id": "12",
+      "nearest_reference_category": "tunis",
+      "nearest_similarity": 0.694396436214447,
+      "predicted_category_margin": 0.04831796884536743,
+      "tie_flag": false,
+      "eligible_reference_count": 11,
+      "best_same_category_reference_id": "12",
+      "best_same_category_similarity": 0.694396436214447,
+      "best_different_category_reference_id": "2",
+      "best_different_category_similarity": 0.6460784673690796,
+      "correct_category_margin": 0.04831796884536743,
+      "representation": "r2_global_regional",
+      "feature_dimension": 1536,
+      "feature_metadata": {
+        "view_order": [
+          "whole",
+          "left",
+          "centre",
+          "right"
+        ],
+        "weights": {
+          "whole": 0.25,
+          "left": 0.25,
+          "centre": 0.25,
+          "right": 0.25
+        },
+        "dimension": 1536,
+        "l2_norm": 1.0000001192092896,
+        "views": {
+          "whole": {
+            "source_xyxy": [
+              0,
+              0,
+              420,
+              132
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                132,
+                420
+              ],
+              "requested_scale": 0.951341424016901,
+              "scale_after_long_edge_limit": 0.951341424016901,
+              "scale_used_before_integer_rounding": 0.951341424016901,
+              "effective_scale_xy": [
+                0.9523809523809523,
+                0.9545454545454546
+              ],
+              "resized_dimensions_hw": [
+                126,
+                400
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                0,
+                1,
+                0,
+                1
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                128,
+                400
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                8,
+                25
+              ],
+              "patch_count": 200,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                128,
+                400
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 200,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.07776473600097233
+          },
+          "left": {
+            "source_xyxy": [
+              0,
+              0,
+              210,
+              132
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                132,
+                210
+              ],
+              "requested_scale": 1.3453999442920348,
+              "scale_after_long_edge_limit": 1.3453999442920348,
+              "scale_used_before_integer_rounding": 1.3453999442920348,
+              "effective_scale_xy": [
+                1.3476190476190477,
+                1.3484848484848484
+              ],
+              "resized_dimensions_hw": [
+                178,
+                283
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                2,
+                7,
+                3,
+                7
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                192,
+                288
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                12,
+                18
+              ],
+              "patch_count": 216,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                192,
+                288
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 216,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.06885747599881142
+          },
+          "centre": {
+            "source_xyxy": [
+              105,
+              0,
+              315,
+              132
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                132,
+                210
+              ],
+              "requested_scale": 1.3453999442920348,
+              "scale_after_long_edge_limit": 1.3453999442920348,
+              "scale_used_before_integer_rounding": 1.3453999442920348,
+              "effective_scale_xy": [
+                1.3476190476190477,
+                1.3484848484848484
+              ],
+              "resized_dimensions_hw": [
+                178,
+                283
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                2,
+                7,
+                3,
+                7
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                192,
+                288
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                12,
+                18
+              ],
+              "patch_count": 216,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                192,
+                288
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999999403953552,
+              "spatial_patch_tokens": 216,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.058342566997453105
+          },
+          "right": {
+            "source_xyxy": [
+              210,
+              0,
+              420,
+              132
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                132,
+                210
+              ],
+              "requested_scale": 1.3453999442920348,
+              "scale_after_long_edge_limit": 1.3453999442920348,
+              "scale_used_before_integer_rounding": 1.3453999442920348,
+              "effective_scale_xy": [
+                1.3476190476190477,
+                1.3484848484848484
+              ],
+              "resized_dimensions_hw": [
+                178,
+                283
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                2,
+                7,
+                3,
+                7
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                192,
+                288
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                12,
+                18
+              ],
+              "patch_count": 216,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                192,
+                288
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 216,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.054158161001396365
+          }
+        },
+        "total_feature_seconds": 0.26225264700042317
+      },
+      "seconds": 0.26241632500023115
+    },
+    "ocr": {
+      "inference_status": "completed",
+      "failure_reason": "",
+      "raw_text": "توشن",
+      "native_confidence": 0.4553837180137634,
+      "native_payload": {
+        "res": {
+          "input_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/10/submitted_ocr/10_budget_unpadded.png",
+          "page_index": null,
+          "rec_text": "توشن",
+          "rec_score": 0.4553837180137634
+        }
+      },
+      "recognition_seconds": 0.04129865799768595,
+      "submitted_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/10/submitted_ocr/10_budget_unpadded.png",
+      "submitted_width": 400,
+      "submitted_height": 126,
+      "normalized_text": "توشن",
+      "parser_boundary_text": "توشن",
+      "nt_evidence": "absent",
+      "parser_reason": "no_unambiguous_nt_match",
+      "conflicting_categories": [],
+      "external_budget_geometry": {
+        "original_dimensions_hw": [
+          132,
+          420
+        ],
+        "requested_scale": 0.951341424016901,
+        "scale_after_long_edge_limit": 0.951341424016901,
+        "scale_used_before_integer_rounding": 0.951341424016901,
+        "effective_scale_xy": [
+          0.9523809523809523,
+          0.9545454545454546
+        ],
+        "resized_dimensions_hw": [
+          126,
+          400
+        ],
+        "rounding_rule": "round-half-up; each dimension at least one pixel",
+        "padding_ltrb": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "odd_padding_rule": "extra pixel goes to right or bottom",
+        "final_dimensions_hw": [
+          128,
+          400
+        ],
+        "patch_size_hw": [
+          16,
+          16
+        ],
+        "patch_grid_hw": [
+          8,
+          25
+        ],
+        "patch_count": 200,
+        "long_edge_limit_applied": false,
+        "patch_count_limit_applied": false,
+        "pixels_cropped": 0
+      }
+    },
+    "decision": {
+      "visual_category": "tunis",
+      "final_category": "tunis",
+      "source": "visual_r2",
+      "override_applied": false,
+      "conflict_flag": false,
+      "ocr_failure_flag": false,
+      "tie_flag": false,
+      "uncertainty_threshold_applied": false
+    },
+    "timing": {
+      "visual_feature_and_match_seconds": 0.26241632500023115,
+      "ocr_recognition_seconds": 0.04129865799768595,
+      "total_classification_seconds": 0.3464977430012368
+    },
+    "index": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/reference_index/reference_r2.npz",
+      "compatibility_fingerprint": "ff5483e3633f97e7601da3386023b140c729c9bea201ab33b35e3774a7c6f8ec"
+    },
+    "evaluation": {
+      "expected_category": "tunis",
+      "visual_correct": true,
+      "final_correct": true
+    }
+  },
+  {
+    "schema_version": 1,
+    "input": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/references/images/11.png",
+      "sha256": "1d5a13afcc92d955fd0df87734267b9e17d4f52c869cb8a2db295f714f062925",
+      "width": 168,
+      "height": 54
+    },
+    "visual": {
+      "visual_category": "tunis",
+      "nearest_reference_id": "12",
+      "nearest_reference_category": "tunis",
+      "nearest_similarity": 0.7244789600372314,
+      "predicted_category_margin": 0.07781016826629639,
+      "tie_flag": false,
+      "eligible_reference_count": 11,
+      "best_same_category_reference_id": "12",
+      "best_same_category_similarity": 0.7244789600372314,
+      "best_different_category_reference_id": "5",
+      "best_different_category_similarity": 0.6466687917709351,
+      "correct_category_margin": 0.07781016826629639,
+      "representation": "r2_global_regional",
+      "feature_dimension": 1536,
+      "feature_metadata": {
+        "view_order": [
+          "whole",
+          "left",
+          "centre",
+          "right"
+        ],
+        "weights": {
+          "whole": 0.25,
+          "left": 0.25,
+          "centre": 0.25,
+          "right": 0.25
+        },
+        "dimension": 1536,
+        "l2_norm": 1.0,
+        "views": {
+          "whole": {
+            "source_xyxy": [
+              0,
+              0,
+              168,
+              54
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                54,
+                168
+              ],
+              "requested_scale": 2.351778943168525,
+              "scale_after_long_edge_limit": 2.351778943168525,
+              "scale_used_before_integer_rounding": 2.351778943168525,
+              "effective_scale_xy": [
+                2.3511904761904763,
+                2.3518518518518516
+              ],
+              "resized_dimensions_hw": [
+                127,
+                395
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                2,
+                0,
+                3,
+                1
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                128,
+                400
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                8,
+                25
+              ],
+              "patch_count": 200,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                128,
+                400
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 200,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.06817462700200849
+          },
+          "left": {
+            "source_xyxy": [
+              0,
+              0,
+              84,
+              54
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                54,
+                84
+              ],
+              "requested_scale": 3.3259176771323924,
+              "scale_after_long_edge_limit": 3.3259176771323924,
+              "scale_used_before_integer_rounding": 3.3259176771323924,
+              "effective_scale_xy": [
+                3.3214285714285716,
+                3.3333333333333335
+              ],
+              "resized_dimensions_hw": [
+                180,
+                279
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                4,
+                6,
+                5,
+                6
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                192,
+                288
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                12,
+                18
+              ],
+              "patch_count": 216,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                192,
+                288
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0000001192092896,
+              "spatial_patch_tokens": 216,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.07712596500277868
+          },
+          "centre": {
+            "source_xyxy": [
+              42,
+              0,
+              126,
+              54
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                54,
+                84
+              ],
+              "requested_scale": 3.3259176771323924,
+              "scale_after_long_edge_limit": 3.3259176771323924,
+              "scale_used_before_integer_rounding": 3.3259176771323924,
+              "effective_scale_xy": [
+                3.3214285714285716,
+                3.3333333333333335
+              ],
+              "resized_dimensions_hw": [
+                180,
+                279
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                4,
+                6,
+                5,
+                6
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                192,
+                288
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                12,
+                18
+              ],
+              "patch_count": 216,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                192,
+                288
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 216,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.07178959200246027
+          },
+          "right": {
+            "source_xyxy": [
+              84,
+              0,
+              168,
+              54
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                54,
+                84
+              ],
+              "requested_scale": 3.3259176771323924,
+              "scale_after_long_edge_limit": 3.3259176771323924,
+              "scale_used_before_integer_rounding": 3.3259176771323924,
+              "effective_scale_xy": [
+                3.3214285714285716,
+                3.3333333333333335
+              ],
+              "resized_dimensions_hw": [
+                180,
+                279
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                4,
+                6,
+                5,
+                6
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                192,
+                288
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                12,
+                18
+              ],
+              "patch_count": 216,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                192,
+                288
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 216,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.05644207099976484
+          }
+        },
+        "total_feature_seconds": 0.2781981580010324
+      },
+      "seconds": 0.27834500599783496
+    },
+    "ocr": {
+      "inference_status": "completed",
+      "failure_reason": "",
+      "raw_text": "937 ن 2",
+      "native_confidence": 0.6832978129386902,
+      "native_payload": {
+        "res": {
+          "input_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/11/submitted_ocr/11_budget_unpadded.png",
+          "page_index": null,
+          "rec_text": "937 ن 2",
+          "rec_score": 0.6832978129386902
+        }
+      },
+      "recognition_seconds": 0.043267387998639606,
+      "submitted_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/11/submitted_ocr/11_budget_unpadded.png",
+      "submitted_width": 395,
+      "submitted_height": 127,
+      "normalized_text": "937ن2",
+      "parser_boundary_text": "937 ن 2",
+      "nt_evidence": "absent",
+      "parser_reason": "no_unambiguous_nt_match",
+      "conflicting_categories": [],
+      "external_budget_geometry": {
+        "original_dimensions_hw": [
+          54,
+          168
+        ],
+        "requested_scale": 2.351778943168525,
+        "scale_after_long_edge_limit": 2.351778943168525,
+        "scale_used_before_integer_rounding": 2.351778943168525,
+        "effective_scale_xy": [
+          2.3511904761904763,
+          2.3518518518518516
+        ],
+        "resized_dimensions_hw": [
+          127,
+          395
+        ],
+        "rounding_rule": "round-half-up; each dimension at least one pixel",
+        "padding_ltrb": [
+          2,
+          0,
+          3,
+          1
+        ],
+        "odd_padding_rule": "extra pixel goes to right or bottom",
+        "final_dimensions_hw": [
+          128,
+          400
+        ],
+        "patch_size_hw": [
+          16,
+          16
+        ],
+        "patch_grid_hw": [
+          8,
+          25
+        ],
+        "patch_count": 200,
+        "long_edge_limit_applied": false,
+        "patch_count_limit_applied": false,
+        "pixels_cropped": 0
+      }
+    },
+    "decision": {
+      "visual_category": "tunis",
+      "final_category": "tunis",
+      "source": "visual_r2",
+      "override_applied": false,
+      "conflict_flag": false,
+      "ocr_failure_flag": false,
+      "tie_flag": false,
+      "uncertainty_threshold_applied": false
+    },
+    "timing": {
+      "visual_feature_and_match_seconds": 0.27834500599783496,
+      "ocr_recognition_seconds": 0.043267387998639606,
+      "total_classification_seconds": 0.36298459399768035
+    },
+    "index": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/reference_index/reference_r2.npz",
+      "compatibility_fingerprint": "ff5483e3633f97e7601da3386023b140c729c9bea201ab33b35e3774a7c6f8ec"
+    },
+    "evaluation": {
+      "expected_category": "tunis",
+      "visual_correct": true,
+      "final_correct": true
+    }
+  },
+  {
+    "schema_version": 1,
+    "input": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/references/images/12.png",
+      "sha256": "6577a657626fbe46c242cd33bc1adbce0f7f23d20c1711d26247275177a50c28",
+      "width": 244,
+      "height": 61
+    },
+    "visual": {
+      "visual_category": "tunis",
+      "nearest_reference_id": "11",
+      "nearest_reference_category": "tunis",
+      "nearest_similarity": 0.7244789600372314,
+      "predicted_category_margin": 0.05073016881942749,
+      "tie_flag": false,
+      "eligible_reference_count": 11,
+      "best_same_category_reference_id": "11",
+      "best_same_category_similarity": 0.7244789600372314,
+      "best_different_category_reference_id": "5",
+      "best_different_category_similarity": 0.673748791217804,
+      "correct_category_margin": 0.05073016881942749,
+      "representation": "r2_global_regional",
+      "feature_dimension": 1536,
+      "feature_metadata": {
+        "view_order": [
+          "whole",
+          "left",
+          "centre",
+          "right"
+        ],
+        "weights": {
+          "whole": 0.25,
+          "left": 0.25,
+          "centre": 0.25,
+          "right": 0.25
+        },
+        "dimension": 1536,
+        "l2_norm": 1.0,
+        "views": {
+          "whole": {
+            "source_xyxy": [
+              0,
+              0,
+              244,
+              61
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                61,
+                244
+              ],
+              "requested_scale": 1.8360655737704918,
+              "scale_after_long_edge_limit": 1.8360655737704918,
+              "scale_used_before_integer_rounding": 1.8360655737704918,
+              "effective_scale_xy": [
+                1.8360655737704918,
+                1.8360655737704918
+              ],
+              "resized_dimensions_hw": [
+                112,
+                448
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                0,
+                0,
+                0,
+                0
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                112,
+                448
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                7,
+                28
+              ],
+              "patch_count": 196,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                112,
+                448
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 196,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.06545561399980215
+          },
+          "left": {
+            "source_xyxy": [
+              0,
+              0,
+              122,
+              61
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                61,
+                122
+              ],
+              "requested_scale": 2.596588835832568,
+              "scale_after_long_edge_limit": 2.596588835832568,
+              "scale_used_before_integer_rounding": 2.596588835832568,
+              "effective_scale_xy": [
+                2.598360655737705,
+                2.5901639344262297
+              ],
+              "resized_dimensions_hw": [
+                158,
+                317
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                1,
+                1,
+                2,
+                1
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                160,
+                320
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                10,
+                20
+              ],
+              "patch_count": 200,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                160,
+                320
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 200,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.06102268699760316
+          },
+          "centre": {
+            "source_xyxy": [
+              61,
+              0,
+              183,
+              61
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                61,
+                122
+              ],
+              "requested_scale": 2.596588835832568,
+              "scale_after_long_edge_limit": 2.596588835832568,
+              "scale_used_before_integer_rounding": 2.596588835832568,
+              "effective_scale_xy": [
+                2.598360655737705,
+                2.5901639344262297
+              ],
+              "resized_dimensions_hw": [
+                158,
+                317
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                1,
+                1,
+                2,
+                1
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                160,
+                320
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                10,
+                20
+              ],
+              "patch_count": 200,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                160,
+                320
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 0.9999999403953552,
+              "spatial_patch_tokens": 200,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.058310538999649
+          },
+          "right": {
+            "source_xyxy": [
+              122,
+              0,
+              244,
+              61
+            ],
+            "preprocessing": {
+              "original_dimensions_hw": [
+                61,
+                122
+              ],
+              "requested_scale": 2.596588835832568,
+              "scale_after_long_edge_limit": 2.596588835832568,
+              "scale_used_before_integer_rounding": 2.596588835832568,
+              "effective_scale_xy": [
+                2.598360655737705,
+                2.5901639344262297
+              ],
+              "resized_dimensions_hw": [
+                158,
+                317
+              ],
+              "rounding_rule": "round-half-up; each dimension at least one pixel",
+              "padding_ltrb": [
+                1,
+                1,
+                2,
+                1
+              ],
+              "odd_padding_rule": "extra pixel goes to right or bottom",
+              "final_dimensions_hw": [
+                160,
+                320
+              ],
+              "patch_size_hw": [
+                16,
+                16
+              ],
+              "patch_grid_hw": [
+                10,
+                20
+              ],
+              "patch_count": 200,
+              "long_edge_limit_applied": false,
+              "patch_count_limit_applied": false,
+              "pixels_cropped": 0,
+              "padding_rgb": [
+                124,
+                116,
+                104
+              ],
+              "resize_interpolation": "bicubic",
+              "tensor_shape": [
+                1,
+                3,
+                160,
+                320
+              ],
+              "tensor_dtype": "torch.float32"
+            },
+            "embedding": {
+              "dimension": 384,
+              "l2_norm": 1.0,
+              "spatial_patch_tokens": 200,
+              "storage_tokens_excluded": 4
+            },
+            "forward_seconds": 0.05565013700106647
+          }
+        },
+        "total_feature_seconds": 0.24328684899955988
+      },
+      "seconds": 0.2434205680001469
+    },
+    "ocr": {
+      "inference_status": "completed",
+      "failure_reason": "",
+      "raw_text": "ؤن",
+      "native_confidence": 0.44501960277557373,
+      "native_payload": {
+        "res": {
+          "input_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/12/submitted_ocr/12_budget_unpadded.png",
+          "page_index": null,
+          "rec_text": "ؤن",
+          "rec_score": 0.44501960277557373
+        }
+      },
+      "recognition_seconds": 0.04727305400228943,
+      "submitted_path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/verification/vendored_leave_one_out/per_image/12/submitted_ocr/12_budget_unpadded.png",
+      "submitted_width": 448,
+      "submitted_height": 112,
+      "normalized_text": "ؤن",
+      "parser_boundary_text": "ؤن",
+      "nt_evidence": "absent",
+      "parser_reason": "no_unambiguous_nt_match",
+      "conflicting_categories": [],
+      "external_budget_geometry": {
+        "original_dimensions_hw": [
+          61,
+          244
+        ],
+        "requested_scale": 1.8360655737704918,
+        "scale_after_long_edge_limit": 1.8360655737704918,
+        "scale_used_before_integer_rounding": 1.8360655737704918,
+        "effective_scale_xy": [
+          1.8360655737704918,
+          1.8360655737704918
+        ],
+        "resized_dimensions_hw": [
+          112,
+          448
+        ],
+        "rounding_rule": "round-half-up; each dimension at least one pixel",
+        "padding_ltrb": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "odd_padding_rule": "extra pixel goes to right or bottom",
+        "final_dimensions_hw": [
+          112,
+          448
+        ],
+        "patch_size_hw": [
+          16,
+          16
+        ],
+        "patch_grid_hw": [
+          7,
+          28
+        ],
+        "patch_count": 196,
+        "long_edge_limit_applied": false,
+        "patch_count_limit_applied": false,
+        "pixels_cropped": 0
+      }
+    },
+    "decision": {
+      "visual_category": "tunis",
+      "final_category": "tunis",
+      "source": "visual_r2",
+      "override_applied": false,
+      "conflict_flag": false,
+      "ocr_failure_flag": false,
+      "tie_flag": false,
+      "uncertainty_threshold_applied": false
+    },
+    "timing": {
+      "visual_feature_and_match_seconds": 0.2434205680001469,
+      "ocr_recognition_seconds": 0.04727305400228943,
+      "total_classification_seconds": 0.33092942100120126
+    },
+    "index": {
+      "path": "/mnt/d/temporary/test/plate_similarity_test/License plate plugin/assets/reference_index/reference_r2.npz",
+      "compatibility_fingerprint": "ff5483e3633f97e7601da3386023b140c729c9bea201ab33b35e3774a7c6f8ec"
+    },
+    "evaluation": {
+      "expected_category": "tunis",
+      "visual_correct": true,
+      "final_correct": true
+    }
+  }
+]

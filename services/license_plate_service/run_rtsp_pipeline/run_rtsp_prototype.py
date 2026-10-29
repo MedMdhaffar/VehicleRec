@@ -15,6 +15,7 @@ from typing import Callable
 
 import cv2
 
+from run_video_pipeline.classification import create_classifier
 import run_rtsp_pipeline.config as config
 from run_rtsp_pipeline.agent import OpenRouterPlateAgent
 from run_rtsp_pipeline.data_capture import ReviewStore
@@ -470,6 +471,7 @@ def run_rtsp(
             TounesMarkerLocalizer(config.WORD_DETECTOR_PATH),
             OpenRouterPlateAgent(enabled=args.agent_enabled),
             ReviewStore(args.capture_root),
+            classifier_factory=create_classifier,
         )
         detector = PlateDetector(config.PLATE_DETECTOR_PATH)
         session_id = reader.connection_generation

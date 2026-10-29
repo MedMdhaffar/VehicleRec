@@ -1,0 +1,20 @@
+{
+  "model_identifier": "dinov3_vits16",
+  "dinov3_repo": "../assets/vendor/dinov3",
+  "dinov3_checkpoint": "../assets/models/dinov3/dinov3_vits16_pretrain_lvd1689m-08c60483.pth",
+  "paddle_model_dir": "../assets/models/arabic_PP-OCRv5_mobile_rec",
+  "ocr_identifier": "arabic_PP-OCRv5_mobile_rec",
+  "reference_manifest": "../assets/references/manifest.json",
+  "reference_index": "../assets/reference_index/reference_r2.npz",
+  "device": "cpu",
+  "ocr_device": "cpu",
+  "tie_tolerance": 1e-12,
+  "resolution_policy": {
+    "target_area": 50176,
+    "max_long_edge": 1008,
+    "max_patch_count": 512,
+    "padding_rgb": [124, 116, 104],
+    "interpolation": "bicubic"
+  }
+}
+
