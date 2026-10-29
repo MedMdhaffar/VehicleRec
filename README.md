@@ -33,12 +33,18 @@ dependencies:
 cd vehicle
 python -m venv .venv
 .venv/bin/pip install -r requirements.txt
+.venv/bin/pip install --no-deps --no-build-isolation -e ../services/license_plate_service/LicensePlatePlugin
 .venv/bin/python manage.py migrate
 .venv/bin/python manage.py runserver
 ```
 
 The API is served at `http://127.0.0.1:8000`. Generated files are stored under
 `vehicle/media/` in per-job directories.
+
+Install the system `ffmpeg` executable with the `libx264` encoder for license
+plate output videos. The API converts annotated videos and completed camera
+recordings to H.264 with `yuv420p` pixels and fast-start MP4 metadata so they can
+play in the browser. Standalone pipelines retain their OpenCV output format.
 
 The computer-vision services require the packages listed in
 `vehicle/requirements.txt`, model weights, and (for optional agent fallbacks)
@@ -108,3 +114,41 @@ Run frontend checks from `frontend/`:
 npm run lint
 npm run build
 ```
+
+## Local plate-category runtime
+
+Django and standalone video/RTSP require the same editable `license_plate_plugin`
+package. The supplemental DINOv3 dependencies are included by
+`vehicle/requirements.txt` through
+`services/license_plate_service/requirements-classifier.txt`. Keep the complete
+plugin directory, including its vendored implementation, model files and frozen
+reference index. Neither runtime downloads or substitutes a classifier model.
+
+Use one Python 3.11 environment for both entry points, or repeat dependency and
+editable-package installation in each environment. For standalone execution with
+the backend environment, from the repository root:
+
+```bash
+cd services/license_plate_service
+../../vehicle/.venv/bin/python -m run_video_pipeline.run_video_prototype /absolute/video.mp4 --max-frames 60
+../../vehicle/.venv/bin/python -m run_rtsp_pipeline.run_rtsp_prototype --url 'rtsp://camera-host/stream' --max-frames 60
+```
+
+The classifier is initialized on each runner's single recognition worker before
+frames are processed. Selected-crop recognition and better-crop rechecks classify
+before registration OCR. Classification evidence is stored separately in
+`captures/prediction_debug.jsonl`; compact results retain their registration
+category/text/confidence meanings. A classifier exception makes the attempt
+unresolved and skips registration and external routing for that attempt.
+
+A writable Torch/Paddle cache may be required even for local model loading. For
+restricted hosts, point `TORCH_HOME`, `PADDLE_PDX_CACHE_HOME` and `MPLCONFIGDIR` to
+writable cache directories. Paddle's PP-OCRv6 registration model must already be
+cached for fully offline execution; the category plugin includes its own Arabic
+OCR model. CPU thread limits can be set in the process environment for bounded
+verification; they do not change model configuration.
+
+The existing external-agent route remains for successful classifications whose
+registration evidence does not meet the existing local acceptance rules. This
+is not yet the final fallback-free system. Development checks must leave
+`--agent-enabled` unset and use `OPENROUTER_ENABLED=false`.

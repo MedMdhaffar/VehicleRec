@@ -1,0 +1,760 @@
+--- a/services/license_plate_service/LicensePlatePlugin/license_plate_plugin/__init__.py
++++ b/services/license_plate_service/LicensePlatePlugin/license_plate_plugin/__init__.py
+@@ -1,7 +1,7 @@
+ """Reusable Tunisian plate-category classification package."""
+ 
+ from .classifier import PlateCategoryClassifier
+-from .config import PluginConfig, load_config
++from .config import PluginConfig, load_config, load_default_config
+ from .errors import PluginError
+ from .parser import normalize_arabic_marker, parse_nt_evidence
+ from .reference_index import ReferenceIndex
+@@ -12,6 +12,7 @@
+     "PluginError",
+     "ReferenceIndex",
+     "load_config",
++    "load_default_config",
+     "normalize_arabic_marker",
+     "parse_nt_evidence",
+ ]
+--- a/services/license_plate_service/LicensePlatePlugin/license_plate_plugin/classifier.py
++++ b/services/license_plate_service/LicensePlatePlugin/license_plate_plugin/classifier.py
+@@ -5,6 +5,8 @@
+ import time
+ from pathlib import Path
+ from typing import Any
++
++import numpy as np
+ 
+ from .config import PluginConfig
+ from .dinov3 import DinoV3Encoder
+@@ -42,6 +44,71 @@
+         output = Path(output_dir).expanduser().resolve()
+         output.mkdir(parents=True, exist_ok=True)
+         image = load_bgr(path)
++        return self._classify_image(
++            image,
++            input_metadata={
++                "path": str(path), "sha256": sha256_file(path),
++                "width": int(image.shape[1]), "height": int(image.shape[0]),
++            },
++            submitted_path=output / "submitted_ocr" / f"{path.stem}_budget_unpadded.png",
++            exclude_reference_ids=exclude_reference_ids,
++            exclude_groups=exclude_groups,
++            expected_category=expected_category,
++        )
++
++    def classify_bgr(
++        self,
++        image: np.ndarray,
++        output_dir: str | Path | None = None,
++        *,
++        exclude_reference_ids: tuple[str, ...] = (),
++        exclude_groups: dict[str, Any] | None = None,
++        expected_category: str | None = None,
++    ) -> dict[str, Any]:
++        """Classify uint8 H×W×3 BGR pixels without changing the caller's array.
++
++        By default no files are written. If output_dir is supplied, save the
++        unpadded OCR submission there. Use a separate directory per call when
++        retaining diagnostics. No source path or file hash is inferred.
++        """
++        if not isinstance(image, np.ndarray):
++            raise PluginError("Expected a NumPy array containing uint8 BGR pixels.")
++        if image.ndim != 3 or image.shape[2] != 3 or image.size == 0:
++            raise PluginError(f"Expected a nonempty BGR array shaped (H, W, 3), got {image.shape}.")
++        if image.dtype != np.uint8:
++            raise PluginError(f"Expected uint8 BGR pixels, got dtype={image.dtype}.")
++        # Isolate model/preprocessing code from caller-owned storage, including
++        # read-only arrays and non-contiguous frame slices.
++        owned_image = image.copy(order="C")
++        submitted_path = None
++        if output_dir is not None:
++            submitted_path = (
++                Path(output_dir).expanduser().resolve()
++                / "submitted_ocr" / "array_budget_unpadded.png"
++            )
++        return self._classify_image(
++            owned_image,
++            input_metadata={
++                "kind": "bgr_array", "dtype": "uint8", "color_order": "BGR",
++                "width": int(image.shape[1]), "height": int(image.shape[0]),
++            },
++            submitted_path=submitted_path,
++            exclude_reference_ids=exclude_reference_ids,
++            exclude_groups=exclude_groups,
++            expected_category=expected_category,
++        )
++
++    def _classify_image(
++        self,
++        image: np.ndarray,
++        *,
++        input_metadata: dict[str, Any],
++        submitted_path: Path | None,
++        exclude_reference_ids: tuple[str, ...],
++        exclude_groups: dict[str, Any] | None,
++        expected_category: str | None,
++    ) -> dict[str, Any]:
++        """Shared feature extraction, OCR, matching and decision implementation."""
+         total_started = time.perf_counter()
+         visual_started = time.perf_counter()
+         embedding, feature_metadata = extract_r2(image, self.encoder, self.config.policy)
+@@ -56,7 +123,6 @@
+ 
+         geometry = calculate_geometry(image.shape, (16, 16), self.config.policy)
+         resized, _padded = resize_and_pad(image, geometry, self.config.policy)
+-        submitted_path = output / "submitted_ocr" / f"{path.stem}_budget_unpadded.png"
+         if self.ocr is None:
+             ocr = {
+                 "inference_status": "disabled",
+@@ -88,12 +154,7 @@
+         ocr_failure = ocr["inference_status"] == "failed"
+         result = {
+             "schema_version": 1,
+-            "input": {
+-                "path": str(path),
+-                "sha256": sha256_file(path),
+-                "width": int(image.shape[1]),
+-                "height": int(image.shape[0]),
+-            },
++            "input": input_metadata,
+             "visual": {
+                 **visual,
+                 "representation": "r2_global_regional",
+--- a/services/license_plate_service/LicensePlatePlugin/license_plate_plugin/config.py
++++ b/services/license_plate_service/LicensePlatePlugin/license_plate_plugin/config.py
+@@ -77,3 +77,12 @@
+         tie_tolerance=float(payload.get("tie_tolerance", 1e-12)),
+     )
+ 
++
++
++def load_default_config() -> PluginConfig:
++    """Load this source checkout's bundled configuration, independent of cwd.
++
++    Install the plugin editable in each runtime environment and retain the
++    complete plugin directory, including configuration and assets.
++    """
++    return load_config(Path(__file__).resolve().parents[1] / "configuration" / "local_reproduction.json")
+--- a/services/license_plate_service/LicensePlatePlugin/license_plate_plugin/ocr.py
++++ b/services/license_plate_service/LicensePlatePlugin/license_plate_plugin/ocr.py
+@@ -55,11 +55,20 @@
+         self.model_dir = model_dir.resolve()
+         self.device = device
+ 
+-    def recognize(self, image_bgr: np.ndarray, submitted_path: Path) -> dict[str, Any]:
+-        save_png(submitted_path, image_bgr)
++    def recognize(
++        self, image_bgr: np.ndarray, submitted_path: Path | None = None
++    ) -> dict[str, Any]:
++        """Use lossless file input for diagnostics, otherwise pass BGR directly.
++
++        Paddle's image reader accepts BGR arrays as well as paths. A private
++        contiguous copy keeps the array path independent of caller storage.
++        """
++        if submitted_path is not None:
++            save_png(submitted_path, image_bgr)
++        model_input = str(submitted_path) if submitted_path is not None else image_bgr.copy(order="C")
+         started = time.perf_counter()
+         try:
+-            outputs = list(self.model.predict(input=str(submitted_path), batch_size=1))
++            outputs = list(self.model.predict(input=model_input, batch_size=1))
+             if len(outputs) != 1:
+                 raise PluginError(f"Expected one OCR result, got {len(outputs)}.")
+             raw_text, confidence, payload = unwrap_paddle_result(outputs[0])
+@@ -74,7 +83,7 @@
+             "native_confidence": confidence,
+             "native_payload": payload,
+             "recognition_seconds": time.perf_counter() - started,
+-            "submitted_path": str(submitted_path.resolve()),
++            "submitted_path": str(submitted_path.resolve()) if submitted_path is not None else None,
+             "submitted_width": int(image_bgr.shape[1]),
+             "submitted_height": int(image_bgr.shape[0]),
+         }
+--- a/services/license_plate_service/LicensePlatePlugin/README.md
++++ b/services/license_plate_service/LicensePlatePlugin/README.md
+@@ -219,3 +219,67 @@
+ - Registration-digit recognition is not established.
+ - Automatic plate localization and production integration are out of scope.
+ 
++
++## Shared repository import and in-memory interface
++
++Django and standalone runtimes should install this **same source checkout** in
++editable mode using their own Python environment. From any directory:
++
++```bash
++/path/to/runtime/python -m pip install --no-deps --no-build-isolation -e \
++  /home/intern/part-time/mohamed/pipeline/services/license_plate_service/LicensePlatePlugin
++```
++
++This requires the existing runtime dependencies and setuptools build backend.
++It installs the import package without copying model assets or changing their
++configuration. Keep the entire plugin directory in place. Regular wheel asset
++packaging is not provided by this change. No recognition runner imports or calls
++the classifier yet.
++
++Both runtimes can use the same package imports and package-relative configuration:
++
++```python
++import cv2
++from license_plate_plugin import PlateCategoryClassifier, load_default_config
++
++classifier = PlateCategoryClassifier(load_default_config())  # Once per owner/worker
++
++# Existing file API: source file SHA-256 and saved unpadded OCR submission.
++file_result = classifier.classify("/data/plate.png", "/tmp/file-diagnostics")
++
++# New API: no input crop or diagnostic file is written by default.
++plate_bgr = cv2.imread("/data/plate.png")
++array_result = classifier.classify_bgr(plate_bgr)
++
++# Optional diagnostics; use a distinct directory per retained call.
++with_diagnostics = classifier.classify_bgr(plate_bgr, "/tmp/array-diagnostics")
++```
++
++`classify_bgr` requires a nonempty `numpy.uint8` array shaped `(H, W, 3)` in
++BGR order. It copies caller storage before processing and accepts read-only or
++non-contiguous arrays. Both APIs share feature extraction, reference matching,
++OCR, NT parsing and final decisions. Both accept `exclude_reference_ids`,
++`exclude_groups` and `expected_category` keyword arguments.
++
++Array input metadata reports `kind="bgr_array"`, `dtype`, `color_order`, width
++and height. It has no source `path` or file `sha256`. With no output directory,
++Arabic OCR receives BGR pixels directly and `ocr.submitted_path` is null. With
++diagnostics, it receives the saved lossless PNG, preserving the existing file
++behavior. Native Paddle payloads can differ in input-path provenance; timing
++also varies. Classification evidence and decision semantics are unchanged.
++
++Focused tests use mocked models with real preprocessing. Optional checks require
++the installed package, local assets and complete runtime dependencies:
++
++```bash
++/path/to/runtime/python -B -m unittest discover -s /absolute/plugin/tests -v
++PLATE_PLUGIN_REAL_INFERENCE=1 /path/to/runtime/python -B -m unittest discover \
++  -s /absolute/plugin/tests -p test_real_interface_parity.py -v
++PLATE_PLUGIN_REAL_OCR=1 /path/to/runtime/python -B -m unittest discover \
++  -s /absolute/plugin/tests -p test_real_interface_parity.py -v
++PLATE_PLUGIN_IMPORT_AUDIT=1 /path/to/runtime/python -B -m unittest discover \
++  -s /absolute/plugin/tests -p test_integration_imports.py -v
++```
++
++The import audit uses fresh processes in an unrelated working directory and
++checks the Django and standalone recognition bindings without running inference.
+--- /dev/null
++++ b/services/license_plate_service/LicensePlatePlugin/tests/test_classifier_interfaces.py
+@@ -0,0 +1,210 @@
++"""Interface contracts with real preprocessing and mocked expensive inference."""
++
++import tempfile
++import unittest
++from pathlib import Path
++from types import SimpleNamespace
++from unittest.mock import Mock, patch
++
++import cv2
++import numpy as np
++
++from license_plate_plugin import PlateCategoryClassifier, PluginError, load_default_config
++from license_plate_plugin.config import ResolutionPolicy
++from license_plate_plugin.ocr import ArabicRecognizer
++
++
++def evidence_only(value):
++    """Remove provenance and measured durations, including Paddle input_path."""
++    if isinstance(value, dict):
++        return {
++            key: evidence_only(item) for key, item in value.items()
++            if key not in {"input", "input_path", "submitted_path", "timing"}
++            and not key.endswith("seconds")
++        }
++    if isinstance(value, list):
++        return [evidence_only(item) for item in value]
++    return value
++
++
++class ClassifierInterfaceTests(unittest.TestCase):
++    def setUp(self):
++        self.classifier = PlateCategoryClassifier.__new__(PlateCategoryClassifier)
++        self.classifier.config = SimpleNamespace(policy=ResolutionPolicy(), tie_tolerance=1e-12)
++        self.classifier.encoder = object()
++        self.classifier.index = Mock(path=Path("fixture.npz"), compatibility_fingerprint="fixture")
++        self.classifier.index.match.return_value = {
++            "visual_category": "tunis", "nearest_reference_id": "12",
++            "nearest_similarity": 0.7, "predicted_category_margin": 0.1, "tie_flag": False,
++        }
++        self.classifier.ocr = ArabicRecognizer.__new__(ArabicRecognizer)
++        self.classifier.ocr.model = Mock()
++        self.set_ocr("نت١0379")
++        self.extract = patch(
++            "license_plate_plugin.classifier.extract_r2",
++            return_value=(np.ones(1536, dtype=np.float32), {"views": {}}),
++        ).start()
++        self.addCleanup(patch.stopall)
++        self.image = np.random.default_rng(7).integers(0, 256, (35, 129, 3), dtype=np.uint8)
++
++    def set_ocr(self, text):
++        self.classifier.ocr.model.predict.side_effect = None
++        self.classifier.ocr.model.predict.return_value = [
++            {"res": {"rec_text": text, "rec_score": 0.85}}
++        ]
++
++    def test_invalid_arrays_fail_before_models_or_output(self):
++        invalid = [None, [], "plate.png", np.zeros((0, 3, 3), np.uint8),
++                   np.zeros((2, 0, 3), np.uint8), np.zeros((3, 4), np.uint8),
++                   np.zeros((3, 4, 4), np.uint8), np.zeros((3, 4, 3), np.float32),
++                   np.zeros((3, 4, 3), np.uint16), np.zeros((3, 4, 3), bool)]
++        with tempfile.TemporaryDirectory() as directory:
++            output = Path(directory) / "unused"
++            for image in invalid:
++                with self.subTest(image_type=type(image)), self.assertRaisesRegex(PluginError, "Expected"):
++                    self.classifier.classify_bgr(image, output)
++            self.assertFalse(output.exists())
++        self.extract.assert_not_called()
++        self.classifier.ocr.model.predict.assert_not_called()
++
++    def test_caller_storage_is_isolated_even_from_mutating_dependency(self):
++        image = self.image[:, ::2]
++        before = image.copy()
++        image.setflags(write=False)
++
++        def mutating_extract(owned, *args):
++            self.assertTrue(owned.flags.c_contiguous)
++            owned[:] = 0
++            return np.ones(1536, np.float32), {}
++
++        self.extract.side_effect = mutating_extract
++        self.classifier.classify_bgr(image)
++        np.testing.assert_array_equal(image, before)
++        self.assertFalse(image.flags.writeable)
++
++    def test_default_array_path_has_no_file_operations_or_fabricated_provenance(self):
++        with patch("license_plate_plugin.ocr.save_png") as save, patch(
++            "license_plate_plugin.classifier.sha256_file"
++        ) as hash_file, patch("pathlib.Path.mkdir") as mkdir:
++            result = self.classifier.classify_bgr(self.image)
++        save.assert_not_called()
++        hash_file.assert_not_called()
++        mkdir.assert_not_called()
++        self.assertEqual(result["input"], {
++            "kind": "bgr_array", "dtype": "uint8", "color_order": "BGR", "width": 129, "height": 35,
++        })
++        self.assertIsNone(result["ocr"]["submitted_path"])
++        submitted = self.classifier.ocr.model.predict.call_args.kwargs["input"]
++        self.assertIsInstance(submitted, np.ndarray)
++        self.assertEqual(submitted.dtype, np.uint8)
++
++    def test_array_diagnostics_are_optional_and_lossless(self):
++        with tempfile.TemporaryDirectory() as directory:
++            result = self.classifier.classify_bgr(self.image, directory)
++            path = Path(result["ocr"]["submitted_path"])
++            self.assertEqual(path.name, "array_budget_unpadded.png")
++            self.assertTrue(path.is_file())
++            self.assertEqual(self.classifier.ocr.model.predict.call_args.kwargs["input"], str(path))
++            saved = cv2.imread(str(path))
++            self.assertEqual(saved.shape[:2], (
++                result["ocr"]["submitted_height"], result["ocr"]["submitted_width"],
++            ))
++            self.assertEqual(len(list(Path(directory).rglob("*.png"))), 1)
++
++    def test_file_and_array_evidence_match_and_file_metadata_is_preserved(self):
++        with tempfile.TemporaryDirectory() as directory:
++            source = Path(directory) / "plate.png"
++            self.assertTrue(cv2.imwrite(str(source), self.image))
++            file_result = self.classifier.classify(source, Path(directory) / "file-output")
++            array_result = self.classifier.classify_bgr(cv2.imread(str(source)))
++            self.assertEqual(evidence_only(file_result), evidence_only(array_result))
++            self.assertEqual(set(file_result["input"]), {"path", "sha256", "width", "height"})
++            self.assertEqual(file_result["input"]["path"], str(source.resolve()))
++            self.assertEqual(len(file_result["input"]["sha256"]), 64)
++            self.assertTrue(Path(file_result["ocr"]["submitted_path"]).is_file())
++            self.assertEqual(Path(file_result["ocr"]["submitted_path"]).name, "plate_budget_unpadded.png")
++
++    def test_shared_decisions_for_positive_absent_conflicting_and_failed_ocr(self):
++        with tempfile.TemporaryDirectory() as directory:
++            source = Path(directory) / "plate.png"
++            cv2.imwrite(str(source), self.image)
++            for text, final, conflict, failed in [
++                ("نت68", "nt", False, False), ("123", "tunis", False, False),
++                ("نت تونس", "tunis", True, False), (None, "tunis", False, True),
++            ]:
++                with self.subTest(text=text):
++                    if failed:
++                        self.classifier.ocr.model.predict.side_effect = RuntimeError("fixture failure")
++                    else:
++                        self.set_ocr(text)
++                    array = self.classifier.classify_bgr(self.image)
++                    file = self.classifier.classify(source, directory)
++                    self.assertEqual(array["decision"], file["decision"])
++                    self.assertEqual(array["decision"]["final_category"], final)
++                    self.assertEqual(array["decision"]["conflict_flag"], conflict)
++                    self.assertEqual(array["decision"]["ocr_failure_flag"], failed)
++
++    def test_disabled_ocr_keeps_visual_result_in_both_interfaces(self):
++        self.classifier.ocr = None
++        with tempfile.TemporaryDirectory() as directory:
++            source = Path(directory) / "plate.png"
++            cv2.imwrite(str(source), self.image)
++            file = self.classifier.classify(source, directory)
++            array = self.classifier.classify_bgr(self.image)
++            self.assertEqual(evidence_only(file), evidence_only(array))
++            self.assertEqual(array["ocr"]["inference_status"], "disabled")
++            self.assertEqual(array["decision"]["final_category"], "tunis")
++
++    def test_exclusions_and_evaluation_are_forwarded_by_both_interfaces(self):
++        kwargs = {"exclude_reference_ids": ("5",), "exclude_groups": {"group_id": "car"},
++                  "expected_category": "nt"}
++        with tempfile.TemporaryDirectory() as directory:
++            source = Path(directory) / "plate.png"
++            cv2.imwrite(str(source), self.image)
++            for result in (self.classifier.classify_bgr(self.image, **kwargs),
++                           self.classifier.classify(source, directory, **kwargs)):
++                self.assertTrue(result["evaluation"]["final_correct"])
++        for call in self.classifier.index.match.call_args_list:
++            self.assertEqual(call.kwargs["exclude_ids"], ("5",))
++            self.assertEqual(call.kwargs["exclude_groups"], {"group_id": "car"})
++            self.assertEqual(call.kwargs["expected_category"], "nt")
++
++    def test_calls_reuse_models_and_index(self):
++        encoder, index, ocr = self.classifier.encoder, self.classifier.index, self.classifier.ocr
++        self.classifier.classify_bgr(self.image)
++        self.classifier.classify_bgr(self.image)
++        self.assertIs(self.classifier.encoder, encoder)
++        self.assertIs(self.classifier.index, index)
++        self.assertIs(self.classifier.ocr, ocr)
++        self.assertEqual(ocr.model.predict.call_count, 2)
++
++    def test_initialization_loads_dependencies_once_for_multiple_calls(self):
++        config = load_default_config()
++        with patch("license_plate_plugin.classifier.DinoV3Encoder") as encoder, patch(
++            "license_plate_plugin.classifier.compatibility_record", return_value={}
++        ), patch("license_plate_plugin.classifier.ReferenceIndex.load", return_value=self.classifier.index) as index, patch(
++            "license_plate_plugin.classifier.ArabicRecognizer", return_value=self.classifier.ocr
++        ) as ocr:
++            classifier = PlateCategoryClassifier(config)
++            classifier.classify_bgr(self.image)
++            classifier.classify_bgr(self.image)
++        encoder.assert_called_once_with(config.dinov3_repo, config.dinov3_checkpoint, config.device)
++        index.assert_called_once_with(config.reference_index, {})
++        ocr.assert_called_once_with(config.paddle_model_dir, config.ocr_device)
++
++    def test_array_ocr_input_preserves_bgr_channel_order(self):
++        image = np.empty_like(self.image)
++        image[:] = [11, 73, 201]
++        self.classifier.classify_bgr(image)
++        submitted = self.classifier.ocr.model.predict.call_args.kwargs["input"]
++        np.testing.assert_array_equal(submitted[0, 0], [11, 73, 201])
++
++    def test_default_config_is_anchored_to_package(self):
++        config = load_default_config()
++        plugin_root = Path(__file__).resolve().parents[1]
++        self.assertEqual(config.source_path, plugin_root / "configuration/local_reproduction.json")
++        self.assertEqual(config.reference_index, plugin_root / "assets/reference_index/reference_r2.npz")
++
++
++if __name__ == "__main__":
++    unittest.main()
+--- /dev/null
++++ b/services/license_plate_service/LicensePlatePlugin/tests/test_integration_imports.py
+@@ -0,0 +1,65 @@
++"""Opt-in real Django/standalone import audit in separate Python processes."""
++
++import os
++import subprocess
++import sys
++import tempfile
++import unittest
++from pathlib import Path
++
++
++@unittest.skipUnless(os.environ.get("PLATE_PLUGIN_IMPORT_AUDIT") == "1", "Requires installed plugin and pipeline dependencies")
++class IntegrationImportTests(unittest.TestCase):
++    def test_django_and_standalone_resolve_same_plugin_and_actual_recognition(self):
++        plugin = Path(__file__).resolve().parents[1]
++        repository = plugin.parents[2]
++        code = '''
++import importlib
++import sys
++from pathlib import Path
++import license_plate_plugin
++from license_plate_plugin import load_default_config
++root, mode, plugin = Path(sys.argv[1]), sys.argv[2], Path(sys.argv[3])
++assert Path(license_plate_plugin.__file__).resolve() == plugin / "license_plate_plugin/__init__.py"
++assert load_default_config().reference_index == plugin / "assets/reference_index/reference_r2.npz"
++if mode == "django":
++    sys.path.insert(0, str(root / "vehicle"))
++    from license_plate_service.service import _ensure_pipeline_import_path
++    _ensure_pipeline_import_path()
++    active_root = root / "vehicle/license_plate_service"
++else:
++    active_root = root / "services/license_plate_service"
++    sys.path.insert(0, str(active_root))
++video = importlib.import_module("run_video_pipeline.run_video_prototype")
++rtsp = importlib.import_module("run_rtsp_pipeline.run_rtsp_prototype")
++rtsp_runner = importlib.import_module("run_rtsp_pipeline.run_video_prototype")
++video_prototype = importlib.import_module("run_video_pipeline.prototype_pipeline")
++rtsp_prototype = importlib.import_module("run_rtsp_pipeline.prototype_pipeline")
++recognition = importlib.import_module("run_video_pipeline.pipeline")
++assert Path(video.__file__).resolve() == active_root / "run_video_pipeline/run_video_prototype.py"
++assert Path(rtsp.__file__).resolve() == active_root / "run_rtsp_pipeline/run_rtsp_prototype.py"
++assert rtsp.VideoPrototypeRunner is rtsp_runner.VideoPrototypeRunner
++assert rtsp.PrototypePlatePipeline is rtsp_prototype.PrototypePlatePipeline
++assert rtsp_prototype.analyze_plate_crop is recognition.analyze_plate_crop
++assert video_prototype.analyze_plate_crop is recognition.analyze_plate_crop
++assert rtsp_runner.PrototypePlatePipeline is video_prototype.PrototypePlatePipeline
++assert rtsp_prototype.route_plate.__module__ == "run_video_pipeline.routing"
++assert rtsp.get_reader.__module__ == "run_rtsp_pipeline.ocr"
++assert rtsp.get_reader.__globals__["config"].__name__ == "run_video_pipeline.config"
++print(mode, "imports verified:", recognition.__file__, license_plate_plugin.__file__)
++'''
++        # Remove source-path injection: the plugin must resolve via installation.
++        env = {key: value for key, value in os.environ.items() if key != "PYTHONPATH"}
++        env["PYTHONDONTWRITEBYTECODE"] = "1"
++        with tempfile.TemporaryDirectory() as directory:
++            for mode in ("django", "standalone"):
++                with self.subTest(mode=mode):
++                    result = subprocess.run(
++                        [sys.executable, "-B", "-c", code, str(repository), mode, str(plugin)],
++                        cwd=directory, env=env, capture_output=True, text=True, timeout=120,
++                    )
++                    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
++
++
++if __name__ == "__main__":
++    unittest.main()
+--- /dev/null
++++ b/services/license_plate_service/LicensePlatePlugin/tests/test_real_interface_parity.py
+@@ -0,0 +1,68 @@
++"""Opt-in local-model parity; no downloads or gallery/configuration changes."""
++
++import os
++import tempfile
++import unittest
++from pathlib import Path
++
++import cv2
++import numpy as np
++import torch
++
++from license_plate_plugin import PlateCategoryClassifier, load_default_config
++from license_plate_plugin.manifest import load_reference_manifest
++from test_classifier_interfaces import evidence_only
++
++
++@unittest.skipUnless(os.environ.get("PLATE_PLUGIN_REAL_INFERENCE") == "1", "Opt-in local model inference")
++class RealInterfaceParityTests(unittest.TestCase):
++    def test_all_reference_crops_have_equivalent_file_and_array_evidence(self):
++        config = load_default_config()
++        classifier = PlateCategoryClassifier(config)
++        records, _ = load_reference_manifest(config.reference_manifest)
++        # Bound CPU threading only in this test, never in the plugin configuration.
++        previous_threads = torch.get_num_threads()
++        torch.set_num_threads(2)
++        self.addCleanup(torch.set_num_threads, previous_threads)
++        with tempfile.TemporaryDirectory() as directory:
++            for record in records:
++                with self.subTest(reference=record["id"]):
++                    image = cv2.imread(str(record["path"]))
++                    before = image.copy()
++                    kwargs = {"exclude_reference_ids": (record["id"],),
++                              "expected_category": record["category"]}
++                    file = classifier.classify(record["path"], Path(directory) / record["id"], **kwargs)
++                    array = classifier.classify_bgr(image, **kwargs)
++                    self.assertEqual(file["ocr"]["inference_status"], "completed")
++                    self.assertEqual(array["ocr"]["inference_status"], "completed")
++                    self.assertEqual(evidence_only(file), evidence_only(array))
++                    self.assertIsNone(array["ocr"]["submitted_path"])
++                    np.testing.assert_array_equal(image, before)
++
++
++@unittest.skipUnless(os.environ.get("PLATE_PLUGIN_REAL_OCR") == "1", "Opt-in local Arabic OCR inference")
++class RealArabicInputParityTests(unittest.TestCase):
++    def test_lossless_file_and_array_ocr_inputs_match(self):
++        from license_plate_plugin.ocr import ArabicRecognizer
++        from license_plate_plugin.preprocessing import calculate_geometry, resize_and_pad
++
++        config = load_default_config()
++        recognizer = ArabicRecognizer(config.paddle_model_dir, config.ocr_device)
++        records, _ = load_reference_manifest(config.reference_manifest)
++        with tempfile.TemporaryDirectory() as directory:
++            for record in records:
++                with self.subTest(reference=record["id"]):
++                    image = record["image"]
++                    geometry = calculate_geometry(image.shape, (16, 16), config.policy)
++                    resized, _ = resize_and_pad(image, geometry, config.policy)
++                    before = resized.copy()
++                    file = recognizer.recognize(resized, Path(directory) / f"{record['id']}.png")
++                    array = recognizer.recognize(resized)
++                    self.assertEqual(file["inference_status"], "completed", file["failure_reason"])
++                    self.assertEqual(array["inference_status"], "completed", array["failure_reason"])
++                    self.assertEqual(evidence_only(file), evidence_only(array))
++                    np.testing.assert_array_equal(resized, before)
++
++
++if __name__ == "__main__":
++    unittest.main()
+--- /dev/null
++++ b/docs/license_plate_classifier_steps_1_2.md
+@@ -0,0 +1,161 @@
++# License-plate classifier integration audit: steps 1–2
++
++Date: 2026-10-29. Scope: establish import boundaries and add an in-memory classifier interface. Changes remain in the working tree; no commit or deployment was performed.
++
++The root `AGENTS.md` was read before editing. No additional `AGENTS.md` applies inside `LicensePlatePlugin`. The existing plugin source, its README, extraction report, historical implementation documentation, configuration and tests were inspected. The historical documentation describes the experiments; the extracted package already provides a frozen gallery and reusable classifier.
++
++## 1. Files changed
++
++All paths below are absolute. “Modified” means changed from the source present at the start of this task, even though Git currently reports the entire plugin directory as untracked.
++
++| Status | Full path | Purpose |
++|---|---|---|
++| Modified | `/home/intern/part-time/mohamed/pipeline/services/license_plate_service/LicensePlatePlugin/license_plate_plugin/classifier.py` | Add validated `classify_bgr`; share feature extraction, matching, OCR and decisions through `_classify_image`; preserve file interface. |
++| Modified | `/home/intern/part-time/mohamed/pipeline/services/license_plate_service/LicensePlatePlugin/license_plate_plugin/ocr.py` | Accept an optional diagnostic path; otherwise submit a private BGR array directly to Paddle. |
++| Modified | `/home/intern/part-time/mohamed/pipeline/services/license_plate_service/LicensePlatePlugin/license_plate_plugin/config.py` | Add `load_default_config`, anchored to this source checkout. |
++| Modified | `/home/intern/part-time/mohamed/pipeline/services/license_plate_service/LicensePlatePlugin/license_plate_plugin/__init__.py` | Export `load_default_config`. |
++| Modified | `/home/intern/part-time/mohamed/pipeline/services/license_plate_service/LicensePlatePlugin/README.md` | Document shared installation/imports, array API, provenance, diagnostics and opt-in verification. |
++| Added | `/home/intern/part-time/mohamed/pipeline/services/license_plate_service/LicensePlatePlugin/tests/test_classifier_interfaces.py` | Twelve focused tests using mocked inference with real preprocessing. |
++| Added | `/home/intern/part-time/mohamed/pipeline/services/license_plate_service/LicensePlatePlugin/tests/test_integration_imports.py` | Opt-in fresh-process audit of actual Django/standalone video and RTSP bindings and installed plugin resolution. |
++| Added | `/home/intern/part-time/mohamed/pipeline/services/license_plate_service/LicensePlatePlugin/tests/test_real_interface_parity.py` | Separate opt-in full-classifier and Arabic-OCR file/array parity tests on all 12 references. |
++| Added | `/home/intern/part-time/mohamed/pipeline/docs/license_plate_classifier_steps_1_2.md` | This audit report. |
++| Added | `/home/intern/part-time/mohamed/pipeline/docs/license_plate_classifier_steps_1_2.patch` | Unified diff of the five modified files and four added source/documentation files. The patch excludes itself to avoid recursive content. |
++
++No pipeline runner, Django service, detector, tracker, crop selector, registration reader, result schema, model asset, gallery, configuration JSON, category route, acceptance threshold or external-agent implementation was changed. Pre-existing working-tree changes were preserved. Temporary build/test environments, baseline copies and diagnostic files were placed under `/tmp`.
++
++## 2. Reviewable diff
++
++Open [license_plate_classifier_steps_1_2.patch](license_plate_classifier_steps_1_2.patch). It includes complete new test files and this report, with additions against `/dev/null`. Modified files are compared with copies taken immediately before editing, rather than Git HEAD: the plugin itself was already untracked. This makes this task's changes reviewable independently of the pre-existing imported plugin and unrelated working-tree edits. The patch uses repository-relative `a/` and `b/` paths.
++
++## 3. Confirmed active import and recognition paths
++
++### Django video
++
++- [views.py:20](/home/intern/part-time/mohamed/pipeline/vehicle/license_plate_service/views.py:20): `analyze` saves the upload and calls `run_video_analysis`.
++- [service.py:16](/home/intern/part-time/mohamed/pipeline/vehicle/license_plate_service/service.py:16): `_ensure_pipeline_import_path` inserts the absolute Django application directory into `sys.path`.
++- [service.py:29](/home/intern/part-time/mohamed/pipeline/vehicle/license_plate_service/service.py:29): `run_video_analysis` imports `run_video_pipeline` implementations from that directory and constructs the reader, pipeline and runner.
++- [run_video_prototype.py:578](/home/intern/part-time/mohamed/pipeline/vehicle/license_plate_service/run_video_pipeline/run_video_prototype.py:578): `_submit` snapshots the selected crop into a recognition task.
++- [run_video_prototype.py:529](/home/intern/part-time/mohamed/pipeline/vehicle/license_plate_service/run_video_pipeline/run_video_prototype.py:529): `_recognize` calls `self.pipeline.process_crop` at line 546.
++- [prototype_pipeline.py:59](/home/intern/part-time/mohamed/pipeline/vehicle/license_plate_service/run_video_pipeline/prototype_pipeline.py:59): calls `run_video_pipeline.pipeline.analyze_plate_crop`.
++- [pipeline.py:135](/home/intern/part-time/mohamed/pipeline/vehicle/license_plate_service/run_video_pipeline/pipeline.py:135): first registration-number OCR call, `_read_safely(reader, detection.crop, detection.bbox)`.
++
++### Django RTSP
++
++- [service.py:130](/home/intern/part-time/mohamed/pipeline/vehicle/license_plate_service/service.py:130): worker imports `run_rtsp_pipeline.run_rtsp_prototype.run_rtsp` after the same import-path setup.
++- [run_rtsp_prototype.py:18](/home/intern/part-time/mohamed/pipeline/vehicle/license_plate_service/run_rtsp_pipeline/run_rtsp_prototype.py:18): imports RTSP-local config, agent, store, marker localizer, reader, detector, prototype pipeline and duplicate video runner. These duplicate modules are genuinely imported.
++- [run_rtsp_prototype.py:412](/home/intern/part-time/mohamed/pipeline/vehicle/license_plate_service/run_rtsp_pipeline/run_rtsp_prototype.py:412): constructs those objects and runs frames through the RTSP-local `VideoPrototypeRunner`.
++- [run_rtsp_pipeline/run_video_prototype.py:546](/home/intern/part-time/mohamed/pipeline/vehicle/license_plate_service/run_rtsp_pipeline/run_video_prototype.py:546): the duplicate runner calls its **injected** pipeline instance's `process_crop`. In an RTSP session that is `run_rtsp_pipeline.prototype_pipeline.PrototypePlatePipeline`, despite the runner module also importing the video prototype class.
++- [run_rtsp_pipeline/prototype_pipeline.py:11](/home/intern/part-time/mohamed/pipeline/vehicle/license_plate_service/run_rtsp_pipeline/prototype_pipeline.py:11): explicitly imports `analyze_plate_crop` from **`run_video_pipeline.pipeline`**; its call is at line 59. It also imports video routing, schemas and agent types.
++- Consequently RTSP-local `pipeline.py` is **not** the active recognition orchestrator. RTSP-local `ocr.py` does provide `get_reader`, but that module imports **video** config and uses the same configured PP-OCRv6 registration model.
++
++### Standalone video and RTSP
++
++The same call graph applies under `/home/intern/part-time/mohamed/pipeline/services/license_plate_service/`:
++
++- [Video CLI/runner:529](/home/intern/part-time/mohamed/pipeline/services/license_plate_service/run_video_pipeline/run_video_prototype.py:529), [video prototype:59](/home/intern/part-time/mohamed/pipeline/services/license_plate_service/run_video_pipeline/prototype_pipeline.py:59), [registration call:135](/home/intern/part-time/mohamed/pipeline/services/license_plate_service/run_video_pipeline/pipeline.py:135).
++- [RTSP imports:18](/home/intern/part-time/mohamed/pipeline/services/license_plate_service/run_rtsp_pipeline/run_rtsp_prototype.py:18), [RTSP runner call:546](/home/intern/part-time/mohamed/pipeline/services/license_plate_service/run_rtsp_pipeline/run_video_prototype.py:546), [RTSP prototype's video import:11](/home/intern/part-time/mohamed/pipeline/services/license_plate_service/run_rtsp_pipeline/prototype_pipeline.py:11).
++
++Fresh subprocesses verified these module identities separately for Django and standalone code. They did not initialize detectors or connect a camera.
++
++### Future insertion point
++
++For each pipeline root, the common future boundary is **inside `run_video_pipeline.pipeline.analyze_plate_crop`, immediately before line 135**, after best-crop selection and before the first registration OCR call. This reaches both video and RTSP because both prototypes bind that function. The crop is `detection.crop`, a BGR NumPy array; `detection.bbox` remains in source-frame coordinates.
++
++A future owner should initialize/inject a classifier once and call `classify_bgr(detection.crop)` at that boundary, with category evidence passed explicitly into downstream processing. The current task does not insert that call or decide downstream routing. Hooking only `run_video_pipeline.prototype_pipeline.process_crop` would miss the RTSP-local prototype; editing RTSP-local `pipeline.py` would miss its active orchestrator.
++
++## 4. Shared plugin import strategy
++
++Use the existing editable-package mechanism in each runtime environment, pointing to the **same absolute source checkout**:
++
++```bash
++/path/to/runtime/python -m pip install --no-deps --no-build-isolation -e \
++  /home/intern/part-time/mohamed/pipeline/services/license_plate_service/LicensePlatePlugin
++```
++
++Prerequisites are the existing Python dependencies and setuptools build backend. There is no runtime `sys.path` injection for this plugin, no model copying and no dependence on shell working directory. Both Django and standalone code use `from license_plate_plugin import PlateCategoryClassifier, load_default_config`. The new helper at [config.py:82](/home/intern/part-time/mohamed/pipeline/services/license_plate_service/LicensePlatePlugin/license_plate_plugin/config.py:82) locates the bundled JSON using `__file__`; that JSON already resolves model, vendor and gallery paths relative to itself. Explicit `load_config(absolute_config_path)` remains supported.
++
++Verification installed the plugin editable into `/tmp/plate-plugin-check-env`, without fetching packages or changing production environments. The test environment was created with `/home/intern/.venv/bin/python -m venv --system-site-packages`; a temporary `.pth` exposes `/home/intern/.venv/lib/python3.11/site-packages` as its runtime dependencies. From unrelated temporary working directories, with `PYTHONPATH` removed, both process modes resolved the exact same plugin `__init__.py` and gallery. The actual Django `vehicle/.venv` lacks Torch, Paddle and OpenCV; installing this plugin there alone would not provide those dependencies when using `--no-deps`.
++
++Keep the full source directory in place for this editable deployment. Standalone wheel asset bundling is outside this change.
++
++## 5. Interfaces and behavior
++
++```python
++import cv2
++from license_plate_plugin import PlateCategoryClassifier, load_default_config
++
++classifier = PlateCategoryClassifier(load_default_config())  # Initialize once.
++
++# Existing behavior: file provenance and saved lossless OCR submission.
++file_result = classifier.classify("/data/plate.png", "/tmp/plate-file")
++
++# New behavior: no input image or diagnostic file is saved.
++plate_bgr = cv2.imread("/data/plate.png")
++array_result = classifier.classify_bgr(plate_bgr)
++
++# Optional diagnostic OCR submission; use a distinct directory per retained call.
++array_debug = classifier.classify_bgr(plate_bgr, "/tmp/plate-array")
++
++# Both interfaces retain reference/evaluation options.
++excluded = classifier.classify_bgr(
++    plate_bgr,
++    exclude_reference_ids=("5",),
++    exclude_groups={"group_id": "example-group"},
++    expected_category="nt",
++)
++```
++
++`classify_bgr` at [classifier.py:59](/home/intern/part-time/mohamed/pipeline/services/license_plate_service/LicensePlatePlugin/license_plate_plugin/classifier.py:59) requires a nonempty `uint8` NumPy array with shape `(H,W,3)`, assumed BGR. Invalid values raise `PluginError` before processing/output. A contiguous private copy protects even read-only or strided caller storage. Metadata identifies `kind=bgr_array`, dtype, color order and dimensions, with no fabricated path or file hash. Existing file input keeps its original `path`, file `sha256`, width and height keys.
++
++Both interfaces call `_classify_image` at line 101. DINO preprocessing, four-view R2 extraction, matching/exclusions, Arabic normalization, positive-NT override, conflict and OCR-failure behavior remain shared and unchanged. Models and index still load only in initialization. No confidence or rejection threshold was added.
++
++`ArabicRecognizer.recognize` at [ocr.py:58](/home/intern/part-time/mohamed/pipeline/services/license_plate_service/LicensePlatePlugin/license_plate_plugin/ocr.py:58) now makes its path optional. Without a path it passes a private BGR array to `TextRecognition.predict`. Installed PaddleX source `/home/intern/.venv/lib/python3.11/site-packages/paddlex/inference/common/reader/image_reader.py`, `ReadImage.read`, accepts NumPy arrays directly as BGR. No temporary file is necessary. With diagnostics enabled it retains the existing lossless PNG/path-input behavior. `ocr.submitted_path` is null when absent. Native Paddle `input_path` metadata can differ between interfaces and is preserved truthfully.
++
++The plugin itself does not save the original input crop for array calls. “No files” concerns classifier inputs/diagnostics; underlying libraries can maintain their own caches during model initialization.
++
++## 6. Verification and limitations
++
++All commands used `-B`/`PYTHONDONTWRITEBYTECODE=1` to avoid modifying repository bytecode caches.
++
++| Check | Result |
++|---|---|
++| Plugin unit suite | 23 discovered: **20 passed**, 3 opt-in tests skipped. Includes 12 new interface tests and 8 existing core tests. Models/index matching mocked in interface tests; geometry, PNG I/O and parser are real. |
++| Installed-plugin import audit | **1 test passed**, with separate fresh Django and standalone subprocesses, unrelated cwd and no `PYTHONPATH`. Verified video/RTSP recognition bindings and identical plugin/config paths. |
++| Real Arabic OCR parity | **1 test passed across all 12 reference crops** (24 real recognitions); full-classifier test skipped in this run. Raw text, native confidence, native payload except path provenance, and other non-timing evidence matched exactly between file and array. Caller pixels were preserved. |
++| Full real classifier parity | **Attempt failed during DINOv3 initialization**, before any classification: missing `torchmetrics` imported through vendored `hubconf.py` → segmentor modules → `dinov3.eval.utils`. No loader/model/configuration workaround was introduced. End-to-end DINO/R2/decision parity remains unverified with real inference. |
++| Django service suite | **7 tests passed**; system check reported no issues. Inference is mocked in API tests. |
++| Changed Python files | Parsed successfully with `ast.parse`. |
++
++Reproduction commands (from repository root; absolute test paths also work):
++
++```bash
++PYTHONDONTWRITEBYTECODE=1 /tmp/plate-plugin-check-env/bin/python -B -m unittest discover \
++  -s services/license_plate_service/LicensePlatePlugin/tests -v
++
++PLATE_PLUGIN_IMPORT_AUDIT=1 PYTHONDONTWRITEBYTECODE=1 \
++  /tmp/plate-plugin-check-env/bin/python -B -m unittest discover \
++  -s services/license_plate_service/LicensePlatePlugin/tests -p test_integration_imports.py -v
++
++PLATE_PLUGIN_REAL_OCR=1 PYTHONDONTWRITEBYTECODE=1 \
++PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK=True PADDLE_PDX_CACHE_HOME=/tmp/plate-plugin-paddle \
++MPLCONFIGDIR=/tmp/plate-plugin-matplotlib OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 MKL_NUM_THREADS=2 \
++  timeout 90s /tmp/plate-plugin-check-env/bin/python -B -m unittest discover \
++  -s services/license_plate_service/LicensePlatePlugin/tests -p test_real_interface_parity.py -v
++
++PLATE_PLUGIN_REAL_INFERENCE=1 PYTHONDONTWRITEBYTECODE=1 \
++PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK=True \
++  /tmp/plate-plugin-check-env/bin/python -B -m unittest discover \
++  -s services/license_plate_service/LicensePlatePlugin/tests -p test_real_interface_parity.py -v
++
++PYTHONDONTWRITEBYTECODE=1 vehicle/.venv/bin/python -B vehicle/manage.py test license_plate_service --noinput
++```
++
++The first unbounded Arabic-only attempt stalled during initialization and was interrupted; the bounded run with CPU thread limits completed successfully in 17.7 seconds. Full real-classifier parity is retained as an opt-in test so it can be rerun in a complete environment. The source environment reports Torch `2.11.0+cu128`, OpenCV `5.0.0`, NumPy `2.3.5`, differing from parts of the historical successful environment.
++
++These are interface/equivalence checks, not an accuracy evaluation or accuracy-improvement claim. No live camera, video inference or external AI call was performed.
++
++## 7. Compatibility and remaining work
++
++The file API signature, diagnostic naming, result structure and decision semantics are preserved. Additions are `classify_bgr`, `load_default_config`, optional OCR diagnostic path, array-specific input provenance, and null `submitted_path` when no file exists. Array callers must not assume file-only input keys are present. Shared classifier use across concurrent requests has no new thread-safety guarantee; future ownership/serialization must be explicit. Diagnostic array submissions use a fixed filename within the supplied directory, so use separate directories when preserving multiple calls.
++
++Remaining integration work: provide complete runtime dependencies, verify full real-classifier parity, establish classifier lifecycle per worker, inject classification before registration OCR, define explicit category mapping/evidence persistence and category-specific local registration workflows, and later remove the external-agent route as separately requested. Existing agent behavior remains unchanged by this task. The four-category gallery, forced classification behavior and development-data limitations remain as before.

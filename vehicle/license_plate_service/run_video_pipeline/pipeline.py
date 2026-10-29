@@ -16,6 +16,7 @@ from run_video_pipeline.ocr import OCRResult, digits_only
 from run_video_pipeline.plate_detector import PlateCrop, PlateDetector
 from run_video_pipeline.private_plate_parser import parse_private_ocr, parse_private_plate
 from run_video_pipeline.schemas import PlateDetection
+from run_video_pipeline.classification import classify_crop
 
 log = logging.getLogger(__name__)
 
@@ -128,8 +129,19 @@ def analyze_plate_crop(
     marker_localizer: MarkerLocalizer | None = None,
     *,
     timing: dict[str, float] | None = None,
+    classifier=None,
 ) -> PlateDetection:
     """Recognize and parse one safe crop while preserving partial results."""
+    classification = classify_crop(classifier, detection.crop)
+    if timing is not None:
+        timing["classification_ms"] = classification.classification_ms
+    if classification.status == "error":
+        return PlateDetection(
+            classification=classification, bbox=list(detection.bbox),
+            detector_confidence=detection.confidence, raw_ocr="", normalized_ocr="",
+            ocr_confidence=0.0, parser_status="invalid",
+            parser_reason="category classification failed before registration OCR",
+        )
     total_started = time.perf_counter()
     started = time.perf_counter()
     ocr_result = _read_safely(reader, detection.crop, detection.bbox)
@@ -151,6 +163,7 @@ def analyze_plate_crop(
             ocr_seconds += time.perf_counter() - started
     started = time.perf_counter()
     result = assemble_plate_detection(detection, ocr_result, marker, left_result, right_result)
+    result.classification = classification
     parser_seconds = time.perf_counter() - started
     if timing is not None:
         timing.update({
@@ -169,10 +182,11 @@ def analyze_image(
     marker_localizer: MarkerLocalizer | None = None,
     *,
     conf: float | None = None,
+    classifier=None,
 ) -> list[PlateDetection]:
     """Detect, safely crop, recognize, and parse every plate in an image."""
     detections = detector.detect_and_crop(image, conf=conf)
     return [
-        analyze_plate_crop(detection, reader, marker_localizer)
+        analyze_plate_crop(detection, reader, marker_localizer, classifier=classifier)
         for detection in detections
     ]

@@ -10,6 +10,8 @@ from urllib.parse import urlparse
 
 from django.conf import settings
 
+from .video import prepare_browser_video
+
 
 def _ensure_pipeline_import_path() -> None:
     """Expose the sibling pipeline packages using the imports used by their CLIs."""
@@ -29,6 +31,7 @@ def run_video_analysis(video: Path, *, job_id: str, max_frames: int | None = Non
     """Run the packaged video pipeline and return its JSON-safe metrics."""
     import cv2
     _ensure_pipeline_import_path()
+    from run_video_pipeline.classification import create_classifier
     from run_video_pipeline import config
     from run_video_pipeline.agent import OpenRouterPlateAgent
     from run_video_pipeline.data_capture import ReviewStore
@@ -52,6 +55,7 @@ def run_video_analysis(video: Path, *, job_id: str, max_frames: int | None = Non
     pipeline = PrototypePlatePipeline(
         counting_reader, TounesMarkerLocalizer(config.WORD_DETECTOR_PATH),
         OpenRouterPlateAgent(enabled=agent_enabled), ReviewStore(job_dir / "captures"),
+        classifier_factory=create_classifier,
     )
     runner = VideoPrototypeRunner(
         pipeline, PlateDetector(config.PLATE_DETECTOR_PATH),
@@ -60,6 +64,7 @@ def run_video_analysis(video: Path, *, job_id: str, max_frames: int | None = Non
     )
     metrics = runner.run(video, output, max_frames=max_frames,
                          selected_crops_dir=job_dir / "selected_crops")
+    prepare_browser_video(output)
     metrics.update({
         "agent_enabled": agent_enabled, "job_id": job_id,
         "output_video_url": f"/api/license-plate/jobs/{job_id}/annotated.mp4/",
@@ -124,7 +129,6 @@ class RTSPManager:
             return dict(self._state)
 
     def _run(self, args, stop_event: threading.Event, session_id: str) -> None:
-        from run_rtsp_pipeline.run_rtsp_prototype import run_rtsp
 
         def on_update(update: dict) -> None:
             with self._lock:
@@ -138,8 +142,11 @@ class RTSPManager:
                 with self._lock:
                     self._preview = encoded.tobytes()
         try:
+            from run_rtsp_pipeline.run_rtsp_prototype import run_rtsp
+
             summary = run_rtsp(args, stop_event, on_frame=on_frame, on_update=on_update)
             if args.record_output and args.record_output.exists():
+                prepare_browser_video(args.record_output)
                 summary["recording_url"] = f"/api/license-plate/jobs/{session_id}/recording.mp4/"
             with self._lock:
                 self._state = {**self._state, **summary, "running": False, "status": "complete"}
