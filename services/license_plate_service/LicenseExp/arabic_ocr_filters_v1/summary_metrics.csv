@@ -1,0 +1,5 @@
+condition,queries,raw_exact_marker_matches,normalized_exact_marker_matches,category_correct,category_accuracy,nt_correct,nt_total,shorta_correct,shorta_total,tunis_correct,tunis_total,accepted_predictions,acceptance_coverage,accepted_correct,accepted_accuracy,mean_recognition_seconds,median_recognition_seconds,total_recognition_seconds,improved_query_ids,regressed_query_ids
+original,7,2,2,2,0.2857142857142857,2,2,0,2,0,3,2,0.2857142857142857,2,1.0,0.08388549957245621,0.0813482119992841,0.5871984970071935,,
+otsu,7,2,2,2,0.2857142857142857,2,2,0,2,0,3,2,0.2857142857142857,2,1.0,0.07406688742776169,0.07060859500052175,0.5184682119943318,,
+canny,7,1,1,1,0.14285714285714285,1,2,0,2,0,3,1,0.14285714285714285,1,1.0,0.0601642278561485,0.04450968199671479,0.4211495949930395,,5
+otsu_canny,7,0,0,0,0.0,0,2,0,2,0,3,0,0.0,0,,0.060199777715232425,0.04546078800194664,0.42139844400662696,,4;5

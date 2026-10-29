@@ -1,0 +1,15 @@
+{
+  "unicode": "NFKC (converts compatibility/presentation forms)",
+  "removed": [
+    "Unicode category Mn diacritics/marks",
+    "U+0640 tatweel",
+    "all Unicode whitespace"
+  ],
+  "preserved": "base-letter identity, including dot distinctions; no substitutions, fuzzy matching, or label-conditioned repair",
+  "exact_mapping": {
+    "نت": "nt",
+    "شرطة": "shorta",
+    "تونس": "tunis"
+  },
+  "fallback": "unknown"
+}

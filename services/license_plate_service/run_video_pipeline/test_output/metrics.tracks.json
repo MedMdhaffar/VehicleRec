@@ -1,0 +1,124 @@
+{
+  "1": {
+    "frames_with_candidate": 100,
+    "first_frame": 0,
+    "last_frame": 99,
+    "frame_ranges": [
+      [
+        0,
+        99
+      ]
+    ],
+    "track_duration_seconds": 4.0,
+    "best_crop_updates": 5,
+    "selected_best_crops": 1,
+    "recognition_attempts": 1,
+    "low_level_ocr_calls": 1,
+    "agent_calls": 0,
+    "selected_crop_frame": 2,
+    "selected_crop_score": 14331.302,
+    "selected_best_crop_path": "run_video_pipeline/test_output/annotated_selected_crops/track_1_recognized.jpg",
+    "final_best_frame": 77,
+    "final_best_quality": 14337.716,
+    "final_best_crop_path": "run_video_pipeline/test_output/annotated_selected_crops/track_1_final_best.jpg",
+    "early_frame": 0,
+    "early_quality": 14078.883,
+    "best_to_early_quality_ratio": 1.018,
+    "early_crop_path": "run_video_pipeline/test_output/annotated_selected_crops/track_1_early.jpg",
+    "capture_crop_path": "/home/intern/part-time/mohamed/pipeline/services/license_plate_service/run_video_pipeline/data_capture/crops/6552e4a6-23c2-4e13-8e1d-f953b81e21ff.jpg",
+    "submitted_frames": [
+      2
+    ],
+    "completed_frames": [
+      17
+    ],
+    "attempt_log": [
+      {
+        "attempt": 1,
+        "frame": 2,
+        "crop_score": 14331.302,
+        "trigger_reason": "strong_quality",
+        "text": "179 تونس 8065",
+        "category": "private",
+        "confidence": 0.8772,
+        "route": "private_local",
+        "source": "local_ocr",
+        "status": "accepted"
+      }
+    ],
+    "result_replaced": false,
+    "replacement_reason": "initial result cached",
+    "text": "179 تونس 8065",
+    "category": "private",
+    "confidence": 0.8772,
+    "route": "private_local",
+    "source": "local_ocr",
+    "status": "accepted",
+    "local_latency_ms": 418.007,
+    "api_latency_ms": 0.0,
+    "total_recognition_latency_ms": 418.208
+  },
+  "2": {
+    "frames_with_candidate": 33,
+    "first_frame": 31,
+    "last_frame": 64,
+    "frame_ranges": [
+      [
+        31,
+        46
+      ],
+      [
+        48,
+        64
+      ]
+    ],
+    "track_duration_seconds": 1.36,
+    "best_crop_updates": 18,
+    "selected_best_crops": 1,
+    "recognition_attempts": 1,
+    "low_level_ocr_calls": 3,
+    "agent_calls": 0,
+    "selected_crop_frame": 62,
+    "selected_crop_score": 11022.246,
+    "selected_best_crop_path": "run_video_pipeline/test_output/annotated_selected_crops/track_2_recognized.jpg",
+    "final_best_frame": 62,
+    "final_best_quality": 11022.246,
+    "final_best_crop_path": "run_video_pipeline/test_output/annotated_selected_crops/track_2_final_best.jpg",
+    "early_frame": 31,
+    "early_quality": 3686.948,
+    "best_to_early_quality_ratio": 2.99,
+    "early_crop_path": "run_video_pipeline/test_output/annotated_selected_crops/track_2_early.jpg",
+    "capture_crop_path": "/home/intern/part-time/mohamed/pipeline/services/license_plate_service/run_video_pipeline/data_capture/crops/360181ba-29fe-4aa5-9901-2d164873cbc9.jpg",
+    "submitted_frames": [
+      62
+    ],
+    "completed_frames": [
+      71
+    ],
+    "attempt_log": [
+      {
+        "attempt": 1,
+        "frame": 62,
+        "crop_score": 11022.246,
+        "trigger_reason": "track_disappeared",
+        "text": "187 تونس 438",
+        "category": "private",
+        "confidence": 0.8181,
+        "route": "private_local",
+        "source": "local_ocr",
+        "status": "accepted"
+      }
+    ],
+    "result_replaced": false,
+    "replacement_reason": "initial result cached",
+    "text": "187 تونس 438",
+    "category": "private",
+    "confidence": 0.8181,
+    "route": "private_local",
+    "source": "local_ocr",
+    "status": "accepted",
+    "local_latency_ms": 149.039,
+    "api_latency_ms": 0.0,
+    "total_recognition_latency_ms": 149.165
+  }
+}

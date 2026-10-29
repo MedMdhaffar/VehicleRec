@@ -103,6 +103,7 @@ class ReviewStore:
                 "final_for_track": bool(quality.get("final_for_track", False)),
                 "previous_sample_id": quality.get("previous_sample_id"),
                 "supersedes_sample_id": quality.get("supersedes_sample_id"),
+                "classification": stored.classification.model_dump(mode="json") if stored.classification else None,
                 "marker": stored.marker.model_dump(mode="json"),
                 "warning": stored.warning,
                 "timing": stored.timing.model_dump(mode="json"),

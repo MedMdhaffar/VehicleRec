@@ -1,0 +1,15 @@
+# Supplement vehicle/requirements.txt for the unchanged official DINOv3 hub import closure.
+# Install in the same Python 3.11 environment as Django or standalone pipelines.
+torchmetrics==1.8.2
+lightning-utilities==0.15.3
+omegaconf==2.3.0
+antlr4-python3-runtime==4.9.3
+ftfy==6.3.1
+submitit==1.5.3
+cloudpickle==3.1.2
+termcolor==3.2.0
+scikit-learn==1.8.0
+regex==2026.4.4
+Pillow==12.2.0
+# Editable build backend and Paddle's pkg_resources compatibility.
+setuptools==79.0.1

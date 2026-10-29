@@ -33,7 +33,9 @@ tensorrt-cu12>=10.8,<11            # YOLO .engine export/inference. MUST be 10.x
                                    # container startup, do NOT bake it (GPU-specific). Pin the exact resolved 10.x after install.
 
 # ── Web service ──
-fastapi==0.136.1
+django
+django-cors-headers
+djangorestframework
 uvicorn[standard]==0.46.0
 python-multipart==0.0.32          # fastapi form parsing (currently unused; cheap, future-proof)
 pydantic==2.13.3
@@ -63,3 +65,6 @@ requests==2.33.1
 # Deep transitive deps (pillow, PyYAML, paddlex, langchain-core, scipy, tqdm, psutil, …)
 # are resolved automatically from the pins above. For a fully-reproducible lock, run
 # pip-compile on this file (follow-up).
+
+# Local plate-category classifier; official DINOv3's full hub import dependencies.
+-r ../services/license_plate_service/requirements-classifier.txt

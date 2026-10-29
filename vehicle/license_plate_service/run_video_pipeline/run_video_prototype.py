@@ -17,6 +17,7 @@ import numpy as np
 import yaml
 
 import run_video_pipeline.config as config
+from run_video_pipeline.classification import create_classifier
 from run_video_pipeline.agent import OpenRouterPlateAgent
 from run_video_pipeline.data_capture import ReviewStore
 from run_video_pipeline.marker_localizer import TounesMarkerLocalizer
@@ -518,7 +519,14 @@ class VideoPrototypeRunner:
         self.camera_id = camera_id
         self.track_id_prefix = track_id_prefix
         self.tracks: dict[int, TrackState] = {}
+        self._finished = False
         self.executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="plate-recognition")
+        try:
+            # Fail before frame processing, and initialize on the actual inference thread.
+            self.executor.submit(self.pipeline.initialize_classifier).result()
+        except BaseException:
+            self.executor.shutdown(wait=True)
+            raise
         self.pending_snapshots: list[set[int]] = []
         self.detection_times_ms: list[float] = []
         self.tracking_times_ms: list[float] = []
@@ -684,28 +692,42 @@ class VideoPrototypeRunner:
         })
         return annotations
 
+    def close(self) -> None:
+        """Release worker-owned model references and join queued recognition work."""
+        if self._finished:
+            return
+        try:
+            self.executor.submit(self.pipeline.release_classifier).result()
+        finally:
+            self.executor.shutdown(wait=True)
+            self._finished = True
+
     def finish(self, source_ref: str | Path, *, end_trigger: str = "video_end") -> float:
         """Submit eligible end-of-source tracks and drain the recognition worker."""
-        for state in self.tracks.values():
-            if (
-                not state.attempts
-                and state.pending is None
-                and state.candidate_count >= self.minimum_exit_candidates
-            ):
-                self._submit(state, source_ref, end_trigger)
-        self.pending_snapshots.append({
-            track_id for track_id, state in self.tracks.items() if state.pending is not None
-        })
+        if self._finished:
+            return 0.0
         drain_started = time.perf_counter()
-        while any(state.pending is not None for state in self.tracks.values()):
-            self._drain(source_ref, None)
+        try:
+            for state in self.tracks.values():
+                if (
+                    not state.attempts
+                    and state.pending is None
+                    and state.candidate_count >= self.minimum_exit_candidates
+                ):
+                    self._submit(state, source_ref, end_trigger)
             self.pending_snapshots.append({
                 track_id for track_id, state in self.tracks.items() if state.pending is not None
             })
-            time.sleep(0.01)
-        for state in self.tracks.values():
-            self.finalize_track(state)
-        self.executor.shutdown(wait=True)
+            while any(state.pending is not None for state in self.tracks.values()):
+                self._drain(source_ref, None)
+                self.pending_snapshots.append({
+                    track_id for track_id, state in self.tracks.items() if state.pending is not None
+                })
+                time.sleep(0.01)
+            for state in self.tracks.values():
+                self.finalize_track(state)
+        finally:
+            self.close()
         return time.perf_counter() - drain_started
 
     def run(
@@ -720,6 +742,8 @@ class VideoPrototypeRunner:
     ) -> dict:
         capture = cv2.VideoCapture(str(video))
         if not capture.isOpened():
+            capture.release()
+            self.close()
             raise SystemExit(f"Could not open video: {video}")
         fps = float(capture.get(cv2.CAP_PROP_FPS) or 25.0)
         width = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -737,6 +761,9 @@ class VideoPrototypeRunner:
                 )
                 frame_tracks.append(annotations)
                 frame_index += 1
+        except BaseException:
+            self.close()
+            raise
         finally:
             capture.release()
         frame_loop_seconds = time.perf_counter() - loop_started
@@ -989,6 +1016,7 @@ def main() -> int:
         TounesMarkerLocalizer(config.WORD_DETECTOR_PATH),
         OpenRouterPlateAgent(enabled=args.agent_enabled),
         ReviewStore(args.capture_root),
+        classifier_factory=create_classifier,
     )
     runner = VideoPrototypeRunner(
         pipeline,

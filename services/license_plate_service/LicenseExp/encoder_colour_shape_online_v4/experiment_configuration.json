@@ -1,0 +1,2288 @@
+{
+  "schema_version": 1,
+  "manifest": {
+    "manifest_path": "controlled_plate_manifest.json",
+    "manifest_sha256": "e9f5d18e4e9d3f3fba27bce8126700e9972b1de147ede6e9f99eaac292c93bcb",
+    "valid": true,
+    "errors": [],
+    "exact_duplicate_id_groups": [],
+    "images": [
+      {
+        "id": "1",
+        "filename": "1.png",
+        "path": "plates/idara/1.png",
+        "category": "idara",
+        "registration": "17 - 138957",
+        "expected_width": 680,
+        "expected_height": 159,
+        "marker_bbox": null,
+        "physical_plate_id": null,
+        "group_id": null,
+        "available": true,
+        "decoded_dimensions_wh": [
+          680,
+          159
+        ],
+        "sha256": "4bc69f7b6e0fb6a200109bfa45cd48ed30e971395a27c20fc76e406cd252cc38"
+      },
+      {
+        "id": "2",
+        "filename": "2.png",
+        "path": "plates/idara/2.png",
+        "category": "idara",
+        "registration": "17 - 148885",
+        "expected_width": 770,
+        "expected_height": 286,
+        "marker_bbox": null,
+        "physical_plate_id": null,
+        "group_id": null,
+        "available": true,
+        "decoded_dimensions_wh": [
+          770,
+          286
+        ],
+        "sha256": "145c7cd5e10a61dac44b4c77538316262d80c4470d63721c86d3589c2933827b"
+      },
+      {
+        "id": "3",
+        "filename": "3.png",
+        "path": "plates/idara/3.png",
+        "category": "idara",
+        "registration": "17 - 138956",
+        "expected_width": 800,
+        "expected_height": 159,
+        "marker_bbox": null,
+        "physical_plate_id": null,
+        "group_id": null,
+        "available": true,
+        "decoded_dimensions_wh": [
+          800,
+          159
+        ],
+        "sha256": "3598db2a3b98103ece19c78cdd066c35b5b6d8f36d0a345d34465a88f7290999"
+      },
+      {
+        "id": "4",
+        "filename": "4.png",
+        "path": "plates/nt/4.png",
+        "category": "nt",
+        "registration": "214172",
+        "expected_width": 823,
+        "expected_height": 200,
+        "marker_bbox": [
+          550,
+          47,
+          718,
+          151
+        ],
+        "physical_plate_id": null,
+        "group_id": null,
+        "available": true,
+        "decoded_dimensions_wh": [
+          823,
+          200
+        ],
+        "sha256": "aba5f5dfb9dcba8cfdc246301f14de421fbbf5a0d3230eb9a8d230bc8443348f"
+      },
+      {
+        "id": "5",
+        "filename": "5.png",
+        "path": "plates/nt/5.png",
+        "category": "nt",
+        "registration": "103679",
+        "expected_width": 129,
+        "expected_height": 35,
+        "marker_bbox": [
+          89,
+          6,
+          120,
+          27
+        ],
+        "physical_plate_id": null,
+        "group_id": null,
+        "available": true,
+        "decoded_dimensions_wh": [
+          129,
+          35
+        ],
+        "sha256": "596120d9f02c1f5ebeee64bed0580e79aae451d4a12af33f29741d54cd7aa839"
+      },
+      {
+        "id": "6",
+        "filename": "6.png",
+        "path": "plates/shorta/6.png",
+        "category": "shorta",
+        "registration": "14330",
+        "expected_width": 132,
+        "expected_height": 39,
+        "marker_bbox": [
+          23,
+          10,
+          46,
+          27
+        ],
+        "physical_plate_id": null,
+        "group_id": null,
+        "available": true,
+        "decoded_dimensions_wh": [
+          132,
+          39
+        ],
+        "sha256": "2bdf3980effb34ba2b539be56511a7af64975eae0b3508fdd2028752e8209d32"
+      },
+      {
+        "id": "7",
+        "filename": "7.png",
+        "path": "plates/shorta/7.png",
+        "category": "shorta",
+        "registration": "27211",
+        "expected_width": 157,
+        "expected_height": 44,
+        "marker_bbox": [
+          25,
+          12,
+          52,
+          32
+        ],
+        "physical_plate_id": null,
+        "group_id": null,
+        "available": true,
+        "decoded_dimensions_wh": [
+          157,
+          44
+        ],
+        "sha256": "7f479012a8417a028939461b4d82d1f86113a78c1ccd4e8d52eb70686a97d5ba"
+      },
+      {
+        "id": "8",
+        "filename": "8.png",
+        "path": "plates/tunis/8.png",
+        "category": "tunis",
+        "registration": "150 9603",
+        "expected_width": 420,
+        "expected_height": 132,
+        "marker_bbox": [
+          136,
+          37,
+          234,
+          94
+        ],
+        "physical_plate_id": null,
+        "group_id": null,
+        "available": true,
+        "decoded_dimensions_wh": [
+          420,
+          132
+        ],
+        "sha256": "2c9d1965d542093d681a40fc48c0bebe0e7f754a5d0a936720808e4734231be8"
+      },
+      {
+        "id": "9",
+        "filename": "9.png",
+        "path": "plates/tunis/9.png",
+        "category": "tunis",
+        "registration": "122 937",
+        "expected_width": 168,
+        "expected_height": 54,
+        "marker_bbox": [
+          69,
+          14,
+          105,
+          39
+        ],
+        "physical_plate_id": null,
+        "group_id": null,
+        "available": true,
+        "decoded_dimensions_wh": [
+          168,
+          54
+        ],
+        "sha256": "1d5a13afcc92d955fd0df87734267b9e17d4f52c869cb8a2db295f714f062925"
+      },
+      {
+        "id": "10",
+        "filename": "10.png",
+        "path": "plates/tunis/10.png",
+        "category": "tunis",
+        "registration": "105 395",
+        "expected_width": 244,
+        "expected_height": 61,
+        "marker_bbox": [
+          90,
+          18,
+          134,
+          46
+        ],
+        "physical_plate_id": null,
+        "group_id": null,
+        "available": true,
+        "decoded_dimensions_wh": [
+          244,
+          61
+        ],
+        "sha256": "6577a657626fbe46c242cd33bc1adbce0f7f23d20c1711d26247275177a50c28"
+      }
+    ],
+    "physical_independence": "Unverified where physical_plate_id and group_id are null; registration text is metadata and is not used to infer plate identity."
+  },
+  "environment": {
+    "python": "3.11.15",
+    "torch": "2.12.1+cu126",
+    "transformers": "5.15.0",
+    "opencv-python": "5.0.0.93",
+    "numpy": "2.4.6",
+    "Pillow": "12.2.0",
+    "matplotlib": "3.11.0",
+    "huggingface-hub": "1.27.0",
+    "cuda_available": false,
+    "torch_cuda_build": "12.6"
+  },
+  "device": "cpu",
+  "models": {
+    "e0_dinov2_small": {
+      "identifier": "facebook/dinov2-small",
+      "documentation": "https://huggingface.co/facebook/dinov2-small",
+      "license": "Apache-2.0",
+      "status": "completed",
+      "reason": null,
+      "resolved_revision": "ed25f3a31f01632728cabb09d1542f84ab7b0056",
+      "processor_class": "BitImageProcessor",
+      "model_class": "Dinov2Model",
+      "device": "cpu"
+    },
+    "e1_dinov3_small": {
+      "identifier": "facebook/dinov3-vits16-pretrain-lvd1689m",
+      "documentation": "https://huggingface.co/facebook/dinov3-vits16-pretrain-lvd1689m",
+      "license": "DINOv3 License; Hugging Face access requires accepting the agreement",
+      "status": "blocked",
+      "reason": "OSError: Can't load image processor for 'facebook/dinov3-vits16-pretrain-lvd1689m'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'facebook/dinov3-vits16-pretrain-lvd1689m' is the correct path to a directory containing a preprocessor_config.json file",
+      "cached": false,
+      "access_requirement": "accept DINOv3 License and obtain repository approval"
+    },
+    "e2_siglip2_naflex_base": {
+      "identifier": "google/siglip2-base-patch16-naflex",
+      "documentation": "https://huggingface.co/google/siglip2-base-patch16-naflex",
+      "license": "Apache-2.0",
+      "status": "completed",
+      "reason": null,
+      "resolved_revision": "b53b807d3a2d5e2b3911292f2d69e5341cdc064c",
+      "processor_class": "Siglip2Processor",
+      "model_class": "Siglip2Model",
+      "device": "cpu",
+      "max_num_patches": 256
+    }
+  },
+  "embedding_metadata": {
+    "e0_dinov2_small": {
+      "whole": [
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              159,
+              680
+            ],
+            "requested_scale": 0.6812319366671905,
+            "scale_after_long_edge_limit": 0.6812319366671905,
+            "scale_used_before_integer_rounding": 0.6812319366671905,
+            "effective_scale_xy": [
+              0.6808823529411765,
+              0.6792452830188679
+            ],
+            "resized_dimensions_hw": [
+              108,
+              463
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              6,
+              2,
+              7,
+              2
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              112,
+              476
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              8,
+              34
+            ],
+            "patch_count": 272,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              112,
+              476
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "367afd3f47a7b07efcf35e43494b852c528604c4cab8dc5c6f394bf76ab3222f",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                0.0,
+                240.99998474121094
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 0.9999999403953552,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        },
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              286,
+              770
+            ],
+            "requested_scale": 0.4773309987737408,
+            "scale_after_long_edge_limit": 0.4773309987737408,
+            "scale_used_before_integer_rounding": 0.4773309987737408,
+            "effective_scale_xy": [
+              0.4779220779220779,
+              0.479020979020979
+            ],
+            "resized_dimensions_hw": [
+              137,
+              368
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              5,
+              1,
+              5,
+              2
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              140,
+              378
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              10,
+              27
+            ],
+            "patch_count": 270,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              140,
+              378
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "0f1f89a72a5201da8387da5f159f17fadb1ce6cc87f573e0d01fc2b39a77f110",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                0.0,
+                254.99998474121094
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 1.0,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        },
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              159,
+              800
+            ],
+            "requested_scale": 0.6280648125830895,
+            "scale_after_long_edge_limit": 0.6280648125830895,
+            "scale_used_before_integer_rounding": 0.6280648125830895,
+            "effective_scale_xy": [
+              0.6275,
+              0.6289308176100629
+            ],
+            "resized_dimensions_hw": [
+              100,
+              502
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              1,
+              6,
+              1,
+              6
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              112,
+              504
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              8,
+              36
+            ],
+            "patch_count": 288,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              112,
+              504
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "a37355569f5c2dde490ff58db6663ee94a6152a1fd4faca73f038c794b3c7ed6",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                4.000007152557373,
+                254.99998474121094
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 1.0,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        },
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              200,
+              823
+            ],
+            "requested_scale": 0.5521195214608235,
+            "scale_after_long_edge_limit": 0.5521195214608235,
+            "scale_used_before_integer_rounding": 0.5521195214608235,
+            "effective_scale_xy": [
+              0.551640340218712,
+              0.55
+            ],
+            "resized_dimensions_hw": [
+              110,
+              454
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              4,
+              1,
+              4,
+              1
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              112,
+              462
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              8,
+              33
+            ],
+            "patch_count": 264,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              112,
+              462
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "a126a02fd6e32659e75b1f160faaf9db0e1ad1aae856c806afdb2d982b92d07a",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                0.0,
+                254.99998474121094
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 0.9999999403953552,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        },
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              35,
+              129
+            ],
+            "requested_scale": 3.3336433964318446,
+            "scale_after_long_edge_limit": 3.3336433964318446,
+            "scale_used_before_integer_rounding": 3.3336433964318446,
+            "effective_scale_xy": [
+              3.3333333333333335,
+              3.342857142857143
+            ],
+            "resized_dimensions_hw": [
+              117,
+              430
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              2,
+              4,
+              2,
+              5
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              126,
+              434
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              9,
+              31
+            ],
+            "patch_count": 279,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              126,
+              434
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "aa4bff31061556a2332c921fa6faa812be733e119a0fe68d70a359a9eaa72acf",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                0.0,
+                244.99998474121094
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 1.0,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        },
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              39,
+              132
+            ],
+            "requested_scale": 3.121970170693139,
+            "scale_after_long_edge_limit": 3.121970170693139,
+            "scale_used_before_integer_rounding": 3.121970170693139,
+            "effective_scale_xy": [
+              3.121212121212121,
+              3.128205128205128
+            ],
+            "resized_dimensions_hw": [
+              122,
+              412
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              4,
+              2,
+              4,
+              2
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              126,
+              420
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              9,
+              30
+            ],
+            "patch_count": 270,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              126,
+              420
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "1ac82c5da3edb6359cf1d1afdd4af59f3ffa43fe7f3798368f7df60ca09ec477",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                0.0,
+                234.99998474121094
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 0.9999999403953552,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        },
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              44,
+              157
+            ],
+            "requested_scale": 2.6950811958079637,
+            "scale_after_long_edge_limit": 2.6950811958079637,
+            "scale_used_before_integer_rounding": 2.6950811958079637,
+            "effective_scale_xy": [
+              2.694267515923567,
+              2.7045454545454546
+            ],
+            "resized_dimensions_hw": [
+              119,
+              423
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              5,
+              3,
+              6,
+              4
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              126,
+              434
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              9,
+              31
+            ],
+            "patch_count": 279,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              126,
+              434
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "b3ec182f080e1a6c1b0a5c0b21bf9d29c6e7fb5c7d67f91ba6259ee9d94816c5",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                3.999999523162842,
+                240.99998474121094
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 0.9999999403953552,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        },
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              132,
+              420
+            ],
+            "requested_scale": 0.951341424016901,
+            "scale_after_long_edge_limit": 0.951341424016901,
+            "scale_used_before_integer_rounding": 0.951341424016901,
+            "effective_scale_xy": [
+              0.9523809523809523,
+              0.9545454545454546
+            ],
+            "resized_dimensions_hw": [
+              126,
+              400
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              3,
+              0,
+              3,
+              0
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              126,
+              406
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              9,
+              29
+            ],
+            "patch_count": 261,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              126,
+              406
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "d5f2d799b420c0b2bc8d3a9c51d84b6ed1f49533383828219ae9fa6b3e0b07d2",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                0.0,
+                243.99996948242188
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 1.0,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        },
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              54,
+              168
+            ],
+            "requested_scale": 2.351778943168525,
+            "scale_after_long_edge_limit": 2.351778943168525,
+            "scale_used_before_integer_rounding": 2.351778943168525,
+            "effective_scale_xy": [
+              2.3511904761904763,
+              2.3518518518518516
+            ],
+            "resized_dimensions_hw": [
+              127,
+              395
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              5,
+              6,
+              6,
+              7
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              140,
+              406
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              10,
+              29
+            ],
+            "patch_count": 290,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              140,
+              406
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "d79b450b3ebb55eced83dea583183e23fd75504eee86673e192c8487b6e5cd8b",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                0.0,
+                251.99996948242188
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 0.9999999403953552,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        },
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              61,
+              244
+            ],
+            "requested_scale": 1.8360655737704918,
+            "scale_after_long_edge_limit": 1.8360655737704918,
+            "scale_used_before_integer_rounding": 1.8360655737704918,
+            "effective_scale_xy": [
+              1.8360655737704918,
+              1.8360655737704918
+            ],
+            "resized_dimensions_hw": [
+              112,
+              448
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              112,
+              448
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              8,
+              32
+            ],
+            "patch_count": 256,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              112,
+              448
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "bccf1152328667ea281825c04f6257ccef7760349fc5d11cb8aa4c20c99a8e91",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                0.0,
+                177.0
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 1.0,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        }
+      ],
+      "marker": [
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              104,
+              168
+            ],
+            "requested_scale": 1.6946370914726467,
+            "scale_after_long_edge_limit": 1.6946370914726467,
+            "scale_used_before_integer_rounding": 1.6946370914726467,
+            "effective_scale_xy": [
+              1.6964285714285714,
+              1.6923076923076923
+            ],
+            "resized_dimensions_hw": [
+              176,
+              285
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              4,
+              3,
+              5,
+              3
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              182,
+              294
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              13,
+              21
+            ],
+            "patch_count": 273,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              182,
+              294
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "6aed77664aed7a6ce9c572d6a626fb53b100dd6f070c8c96ed714c1a34a723e8",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                34.000003814697266,
+                254.99998474121094
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 0.9999999403953552,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        },
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              21,
+              31
+            ],
+            "requested_scale": 8.77925217869975,
+            "scale_after_long_edge_limit": 8.77925217869975,
+            "scale_used_before_integer_rounding": 8.77925217869975,
+            "effective_scale_xy": [
+              8.774193548387096,
+              8.761904761904763
+            ],
+            "resized_dimensions_hw": [
+              184,
+              272
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              4,
+              6,
+              4,
+              6
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              196,
+              280
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              14,
+              20
+            ],
+            "patch_count": 280,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              196,
+              280
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "89efc9b99519a5f10d282c788d62e0a1cc6cf471c5252940f5776e4b3627268f",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                0.0,
+                221.99998474121094
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 0.9999999403953552,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        },
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              17,
+              23
+            ],
+            "requested_scale": 11.32816691830149,
+            "scale_after_long_edge_limit": 11.32816691830149,
+            "scale_used_before_integer_rounding": 11.32816691830149,
+            "effective_scale_xy": [
+              11.347826086956522,
+              11.352941176470589
+            ],
+            "resized_dimensions_hw": [
+              193,
+              261
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              2,
+              1,
+              3,
+              2
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              196,
+              266
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              14,
+              19
+            ],
+            "patch_count": 266,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              196,
+              266
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "86588d99f5015c01bccb55c7ff998368f1a6f5f41677aea295f273b680e73294",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                44.999996185302734,
+                226.99998474121094
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 1.0,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        },
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              20,
+              27
+            ],
+            "requested_scale": 9.639425217227348,
+            "scale_after_long_edge_limit": 9.639425217227348,
+            "scale_used_before_integer_rounding": 9.639425217227348,
+            "effective_scale_xy": [
+              9.62962962962963,
+              9.65
+            ],
+            "resized_dimensions_hw": [
+              193,
+              260
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              3,
+              1,
+              3,
+              2
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              196,
+              266
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              14,
+              19
+            ],
+            "patch_count": 266,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              196,
+              266
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "b4484e4b56b6331408cef02818641877c9b8c046e67dd8388378659d7448e030",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                33.000003814697266,
+                233.99996948242188
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 1.0,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        },
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              57,
+              98
+            ],
+            "requested_scale": 2.9970745970614208,
+            "scale_after_long_edge_limit": 2.9970745970614208,
+            "scale_used_before_integer_rounding": 2.9970745970614208,
+            "effective_scale_xy": [
+              3.0,
+              3.0
+            ],
+            "resized_dimensions_hw": [
+              171,
+              294
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              0,
+              5,
+              0,
+              6
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              182,
+              294
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              13,
+              21
+            ],
+            "patch_count": 273,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              182,
+              294
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "3934c446d345de6d906cfac14efd82672d0e36529ae40aac527bc81409def469",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                0.0,
+                193.99996948242188
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 0.9999999403953552,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        },
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              25,
+              36
+            ],
+            "requested_scale": 7.466666666666667,
+            "scale_after_long_edge_limit": 7.466666666666667,
+            "scale_used_before_integer_rounding": 7.466666666666667,
+            "effective_scale_xy": [
+              7.472222222222222,
+              7.48
+            ],
+            "resized_dimensions_hw": [
+              187,
+              269
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              5,
+              4,
+              6,
+              5
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              196,
+              280
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              14,
+              20
+            ],
+            "patch_count": 280,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              196,
+              280
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "ea5baa11fa699f318ce52cef9ffc5ab772f57842a4976c8fa8fd357ef78b9db1",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                0.0,
+                254.99998474121094
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 1.0,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        },
+        {
+          "preprocessing": {
+            "mode": "budget",
+            "original_dimensions_hw": [
+              28,
+              44
+            ],
+            "requested_scale": 6.381792281739725,
+            "scale_after_long_edge_limit": 6.381792281739725,
+            "scale_used_before_integer_rounding": 6.381792281739725,
+            "effective_scale_xy": [
+              6.386363636363637,
+              6.392857142857143
+            ],
+            "resized_dimensions_hw": [
+              179,
+              281
+            ],
+            "rounding_rule": "round-half-up; each resized dimension is at least 1 pixel",
+            "padding_ltrb": [
+              6,
+              1,
+              7,
+              2
+            ],
+            "odd_padding_rule": "extra pixel goes to right or bottom",
+            "final_dimensions_hw": [
+              182,
+              294
+            ],
+            "patch_size_hw": [
+              14,
+              14
+            ],
+            "patch_grid_hw": [
+              13,
+              21
+            ],
+            "patch_count": 273,
+            "long_edge_limit_applied": false,
+            "patch_count_limit_applied": false,
+            "complete_resized_image_region_preserved": true,
+            "pixels_cropped": 0,
+            "padding_rgb": [
+              124,
+              116,
+              104
+            ],
+            "resize_interpolation": "bicubic",
+            "processor_geometry_disabled": {
+              "do_resize": false,
+              "do_center_crop": false
+            },
+            "tensor_shape": [
+              1,
+              3,
+              182,
+              294
+            ],
+            "tensor_dtype": "torch.float32",
+            "tensor_sha256": "55f14563df09a8de468c4f325cc84a8bacde2b05198839feea23bb46955da3a2",
+            "display_reconstruction": {
+              "description": "Reconstructed from the exact inference tensor by reversing normalization and rescaling; clipped to [0,255], rounded to nearest integer, and displayed as uint8.",
+              "pre_clip_range": [
+                0.0,
+                161.99998474121094
+              ],
+              "clipped_value_count": 0,
+              "rounded_for_display": true,
+              "matches_prepared_uint8_exactly": true,
+              "maximum_absolute_uint8_difference": 0
+            }
+          },
+          "embedding": {
+            "dimension": 384,
+            "dtype": "torch.float32",
+            "l2_norm": 1.0,
+            "logic": "last_hidden_state[:, 0, :], float32, L2-normalized"
+          }
+        }
+      ],
+      "processor": {
+        "class": "transformers.models.bit.image_processing_bit.BitImageProcessor",
+        "do_convert_rgb": true,
+        "do_resize_default": true,
+        "size_default": "SizeDict(height=None, width=None, longest_edge=None, shortest_edge=256, max_height=None, max_width=None)",
+        "do_center_crop_default": true,
+        "crop_size_default": "SizeDict(height=224, width=224, longest_edge=None, shortest_edge=None, max_height=None, max_width=None)",
+        "do_rescale": true,
+        "rescale_factor": 0.00392156862745098,
+        "do_normalize": true,
+        "image_mean_rgb": [
+          0.485,
+          0.456,
+          0.406
+        ],
+        "image_std_rgb": [
+          0.229,
+          0.224,
+          0.225
+        ]
+      }
+    },
+    "e2_siglip2_naflex_base": {
+      "whole": [
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 256,
+            "padded_patch_slots": 0,
+            "spatial_shapes_hw_patches": [
+              8,
+              32
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              128,
+              512
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 1.0,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        },
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 250,
+            "padded_patch_slots": 6,
+            "spatial_shapes_hw_patches": [
+              10,
+              25
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              160,
+              400
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 0.9999998807907104,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        },
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 252,
+            "padded_patch_slots": 4,
+            "spatial_shapes_hw_patches": [
+              7,
+              36
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              112,
+              576
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 0.9999998807907104,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        },
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 256,
+            "padded_patch_slots": 0,
+            "spatial_shapes_hw_patches": [
+              8,
+              32
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              128,
+              512
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 0.9999999403953552,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        },
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 240,
+            "padded_patch_slots": 16,
+            "spatial_shapes_hw_patches": [
+              8,
+              30
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              128,
+              480
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 1.0,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        },
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 252,
+            "padded_patch_slots": 4,
+            "spatial_shapes_hw_patches": [
+              9,
+              28
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              144,
+              448
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 1.0,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        },
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 232,
+            "padded_patch_slots": 24,
+            "spatial_shapes_hw_patches": [
+              8,
+              29
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              128,
+              464
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 0.9999998807907104,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        },
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 252,
+            "padded_patch_slots": 4,
+            "spatial_shapes_hw_patches": [
+              9,
+              28
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              144,
+              448
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 0.9999999403953552,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        },
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 252,
+            "padded_patch_slots": 4,
+            "spatial_shapes_hw_patches": [
+              9,
+              28
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              144,
+              448
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 1.0,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        },
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 256,
+            "padded_patch_slots": 0,
+            "spatial_shapes_hw_patches": [
+              8,
+              32
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              128,
+              512
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 0.9999998807907104,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        }
+      ],
+      "marker": [
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 240,
+            "padded_patch_slots": 16,
+            "spatial_shapes_hw_patches": [
+              12,
+              20
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              192,
+              320
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 1.0,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        },
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 247,
+            "padded_patch_slots": 9,
+            "spatial_shapes_hw_patches": [
+              13,
+              19
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              208,
+              304
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 0.9999999403953552,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        },
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 252,
+            "padded_patch_slots": 4,
+            "spatial_shapes_hw_patches": [
+              14,
+              18
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              224,
+              288
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 1.0,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        },
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 252,
+            "padded_patch_slots": 4,
+            "spatial_shapes_hw_patches": [
+              14,
+              18
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              224,
+              288
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 1.0000001192092896,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        },
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 252,
+            "padded_patch_slots": 4,
+            "spatial_shapes_hw_patches": [
+              12,
+              21
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              192,
+              336
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 1.0,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        },
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 247,
+            "padded_patch_slots": 9,
+            "spatial_shapes_hw_patches": [
+              13,
+              19
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              208,
+              304
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 1.0,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        },
+        {
+          "official_processor_outputs": {
+            "packed_pixel_values_shape": [
+              1,
+              256,
+              768
+            ],
+            "pixel_attention_mask_shape": [
+              1,
+              256
+            ],
+            "valid_patch_count": 247,
+            "padded_patch_slots": 9,
+            "spatial_shapes_hw_patches": [
+              13,
+              19
+            ],
+            "patch_size": 16,
+            "reconstructed_dimensions_hw": [
+              208,
+              304
+            ],
+            "display_note": "Official packed patches reconstructed in row-major spatial order after reversing normalization; uint8 clipping/rounding is display-only."
+          },
+          "embedding_dimension": 768,
+          "l2_norm": 1.0,
+          "feature_path": "official model.get_image_features(**processor_outputs)",
+          "max_num_patches": 256
+        }
+      ]
+    }
+  },
+  "preprocessing": {
+    "e0_and_e1_budget_policy": {
+      "target_area": 50176,
+      "max_long_edge": 1008,
+      "max_patch_count": 512,
+      "padding_rgb": [
+        124,
+        116,
+        104
+      ],
+      "interpolation": "bicubic",
+      "status": "experimental choices; not established optimal values"
+    },
+    "e2_naflex_max_num_patches": 256,
+    "e2_policy": "official NaFlex processor only; no DINO preprocessing"
+  },
+  "colour": {
+    "opencv_hsv_ranges": {
+      "H": [
+        0,
+        179
+      ],
+      "S": [
+        0,
+        255
+      ],
+      "V": [
+        0,
+        255
+      ]
+    },
+    "joint_histogram_bins_hsv": [
+      18,
+      8,
+      8
+    ],
+    "histogram_ranges": [
+      [
+        0,
+        180
+      ],
+      [
+        0,
+        256
+      ],
+      [
+        0,
+        256
+      ]
+    ],
+    "normalization": "L1",
+    "distance": "Hellinger",
+    "c1_grouping": "grayscale Otsu bright/dark proxies",
+    "c1_group_weights": [
+      0.5,
+      0.5
+    ],
+    "near_empty_group_fraction": 0.005,
+    "empty_policy": "both empty distance 0; one empty distance 1",
+    "red_hue_intervals_inclusive": [
+      [
+        0,
+        10
+      ],
+      [
+        170,
+        179
+      ]
+    ],
+    "red_min_saturation": 100,
+    "red_min_value": 50
+  },
+  "shape": {
+    "manual_marker_subset_ids": [
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "corrected_image_5_bbox": [
+      89,
+      6,
+      120,
+      27
+    ],
+    "canvas_size": 256,
+    "content_long_edge": 224,
+    "adaptive_block_size": 31,
+    "adaptive_C": 5,
+    "canny_thresholds": [
+      50,
+      150
+    ],
+    "S0": "bidirectional normalized correlation on adaptive views, averaged; no translation/scale search",
+    "S1": "bidirectional edge chamfer mean, normalized by canvas diagonal",
+    "empty_policy": "invalid pair; never perfect"
+  },
+  "evaluation": {
+    "full_pair_count_per_method": 45,
+    "marker_pair_count_per_method": 21,
+    "classifier": "leave-one-out 1-NN",
+    "tie_tolerance": 1e-12,
+    "tie_rule": "smallest numerical reference ID, tie flagged",
+    "physical_independence": "unverified where group IDs are null",
+    "raw_scores_across_methods_comparable": false
+  },
+  "baseline_reproduction": {
+    "tolerance": 1e-06,
+    "whole_max_abs_difference": 3.5762786865234375e-07,
+    "marker_max_abs_difference": 2.384185791015625e-07
+  },
+  "historical_r2_reference": {
+    "full_correct": 7,
+    "full_total": 10,
+    "marker_correct": 5,
+    "marker_total": 7,
+    "source": "representation_experiment_v3"
+  },
+  "runtime": {
+    "warm_latency_measured": false,
+    "reason": "No synchronized repeated warm-inference timing protocol was executed; model loading and downloads are excluded."
+  }
+}

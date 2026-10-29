@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "coordinate_convention": "Original decoded-image coordinates. tight_plate_bbox is xyxy with exclusive x2/y2; corners are ordered top-left, top-right, bottom-right, bottom-left.",
+  "images": {}
+}

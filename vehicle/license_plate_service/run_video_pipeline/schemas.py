@@ -3,9 +3,29 @@ from typing import Any, Literal, Optional
 from pydantic import BaseModel, Field
 
 
+class CategoryClassification(BaseModel):
+    """Category evidence only; similarities are not calibrated probabilities."""
+
+    status: Literal["completed", "error"]
+    final_category: Optional[str] = None
+    visual_category: Optional[str] = None
+    decision_source: Optional[str] = None
+    nearest_reference_id: Optional[str] = None
+    nearest_similarity: Optional[float] = None
+    category_margin: Optional[float] = None
+    nt_evidence: Optional[str] = None
+    conflict: bool = False
+    arabic_ocr_failed: bool = False
+    error: Optional[str] = None
+    classification_ms: float = 0.0
+    visual_ms: float = 0.0
+    arabic_ocr_ms: float = 0.0
+
+
 class PlateDetection(BaseModel):
     """Unified result for one detected (or directly supplied) plate crop."""
 
+    classification: Optional[CategoryClassification] = Field(default=None, exclude=True)
     bbox: list[int]  # [x1, y1, x2, y2]
     detector_confidence: Optional[float]
     raw_ocr: str
@@ -50,6 +70,7 @@ class MarkerEvidence(BaseModel):
 
 
 class PlateTiming(BaseModel):
+    classification_ms: float = 0.0
     routing_ms: float = 0.0
     marker_ms: float = 0.0
     ocr_ms: float = 0.0
@@ -62,6 +83,7 @@ class PlateTiming(BaseModel):
 
 
 class UnifiedPlateResult(BaseModel):
+    classification: Optional[CategoryClassification] = Field(default=None, exclude=True)
     sample_id: str
     timestamp: str
     plate_text_raw: str = ""
