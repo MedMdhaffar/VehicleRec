@@ -1,0 +1,20 @@
+{
+  "A": {
+    "definition": "exact complete_plate_nt_ocr_v1 unpadded budget input; default recognizer shape 3x48x320"
+  },
+  "B": {
+    "definition": "best.pt highest confidence >=0.25; accept only >=60% width and >=20% height; 4% source margin; otherwise labelled source fallback"
+  },
+  "C": {
+    "definition": "rightmost 40% of B crop, full height, floor(0.60*width) lower x; then budget resize"
+  },
+  "D": {
+    "definition": "PP-OCRv5_mobile_det defaults on A; recognize every detected region independently; no joining"
+  },
+  "E": {
+    "definition": "same A pixels; documented recognizer input_shape=(3,64,640) instead of default 3x48x320"
+  },
+  "ABC_any": {
+    "definition": "NT if any A/B/C is present and none is conflicting; otherwise saved R2"
+  }
+}

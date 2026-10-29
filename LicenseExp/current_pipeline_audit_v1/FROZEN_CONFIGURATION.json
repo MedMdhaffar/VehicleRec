@@ -1,0 +1,125 @@
+{
+  "audit_date": "2026-10-28",
+  "status": "documentation snapshot; pipeline unchanged",
+  "authoritative_manifest": {
+    "path": "all_plate_manifest.json",
+    "sha256": "d7f68deddf2ff302e4d8dd04a3ad56b1519f2869ecf74c8a24daa2ed25a92910",
+    "image_count": 12,
+    "categories": {"idara": 3, "nt": 4, "shorta": 2, "tunis": 3},
+    "exact_duplicate_groups": [],
+    "physical_independence": "unverified; every physical_plate_id and group_id is null"
+  },
+  "visual": {
+    "entry_point": "evaluate_plate_representations.py",
+    "authoritative_output": "dinov3_s_all12_budget_finalcrop_v1",
+    "encoder": "dinov3_vits16",
+    "architecture": "DINOv3 ViT-S/16, LVD-1689M",
+    "license": "DINOv3 License Agreement in the pinned official repository",
+    "official_documentation": "https://github.com/facebookresearch/dinov3",
+    "checkpoint": "checkpoints/dinov3/dinov3_vits16_pretrain_lvd1689m-08c60483.pth",
+    "checkpoint_sha256": "08c60483bc63c04f533611e34bf70b120eedb7240f469bc16e9e20bf344b941d",
+    "official_repository": "third_party/third_party/dinov3",
+    "official_repository_revision": "6876159a11b4df116f30f667f8c9888617df0751",
+    "loading": "torch.hub.load(local_repo, 'dinov3_vits16', source='local', weights=local_checkpoint)",
+    "patch_size": [16, 16],
+    "embedding_dimension": 384,
+    "storage_register_tokens_in_official_architecture": 4,
+    "storage_register_token_use": "excluded; wrapper emits explicit CLS plus x_norm_patchtokens only",
+    "input_mode": "budget",
+    "resolution_policy": {
+      "target_area": 50176,
+      "max_long_edge": 1008,
+      "max_patch_count": 512,
+      "padding_rgb": [124, 116, 104],
+      "interpolation": "OpenCV INTER_CUBIC",
+      "dimension_rounding": "round-half-up",
+      "odd_padding": "extra pixel on right or bottom"
+    },
+    "processor": {
+      "rgb": true,
+      "automatic_resize": false,
+      "automatic_center_crop": false,
+      "rescale_factor": 0.00392156862745098,
+      "mean_rgb": [0.485, 0.456, 0.406],
+      "std_rgb": [0.229, 0.224, 0.225]
+    },
+    "representation": {
+      "name": "R2 whole + overlapping regions",
+      "regions": {"left": "[0,0.5W)", "centre": "[0.25W,0.75W)", "right": "[0.5W,W)"},
+      "rounding": "floor lower bound, ceil upper bound, clamp, full height",
+      "component_weights": {"whole": 0.25, "left": 0.25, "centre": 0.25, "right": 0.25},
+      "component_dimension": 384,
+      "combined_dimension": 1536,
+      "score": "sum_i 0.25*cos(component_i(A), component_i(B))"
+    },
+    "evaluation": {
+      "protocol": "leave-one-image-out 1-nearest-neighbour",
+      "similarity": "cosine",
+      "tie_tolerance": 1e-12,
+      "tie_resolution": "smallest numeric reference ID; tie remains flagged",
+      "rejection_threshold": null,
+      "saved_device": "cpu",
+      "pooled_precision": "float32",
+      "inference": "model.eval and torch.no_grad",
+      "saved_result_sha256": "3cf39a01990d58bb68d3743e386229cd2746e7841bef544ee88672d5094066d3",
+      "saved_predictions_sha256": "27275edba86e0fc621f72b3f20b877aeea15c63770c399c0cb0ce06771d77a53"
+    }
+  },
+  "ocr": {
+    "entry_point": "evaluate_complete_plate_nt_ocr.py",
+    "authoritative_output": "complete_plate_nt_ocr_finalcrop_v1",
+    "model": "arabic_PP-OCRv5_mobile_rec",
+    "license": "Apache-2.0 (as recorded by the completed experiment)",
+    "official_documentation": "https://www.paddleocr.ai/main/en/version3.x/module_usage/text_recognition.html",
+    "model_cache": "/home/mohamed/.paddlex/official_models/arabic_PP-OCRv5_mobile_rec",
+    "asset_hashes": {
+      "inference.pdiparams": "4b4271fd1dd89a40b2056e1a42e58de7c0df2fdcf1a97ca9a8916d7ec45f9143",
+      "inference.json": "d43832804d89c0e18d59f8446a3babd0ef60c44bc335efddac3176caf71d50af",
+      "inference.yml": "21368419e6c016c31db55d316d59e11c128e1913e6e6fe10287084710043d3a6"
+    },
+    "interface": "paddleocr.TextRecognition(model_name=..., device='cpu').predict(path, batch_size=1)",
+    "text_detection": false,
+    "orientation_classification": false,
+    "unwarping": false,
+    "external_input": "same proportional budget-resized complete content as visual whole view, unpadded BGR PNG",
+    "internal_preprocessing": "BGR decode; proportional resize to height 48 with ceil width; batch-width right padding; CHW float32; /255 then (x-0.5)/0.5; configured and applicable batch-1 shape [3,48,320]; valid_ratio retained",
+    "decoder": "CTCLabelDecode",
+    "result_fields": ["input_path", "page_index", "rec_text", "rec_score"],
+    "saved_device": "cpu",
+    "saved_fusion_csv_sha256": "f5d4553567fe7d072b4d5e8d0643f830da9429b88c962ec00dbd884ced0002b8",
+    "saved_metrics_sha256": "dd9d80a7a87c77986afd03a6b497ce58993fa7dd515192e8469da2e677d40e78"
+  },
+  "runtime_versions": {
+    "python": "3.11.15",
+    "torch": "2.12.1+cu126",
+    "transformers": "5.15.0",
+    "paddleocr": "3.7.0",
+    "paddlepaddle": "3.2.0",
+    "opencv-python": "5.0.0.93",
+    "numpy": "2.3.5",
+    "matplotlib": "3.11.0"
+  },
+  "source_hashes": {
+    "evaluate_plate_representations.py": "c490de4e796d98546c1a46663e922a58f28582d235ee2409d0a28a182097700e",
+    "dinov3_official_adapter.py": "b30e983cf14f3ac71179860f97fcd466b5a4e784cd142c133c6b84bd49395569",
+    "plate_preprocessing.py": "1da9f00794893f106dff268239556d3f0143ddb29d1c44773d9c989fcd0ca942",
+    "plate_representations.py": "3a1ec316d75f62a8a3c42fcb6a27d29d514bbc819fb4336ef6d98d5271f82148",
+    "plate_variants.py": "d7b989fececf9ed2dc81453b0c7f95afd09b91f8353625d9ff417dc6fc4afed4",
+    "evaluate_complete_plate_nt_ocr.py": "6f234473f0cb1cad9e49625ba99cedbaee687759982756226acbded6107fcd60",
+    "arabic_marker_ocr.py": "4fcf4c00a5c78c174ca3a4a1aa5c8d6f44c767a14025016ae271ba1afb151a68"
+  },
+  "verified_results": {
+    "r0": "8/12",
+    "r1": "8/12",
+    "r2": "11/12",
+    "r2_plus_nt_ocr": "12/12",
+    "nt_detection": {"tp": 4, "fp": 0, "fn": 0, "tn": 8},
+    "only_fusion_correction": "image 5",
+    "regressions": []
+  },
+  "audit_findings": [
+    "The official model has four storage/register tokens, but saved per-forward metadata records zero because the adapter checks x_norm_regtokens while this repository returns x_storage_tokens. They are still excluded from R1 because the wrapper concatenates only CLS and x_norm_patchtokens.",
+    "Saved metadata calls rectangular support positional interpolation. This official DINOv3 implementation actually generates 2-D RoPE for the observed H,W patch grid.",
+    "The fusion experiment consumes saved leave-one-out visual predictions. There is no implemented frozen-gallery new-image inference interface or production integration."
+  ]
+}

@@ -1,0 +1,249 @@
+{
+  "conditions": {
+    "A": {
+      "definition": "exact complete_plate_nt_ocr_v1 unpadded budget input; default recognizer shape 3x48x320"
+    },
+    "B": {
+      "definition": "best.pt highest confidence >=0.25; accept only >=60% width and >=20% height; 4% source margin; otherwise labelled source fallback"
+    },
+    "C": {
+      "definition": "rightmost 40% of B crop, full height, floor(0.60*width) lower x; then budget resize"
+    },
+    "D": {
+      "definition": "PP-OCRv5_mobile_det defaults on A; recognize every detected region independently; no joining"
+    },
+    "E": {
+      "definition": "same A pixels; documented recognizer input_shape=(3,64,640) instead of default 3x48x320"
+    },
+    "ABC_any": {
+      "definition": "NT if any A/B/C is present and none is conflicting; otherwise saved R2"
+    }
+  },
+  "manifest": "all_plate_manifest.json",
+  "baseline": "dinov3_s_all12_budget_recrop_v1",
+  "prior_A": "complete_plate_nt_ocr_recrop_v1",
+  "A_discrepancies": [],
+  "localization": {
+    "1": {
+      "status": "fallback_original",
+      "detector_confidence": null,
+      "crop_xyxy": [
+        0,
+        0,
+        680,
+        159
+      ],
+      "right_xyxy_in_b": [
+        408,
+        0,
+        680,
+        159
+      ]
+    },
+    "2": {
+      "status": "fallback_original",
+      "detector_confidence": null,
+      "crop_xyxy": [
+        0,
+        0,
+        770,
+        286
+      ],
+      "right_xyxy_in_b": [
+        462,
+        0,
+        770,
+        286
+      ]
+    },
+    "3": {
+      "status": "fallback_original",
+      "detector_confidence": null,
+      "crop_xyxy": [
+        0,
+        0,
+        800,
+        159
+      ],
+      "right_xyxy_in_b": [
+        480,
+        0,
+        800,
+        159
+      ]
+    },
+    "4": {
+      "status": "fallback_original",
+      "detector_confidence": null,
+      "crop_xyxy": [
+        0,
+        0,
+        823,
+        200
+      ],
+      "right_xyxy_in_b": [
+        493,
+        0,
+        823,
+        200
+      ]
+    },
+    "5": {
+      "status": "fallback_original",
+      "detector_confidence": 0.319183886051178,
+      "crop_xyxy": [
+        0,
+        0,
+        129,
+        35
+      ],
+      "right_xyxy_in_b": [
+        77,
+        0,
+        129,
+        35
+      ]
+    },
+    "6": {
+      "status": "fallback_original",
+      "detector_confidence": null,
+      "crop_xyxy": [
+        0,
+        0,
+        516,
+        136
+      ],
+      "right_xyxy_in_b": [
+        309,
+        0,
+        516,
+        136
+      ]
+    },
+    "7": {
+      "status": "fallback_original",
+      "detector_confidence": null,
+      "crop_xyxy": [
+        0,
+        0,
+        562,
+        141
+      ],
+      "right_xyxy_in_b": [
+        337,
+        0,
+        562,
+        141
+      ]
+    },
+    "8": {
+      "status": "fallback_original",
+      "detector_confidence": null,
+      "crop_xyxy": [
+        0,
+        0,
+        132,
+        39
+      ],
+      "right_xyxy_in_b": [
+        79,
+        0,
+        132,
+        39
+      ]
+    },
+    "9": {
+      "status": "fallback_original",
+      "detector_confidence": null,
+      "crop_xyxy": [
+        0,
+        0,
+        157,
+        44
+      ],
+      "right_xyxy_in_b": [
+        94,
+        0,
+        157,
+        44
+      ]
+    },
+    "10": {
+      "status": "fallback_original",
+      "detector_confidence": null,
+      "crop_xyxy": [
+        0,
+        0,
+        420,
+        132
+      ],
+      "right_xyxy_in_b": [
+        252,
+        0,
+        420,
+        132
+      ]
+    },
+    "11": {
+      "status": "fallback_original",
+      "detector_confidence": null,
+      "crop_xyxy": [
+        0,
+        0,
+        168,
+        54
+      ],
+      "right_xyxy_in_b": [
+        100,
+        0,
+        168,
+        54
+      ]
+    },
+    "12": {
+      "status": "fallback_original",
+      "detector_confidence": 0.3381151258945465,
+      "crop_xyxy": [
+        0,
+        0,
+        244,
+        61
+      ],
+      "right_xyxy_in_b": [
+        146,
+        0,
+        244,
+        61
+      ]
+    }
+  },
+  "weights_sha256": "d7a69b324a58e24223a48371f5a70a5e222357d0edaa47dd435bca7cc8c831a0",
+  "recognizer": "arabic_PP-OCRv5_mobile_rec",
+  "default_input_shape": [
+    3,
+    48,
+    320
+  ],
+  "E_input_shape_requested_and_runtime_confirmed": [
+    3,
+    64,
+    640
+  ],
+  "D_status": "blocked",
+  "D_blocker": "PP-OCRv5_mobile_det is not cached; PaddleX reported no reachable official model host, so no regions were fabricated.",
+  "versions": {
+    "paddleocr": "3.7.0",
+    "paddlepaddle": "3.2.0",
+    "opencv-python": "5.0.0.93",
+    "numpy": "2.3.5",
+    "ultralytics": "8.4.86"
+  },
+  "device": "cpu",
+  "timing": {
+    "recognizer_load": 0.8895740369998748,
+    "warmup": 0.10158744900036254,
+    "E_load": 0.18127207900033682,
+    "E_warmup": 0.10907630000019708,
+    "ABC_preprocessing_and_localization": 1.9837362339985702
+  }
+}
