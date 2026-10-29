@@ -1,0 +1,158 @@
+[
+  {
+    "image_id": "1",
+    "status": "completed",
+    "payload": {
+      "res": {
+        "input_path": "complete_plate_nt_ocr_v1/submitted_budget_crops/1_budget_unpadded.png",
+        "page_index": null,
+        "rec_text": "17 - 138957",
+        "rec_score": 0.9179226160049438
+      }
+    },
+    "failure_reason": ""
+  },
+  {
+    "image_id": "2",
+    "status": "completed",
+    "payload": {
+      "res": {
+        "input_path": "complete_plate_nt_ocr_v1/submitted_budget_crops/2_budget_unpadded.png",
+        "page_index": null,
+        "rec_text": "17-18885",
+        "rec_score": 0.8264201283454895
+      }
+    },
+    "failure_reason": ""
+  },
+  {
+    "image_id": "3",
+    "status": "completed",
+    "payload": {
+      "res": {
+        "input_path": "complete_plate_nt_ocr_v1/submitted_budget_crops/3_budget_unpadded.png",
+        "page_index": null,
+        "rec_text": "17 - 138956",
+        "rec_score": 0.930962324142456
+      }
+    },
+    "failure_reason": ""
+  },
+  {
+    "image_id": "4",
+    "status": "completed",
+    "payload": {
+      "res": {
+        "input_path": "complete_plate_nt_ocr_v1/submitted_budget_crops/4_budget_unpadded.png",
+        "page_index": null,
+        "rec_text": "ن ت ١١٦٤",
+        "rec_score": 0.7694334983825684
+      }
+    },
+    "failure_reason": ""
+  },
+  {
+    "image_id": "5",
+    "status": "completed",
+    "payload": {
+      "res": {
+        "input_path": "complete_plate_nt_ocr_v1/submitted_budget_crops/5_budget_unpadded.png",
+        "page_index": null,
+        "rec_text": "نت١0379",
+        "rec_score": 0.7348999381065369
+      }
+    },
+    "failure_reason": ""
+  },
+  {
+    "image_id": "6",
+    "status": "completed",
+    "payload": {
+      "res": {
+        "input_path": "complete_plate_nt_ocr_v1/submitted_budget_crops/6_budget_unpadded.png",
+        "page_index": null,
+        "rec_text": "16828 00",
+        "rec_score": 0.47581547498703003
+      }
+    },
+    "failure_reason": ""
+  },
+  {
+    "image_id": "7",
+    "status": "completed",
+    "payload": {
+      "res": {
+        "input_path": "complete_plate_nt_ocr_v1/submitted_budget_crops/7_budget_unpadded.png",
+        "page_index": null,
+        "rec_text": "727750",
+        "rec_score": 0.7450554370880127
+      }
+    },
+    "failure_reason": ""
+  },
+  {
+    "image_id": "8",
+    "status": "completed",
+    "payload": {
+      "res": {
+        "input_path": "complete_plate_nt_ocr_v1/submitted_budget_crops/8_budget_unpadded.png",
+        "page_index": null,
+        "rec_text": "300",
+        "rec_score": 0.7809286713600159
+      }
+    },
+    "failure_reason": ""
+  },
+  {
+    "image_id": "9",
+    "status": "completed",
+    "payload": {
+      "res": {
+        "input_path": "complete_plate_nt_ocr_v1/submitted_budget_crops/9_budget_unpadded.png",
+        "page_index": null,
+        "rec_text": "a27211",
+        "rec_score": 0.7739422917366028
+      }
+    },
+    "failure_reason": ""
+  },
+  {
+    "image_id": "10",
+    "status": "completed",
+    "payload": {
+      "res": {
+        "input_path": "complete_plate_nt_ocr_v1/submitted_budget_crops/10_budget_unpadded.png",
+        "page_index": null,
+        "rec_text": "توشن",
+        "rec_score": 0.4553837180137634
+      }
+    },
+    "failure_reason": ""
+  },
+  {
+    "image_id": "11",
+    "status": "completed",
+    "payload": {
+      "res": {
+        "input_path": "complete_plate_nt_ocr_v1/submitted_budget_crops/11_budget_unpadded.png",
+        "page_index": null,
+        "rec_text": "937 ن 2",
+        "rec_score": 0.6832978129386902
+      }
+    },
+    "failure_reason": ""
+  },
+  {
+    "image_id": "12",
+    "status": "completed",
+    "payload": {
+      "res": {
+        "input_path": "complete_plate_nt_ocr_v1/submitted_budget_crops/12_budget_unpadded.png",
+        "page_index": null,
+        "rec_text": "ؤن",
+        "rec_score": 0.44501960277557373
+      }
+    },
+    "failure_reason": ""
+  }
+]

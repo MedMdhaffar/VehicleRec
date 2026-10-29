@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "coordinate_convention": "marker_bbox is xyxy in original decoded image pixels; x2/y2 are exclusive",
+  "annotation_notes": "Images 6 and 7 are new NT examples. Their marker boxes were manually selected by visual inspection and approved by the user. Existing boxes were migrated unchanged when Shorta/Tunis files were renumbered.",
+  "images": [
+    {"id": "4", "path": "plates/nt/4.png", "category": "nt", "expected_marking": "ن ت", "expected_width": 823, "expected_height": 200, "marker_bbox": [550, 47, 718, 151], "baseline_v4_id": "4"},
+    {"id": "5", "path": "plates/nt/5.png", "category": "nt", "expected_marking": "ن ت", "expected_width": 129, "expected_height": 35, "marker_bbox": [89, 6, 120, 27], "baseline_v4_id": "5"},
+    {"id": "6", "path": "plates/nt/6.png", "category": "nt", "expected_marking": "ن ت", "expected_width": 516, "expected_height": 136, "marker_bbox": [332, 22, 483, 98], "baseline_v4_id": null},
+    {"id": "7", "path": "plates/nt/7.png", "category": "nt", "expected_marking": "ن ت", "expected_width": 562, "expected_height": 141, "marker_bbox": [362, 14, 536, 97], "baseline_v4_id": null},
+    {"id": "8", "path": "plates/shorta/8.png", "category": "shorta", "expected_marking": "شرطة", "expected_width": 132, "expected_height": 39, "marker_bbox": [23, 10, 46, 27], "baseline_v4_id": "6"},
+    {"id": "9", "path": "plates/shorta/9.png", "category": "shorta", "expected_marking": "شرطة", "expected_width": 157, "expected_height": 44, "marker_bbox": [25, 12, 52, 32], "baseline_v4_id": "7"},
+    {"id": "10", "path": "plates/tunis/10.png", "category": "tunis", "expected_marking": "تونس", "expected_width": 420, "expected_height": 132, "marker_bbox": [136, 37, 234, 94], "baseline_v4_id": "8"},
+    {"id": "11", "path": "plates/tunis/11.png", "category": "tunis", "expected_marking": "تونس", "expected_width": 168, "expected_height": 54, "marker_bbox": [69, 14, 105, 39], "baseline_v4_id": "9"},
+    {"id": "12", "path": "plates/tunis/12.png", "category": "tunis", "expected_marking": "تونس", "expected_width": 244, "expected_height": 61, "marker_bbox": [90, 18, 134, 46], "baseline_v4_id": "10"}
+  ]
+}

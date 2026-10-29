@@ -1,0 +1,357 @@
+{
+  "schema_version": 1,
+  "status": "completed",
+  "manifest": "arabic_ocr_extended_manifest.json",
+  "manifest_sha256": "c241536da368dc177a1a07391b6f0dc2c2abeed67a8c3951282ce0bc4488411a",
+  "manifest_content": {
+    "schema_version": 1,
+    "coordinate_convention": "marker_bbox is xyxy in original decoded image pixels; x2/y2 are exclusive",
+    "annotation_notes": "Images 6 and 7 are new NT examples. Their marker boxes were manually selected by visual inspection and approved by the user. Existing boxes were migrated unchanged when Shorta/Tunis files were renumbered.",
+    "images": [
+      {
+        "id": "4",
+        "path": "plates/nt/4.png",
+        "category": "nt",
+        "expected_marking": "ن ت",
+        "expected_width": 823,
+        "expected_height": 200,
+        "marker_bbox": [
+          550,
+          47,
+          718,
+          151
+        ],
+        "baseline_v4_id": "4"
+      },
+      {
+        "id": "5",
+        "path": "plates/nt/5.png",
+        "category": "nt",
+        "expected_marking": "ن ت",
+        "expected_width": 129,
+        "expected_height": 35,
+        "marker_bbox": [
+          89,
+          6,
+          120,
+          27
+        ],
+        "baseline_v4_id": "5"
+      },
+      {
+        "id": "6",
+        "path": "plates/nt/6.png",
+        "category": "nt",
+        "expected_marking": "ن ت",
+        "expected_width": 600,
+        "expected_height": 330,
+        "marker_bbox": [
+          342,
+          103,
+          493,
+          179
+        ],
+        "baseline_v4_id": null
+      },
+      {
+        "id": "7",
+        "path": "plates/nt/7.png",
+        "category": "nt",
+        "expected_marking": "ن ت",
+        "expected_width": 600,
+        "expected_height": 330,
+        "marker_bbox": [
+          387,
+          88,
+          561,
+          171
+        ],
+        "baseline_v4_id": null
+      },
+      {
+        "id": "8",
+        "path": "plates/shorta/8.png",
+        "category": "shorta",
+        "expected_marking": "شرطة",
+        "expected_width": 132,
+        "expected_height": 39,
+        "marker_bbox": [
+          23,
+          10,
+          46,
+          27
+        ],
+        "baseline_v4_id": "6"
+      },
+      {
+        "id": "9",
+        "path": "plates/shorta/9.png",
+        "category": "shorta",
+        "expected_marking": "شرطة",
+        "expected_width": 157,
+        "expected_height": 44,
+        "marker_bbox": [
+          25,
+          12,
+          52,
+          32
+        ],
+        "baseline_v4_id": "7"
+      },
+      {
+        "id": "10",
+        "path": "plates/tunis/10.png",
+        "category": "tunis",
+        "expected_marking": "تونس",
+        "expected_width": 420,
+        "expected_height": 132,
+        "marker_bbox": [
+          136,
+          37,
+          234,
+          94
+        ],
+        "baseline_v4_id": "8"
+      },
+      {
+        "id": "11",
+        "path": "plates/tunis/11.png",
+        "category": "tunis",
+        "expected_marking": "تونس",
+        "expected_width": 168,
+        "expected_height": 54,
+        "marker_bbox": [
+          69,
+          14,
+          105,
+          39
+        ],
+        "baseline_v4_id": "9"
+      },
+      {
+        "id": "12",
+        "path": "plates/tunis/12.png",
+        "category": "tunis",
+        "expected_marking": "تونس",
+        "expected_width": 244,
+        "expected_height": 61,
+        "marker_bbox": [
+          90,
+          18,
+          134,
+          46
+        ],
+        "baseline_v4_id": "10"
+      }
+    ]
+  },
+  "baseline_dir": "arabic_ocr_ppocrv5_v4",
+  "model": "arabic_PP-OCRv5_mobile_rec",
+  "device": "cpu",
+  "filter_parameters_fixed_before_inference": {
+    "original": {
+      "operation": "unchanged BGR crop"
+    },
+    "otsu": {
+      "operation": "BGR to grayscale, then OpenCV Otsu binary threshold",
+      "threshold_type": "THRESH_BINARY | THRESH_OTSU"
+    },
+    "canny": {
+      "operation": "BGR to grayscale, then OpenCV Canny",
+      "threshold1": 100,
+      "threshold2": 200,
+      "aperture_size": 3,
+      "l2_gradient": false
+    },
+    "otsu_canny": {
+      "operation": "OpenCV Canny applied to the Otsu binary image",
+      "threshold1": 100,
+      "threshold2": 200,
+      "aperture_size": 3,
+      "l2_gradient": false
+    },
+    "shared": {
+      "preserve_dimensions": true,
+      "single_channel_conversion": "cv2.COLOR_GRAY2BGR; three identical channels",
+      "extra_resize_blur_sharpen_morphology_inversion": false
+    }
+  },
+  "normalization_policy_unchanged": {
+    "unicode": "NFKC (converts compatibility/presentation forms)",
+    "removed": [
+      "Unicode category Mn diacritics/marks",
+      "U+0640 tatweel",
+      "all Unicode whitespace"
+    ],
+    "preserved": "base-letter identity, including dot distinctions; no substitutions, fuzzy matching, or label-conditioned repair",
+    "exact_mapping": {
+      "نت": "nt",
+      "شرطة": "shorta",
+      "تونس": "tunis"
+    },
+    "fallback": "unknown"
+  },
+  "model_metadata": {
+    "identifier": "arabic_PP-OCRv5_mobile_rec",
+    "license": "Apache-2.0",
+    "documentation": "https://www.paddleocr.ai/main/en/version3.x/algorithm/PP-OCRv5/PP-OCRv5_multi_languages.html",
+    "module_documentation": "https://www.paddleocr.ai/main/en/version3.x/module_usage/text_recognition.html"
+  },
+  "runtime_versions": {
+    "python": "3.11.15",
+    "paddleocr": "3.7.0",
+    "paddlepaddle": "3.2.0",
+    "opencv-python": "5.0.0.93",
+    "numpy": "2.3.5"
+  },
+  "timing": {
+    "model_load_seconds": 3.5300604790027137,
+    "warmup_seconds": 0.23523031199874822,
+    "recognition_excludes_load_and_warmup": true
+  },
+  "legacy_baseline_reproduction": {
+    "legacy_images_checked": 7,
+    "all_match": true,
+    "checks": [
+      {
+        "extended_id": "4",
+        "baseline_v4_id": "4",
+        "raw_text_match": true,
+        "normalized_text_match": true,
+        "prediction_match": true
+      },
+      {
+        "extended_id": "5",
+        "baseline_v4_id": "5",
+        "raw_text_match": true,
+        "normalized_text_match": true,
+        "prediction_match": true
+      },
+      {
+        "extended_id": "8",
+        "baseline_v4_id": "6",
+        "raw_text_match": true,
+        "normalized_text_match": true,
+        "prediction_match": true
+      },
+      {
+        "extended_id": "9",
+        "baseline_v4_id": "7",
+        "raw_text_match": true,
+        "normalized_text_match": true,
+        "prediction_match": true
+      },
+      {
+        "extended_id": "10",
+        "baseline_v4_id": "8",
+        "raw_text_match": true,
+        "normalized_text_match": true,
+        "prediction_match": true
+      },
+      {
+        "extended_id": "11",
+        "baseline_v4_id": "9",
+        "raw_text_match": true,
+        "normalized_text_match": true,
+        "prediction_match": true
+      },
+      {
+        "extended_id": "12",
+        "baseline_v4_id": "10",
+        "raw_text_match": true,
+        "normalized_text_match": true,
+        "prediction_match": true
+      }
+    ]
+  },
+  "summaries": [
+    {
+      "condition": "original",
+      "queries": 9,
+      "exact_matches": 4,
+      "category_correct": 4,
+      "category_accuracy": 0.4444444444444444,
+      "nt_correct": 4,
+      "nt_total": 4,
+      "shorta_correct": 0,
+      "shorta_total": 2,
+      "tunis_correct": 0,
+      "tunis_total": 3,
+      "accepted_count": 4,
+      "accepted_coverage": 0.4444444444444444,
+      "accepted_correct": 4,
+      "accepted_accuracy": 1.0,
+      "improved_ids": "",
+      "regressed_ids": "",
+      "mean_seconds": 0.05724474422135649,
+      "median_seconds": 0.05479251300130272,
+      "total_seconds": 0.5152026979922084
+    },
+    {
+      "condition": "otsu",
+      "queries": 9,
+      "exact_matches": 4,
+      "category_correct": 4,
+      "category_accuracy": 0.4444444444444444,
+      "nt_correct": 4,
+      "nt_total": 4,
+      "shorta_correct": 0,
+      "shorta_total": 2,
+      "tunis_correct": 0,
+      "tunis_total": 3,
+      "accepted_count": 4,
+      "accepted_coverage": 0.4444444444444444,
+      "accepted_correct": 4,
+      "accepted_accuracy": 1.0,
+      "improved_ids": "",
+      "regressed_ids": "",
+      "mean_seconds": 0.07422656788872296,
+      "median_seconds": 0.07027000100060832,
+      "total_seconds": 0.6680391109985067
+    },
+    {
+      "condition": "canny",
+      "queries": 9,
+      "exact_matches": 2,
+      "category_correct": 2,
+      "category_accuracy": 0.2222222222222222,
+      "nt_correct": 2,
+      "nt_total": 4,
+      "shorta_correct": 0,
+      "shorta_total": 2,
+      "tunis_correct": 0,
+      "tunis_total": 3,
+      "accepted_count": 2,
+      "accepted_coverage": 0.2222222222222222,
+      "accepted_correct": 2,
+      "accepted_accuracy": 1.0,
+      "improved_ids": "",
+      "regressed_ids": "5;6",
+      "mean_seconds": 0.07144890977764994,
+      "median_seconds": 0.06279232000088086,
+      "total_seconds": 0.6430401879988494
+    },
+    {
+      "condition": "otsu_canny",
+      "queries": 9,
+      "exact_matches": 2,
+      "category_correct": 2,
+      "category_accuracy": 0.2222222222222222,
+      "nt_correct": 2,
+      "nt_total": 4,
+      "shorta_correct": 0,
+      "shorta_total": 2,
+      "tunis_correct": 0,
+      "tunis_total": 3,
+      "accepted_count": 2,
+      "accepted_coverage": 0.2222222222222222,
+      "accepted_correct": 2,
+      "accepted_accuracy": 1.0,
+      "improved_ids": "",
+      "regressed_ids": "4;5",
+      "mean_seconds": 0.0924022452236386,
+      "median_seconds": 0.048764675004349556,
+      "total_seconds": 0.8316202070127474
+    }
+  ]
+}

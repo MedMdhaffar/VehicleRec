@@ -1,0 +1,145 @@
+{
+  "manifest": "controlled_plate_manifest_historical_remap.json",
+  "manifest_sha256": "f62d602049ab4bd878be3f48f1e79778f6b8d9329c3d691cad90dbec7e88a58f",
+  "historical_source_hashes_verified": true,
+  "models": {
+    "dinov2_small": {
+      "status": "complete",
+      "modes": [
+        "native",
+        "budget"
+      ]
+    },
+    "dinov3_vits16": {
+      "status": "blocked",
+      "checkpoint": "dinov3_vits16_pretrain_lvd1689m-08c60483.pth",
+      "reason": "Official Meta DINOv3 repository and exact .pth checkpoint are absent locally; no approved signed checkpoint URLs were supplied in the project or conversation."
+    },
+    "dinov3_vitb16": {
+      "status": "blocked",
+      "checkpoint": "dinov3_vitb16_pretrain_lvd1689m-73cec8be.pth",
+      "reason": "Official Meta DINOv3 repository and exact .pth checkpoint are absent locally; no approved signed checkpoint URLs were supplied in the project or conversation."
+    },
+    "gpu": {
+      "available_to_torch": false,
+      "nvml": "GPU access blocked by the operating system"
+    }
+  },
+  "policy": {
+    "target_area": 50176,
+    "max_long_edge": 1008,
+    "max_patch_count": 512,
+    "padding_rgb": [
+      124,
+      116,
+      104
+    ],
+    "interpolation": "bicubic",
+    "status": "experimental choices; not established optimal values"
+  },
+  "dino_patch_sizes": {
+    "dinov2_small": [
+      14,
+      14
+    ],
+    "dinov3_vits16": [
+      16,
+      16
+    ],
+    "dinov3_vitb16": [
+      16,
+      16
+    ]
+  },
+  "precision": "float32 features, L2 normalized; cosine similarity",
+  "official_dinov3_interface": "torch.hub.load(local_repo, entrypoint, source='local', weights=local_checkpoint)",
+  "versions": {
+    "torch": "2.12.1+cu126",
+    "transformers": "5.15.0",
+    "numpy": "2.3.5",
+    "opencv-python": "5.0.0.93",
+    "matplotlib": "3.11.0"
+  },
+  "python": "3.11.15",
+  "device": "cpu",
+  "timing": {
+    "native": {
+      "actual_cached_forward_passes": 47,
+      "whole_passes_shared_by_r0_r1": 10,
+      "additional_r2_region_passes": 30,
+      "additional_r3_marker_passes": 7,
+      "latency_measured": true,
+      "timing_policy": "two fixed warm-up forwards; wall-clock per view; CUDA synchronized when applicable; loading excluded",
+      "model_load_seconds": 0.3664514429983683,
+      "per_forward_seconds": {
+        "whole_shared_r0_r1": {
+          "count": 10,
+          "mean": 0.10603713379969122,
+          "median": 0.05089705999853322,
+          "total": 1.0603713379969122
+        },
+        "r2_regions": {
+          "count": 30,
+          "mean": 0.05365334449937412,
+          "median": 0.026484432000870584,
+          "total": 1.6096003349812236
+        },
+        "r3_marker": {
+          "count": 7,
+          "mean": 0.013002674000745174,
+          "median": 0.01068118500552373,
+          "total": 0.09101871800521621
+        }
+      },
+      "r2_total_feature_seconds": 2.6699716729781358,
+      "peak_gpu_memory_bytes": null
+    },
+    "budget": {
+      "actual_cached_forward_passes": 47,
+      "whole_passes_shared_by_r0_r1": 10,
+      "additional_r2_region_passes": 30,
+      "additional_r3_marker_passes": 7,
+      "latency_measured": true,
+      "timing_policy": "two fixed warm-up forwards; wall-clock per view; CUDA synchronized when applicable; loading excluded",
+      "model_load_seconds": 0.370267131998844,
+      "per_forward_seconds": {
+        "whole_shared_r0_r1": {
+          "count": 10,
+          "mean": 0.07643147830167436,
+          "median": 0.0779792110042763,
+          "total": 0.7643147830167436
+        },
+        "r2_regions": {
+          "count": 30,
+          "mean": 0.07561866796653097,
+          "median": 0.0756148989967187,
+          "total": 2.268560038995929
+        },
+        "r3_marker": {
+          "count": 7,
+          "mean": 0.07567852442714086,
+          "median": 0.07527851600025315,
+          "total": 0.529749670989986
+        }
+      },
+      "r2_total_feature_seconds": 3.0328748220126727,
+      "peak_gpu_memory_bytes": null
+    }
+  },
+  "baseline_equivalence": {
+    "available": true,
+    "compatible": true,
+    "compatibility": {
+      "manifest_hash_matches": false,
+      "model_identifier_matches": true,
+      "resolved_revision_matches": true,
+      "budget_policy_matches": true,
+      "all_tensor_hashes_match": true,
+      "source_hashes_categories_dimensions_match": true
+    },
+    "tolerance": 1e-06,
+    "maximum_absolute_similarity_difference": 3.5762786865234375e-07,
+    "nearest_neighbor_predictions_match": true,
+    "equivalent": true
+  }
+}

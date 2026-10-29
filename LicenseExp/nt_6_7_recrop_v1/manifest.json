@@ -1,0 +1,74 @@
+{
+  "input_directory": "/tmp/nt67_sources",
+  "weights": "best.pt",
+  "weights_sha256": "d7a69b324a58e24223a48371f5a70a5e222357d0edaa47dd435bca7cc8c831a0",
+  "det_conf": 0.3,
+  "crop_padding_each_side": 0.02,
+  "selection": "highest-confidence detection per image",
+  "images_found": 2,
+  "successful_crops": 2,
+  "failed_images": 0,
+  "override_file": "nt_6_7_reviewed_overrides.json",
+  "records": [
+    {
+      "source": "/tmp/nt67_sources/6.png",
+      "source_sha256": "962d41c3e15653245566fc7f0318411f6d5192be1c17624e1395a9cab003d4ea",
+      "status": "cropped_with_reviewed_fallback",
+      "strict_detection_error": "No plate detected in '/tmp/nt67_sources/6.png' at confidence 0.300.",
+      "source_dimensions_hw": [
+        330,
+        600
+      ],
+      "fallback_bbox_xyxy": [
+        20.0,
+        84.0,
+        516.0,
+        214.0
+      ],
+      "fallback_basis": "visual review after best.pt detections were incomplete at all tested confidences",
+      "review_note": "Complete plate frame, registration digits, both NT letters, and dots retained.",
+      "padded_crop_bbox_xyxy": [
+        10,
+        81,
+        526,
+        217
+      ],
+      "crop_dimensions_hw": [
+        136,
+        516
+      ],
+      "crop": "nt_6_7_recrop_v1/crops/6_plate.png",
+      "detection_preview": "nt_6_7_recrop_v1/detections/6_detection.png"
+    },
+    {
+      "source": "/tmp/nt67_sources/7.png",
+      "source_sha256": "94ab978d6848b3eb70b2c460141fdb51fb36b19cfd8338e02fbfbe6f9271b1ec",
+      "status": "cropped_with_reviewed_fallback",
+      "strict_detection_error": "No plate detected in '/tmp/nt67_sources/7.png' at confidence 0.300.",
+      "source_dimensions_hw": [
+        330,
+        600
+      ],
+      "fallback_bbox_xyxy": [
+        36.0,
+        77.0,
+        576.0,
+        212.0
+      ],
+      "fallback_basis": "visual review after best.pt returned no detection down to confidence 0.001",
+      "review_note": "Complete plate frame, registration digits, both NT letters, and dots retained.",
+      "padded_crop_bbox_xyxy": [
+        25,
+        74,
+        587,
+        215
+      ],
+      "crop_dimensions_hw": [
+        141,
+        562
+      ],
+      "crop": "nt_6_7_recrop_v1/crops/7_plate.png",
+      "detection_preview": "nt_6_7_recrop_v1/detections/7_detection.png"
+    }
+  ]
+}

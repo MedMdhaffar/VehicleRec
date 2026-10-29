@@ -1,0 +1,135 @@
+[
+  {
+    "image_id": "4",
+    "source_path": "plates/nt/4.png",
+    "source_sha256": "aba5f5dfb9dcba8cfdc246301f14de421fbbf5a0d3230eb9a8d230bc8443348f",
+    "crop_path": "arabic_ocr_ppocrv5_v3/marker_crops/4_marker.png",
+    "crop_sha256": "17ce70c762a517c0a6961d1a3fbe243f01d819285a97aac76882af1b200f674d",
+    "bbox_xyxy_exclusive": [
+      550,
+      47,
+      718,
+      151
+    ],
+    "crop_dimensions_wh": [
+      168,
+      104
+    ],
+    "expected_category": "nt",
+    "expected_marking": "ن ت"
+  },
+  {
+    "image_id": "5",
+    "source_path": "plates/nt/5.png",
+    "source_sha256": "596120d9f02c1f5ebeee64bed0580e79aae451d4a12af33f29741d54cd7aa839",
+    "crop_path": "arabic_ocr_ppocrv5_v3/marker_crops/5_marker.png",
+    "crop_sha256": "ef5298dc8c81f74793fb55e94b6c9d5c0b165a40ae768933cdee1a572dabd45b",
+    "bbox_xyxy_exclusive": [
+      89,
+      6,
+      120,
+      27
+    ],
+    "crop_dimensions_wh": [
+      31,
+      21
+    ],
+    "expected_category": "nt",
+    "expected_marking": "ن ت"
+  },
+  {
+    "image_id": "6",
+    "source_path": "plates/shorta/6.png",
+    "source_sha256": "2bdf3980effb34ba2b539be56511a7af64975eae0b3508fdd2028752e8209d32",
+    "crop_path": "arabic_ocr_ppocrv5_v3/marker_crops/6_marker.png",
+    "crop_sha256": "817fdcd9516e9b08b552f250978e7c0aaa644b67b44d65ff8fa05e23ae885197",
+    "bbox_xyxy_exclusive": [
+      23,
+      10,
+      46,
+      27
+    ],
+    "crop_dimensions_wh": [
+      23,
+      17
+    ],
+    "expected_category": "shorta",
+    "expected_marking": "شرطة"
+  },
+  {
+    "image_id": "7",
+    "source_path": "plates/shorta/7.png",
+    "source_sha256": "7f479012a8417a028939461b4d82d1f86113a78c1ccd4e8d52eb70686a97d5ba",
+    "crop_path": "arabic_ocr_ppocrv5_v3/marker_crops/7_marker.png",
+    "crop_sha256": "4563cfabdc63e3f2cd229589f47da600a99e1e91335d0dd298f5045624c5a107",
+    "bbox_xyxy_exclusive": [
+      25,
+      12,
+      52,
+      32
+    ],
+    "crop_dimensions_wh": [
+      27,
+      20
+    ],
+    "expected_category": "shorta",
+    "expected_marking": "شرطة"
+  },
+  {
+    "image_id": "8",
+    "source_path": "plates/tunis/8.png",
+    "source_sha256": "2c9d1965d542093d681a40fc48c0bebe0e7f754a5d0a936720808e4734231be8",
+    "crop_path": "arabic_ocr_ppocrv5_v3/marker_crops/8_marker.png",
+    "crop_sha256": "749232e6a92e70ca12fec891b35b551da53674032deedc3d0a2d4385bbb3ccae",
+    "bbox_xyxy_exclusive": [
+      136,
+      37,
+      234,
+      94
+    ],
+    "crop_dimensions_wh": [
+      98,
+      57
+    ],
+    "expected_category": "tunis",
+    "expected_marking": "تونس"
+  },
+  {
+    "image_id": "9",
+    "source_path": "plates/tunis/9.png",
+    "source_sha256": "1d5a13afcc92d955fd0df87734267b9e17d4f52c869cb8a2db295f714f062925",
+    "crop_path": "arabic_ocr_ppocrv5_v3/marker_crops/9_marker.png",
+    "crop_sha256": "c16a6a24569a90ef71b3223763a112ba6e635e370605f4f26c3a438bb08faa3d",
+    "bbox_xyxy_exclusive": [
+      69,
+      14,
+      105,
+      39
+    ],
+    "crop_dimensions_wh": [
+      36,
+      25
+    ],
+    "expected_category": "tunis",
+    "expected_marking": "تونس"
+  },
+  {
+    "image_id": "10",
+    "source_path": "plates/tunis/10.png",
+    "source_sha256": "6577a657626fbe46c242cd33bc1adbce0f7f23d20c1711d26247275177a50c28",
+    "crop_path": "arabic_ocr_ppocrv5_v3/marker_crops/10_marker.png",
+    "crop_sha256": "1af0242832fa7377a52e3b1a3edbb40418683615f3f6b2dac89f3552d5fa0098",
+    "bbox_xyxy_exclusive": [
+      90,
+      18,
+      134,
+      46
+    ],
+    "crop_dimensions_wh": [
+      44,
+      28
+    ],
+    "expected_category": "tunis",
+    "expected_marking": "تونس"
+  }
+]
