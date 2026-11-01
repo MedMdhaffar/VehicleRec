@@ -1,6 +1,7 @@
 """Serving-layer adapters for the standalone license-plate pipelines."""
 from __future__ import annotations
 
+import logging
 import threading
 import uuid
 import sys
@@ -11,6 +12,9 @@ from urllib.parse import urlparse
 from django.conf import settings
 
 from .video import prepare_browser_video
+
+
+log = logging.getLogger(__name__)
 
 
 def _ensure_pipeline_import_path() -> None:
@@ -26,17 +30,15 @@ def _jobs_root() -> Path:
     return root
 
 
-def run_video_analysis(video: Path, *, job_id: str, max_frames: int | None = None,
-                       agent_enabled: bool = False) -> dict:
+def run_video_analysis(video: Path, *, job_id: str, max_frames: int | None = None) -> dict:
     """Run the packaged video pipeline and return its JSON-safe metrics."""
+    log.info("Video job %s: loading pipeline dependencies", job_id)
     import cv2
     _ensure_pipeline_import_path()
     from run_video_pipeline.classification import create_classifier
     from run_video_pipeline import config
-    from run_video_pipeline.agent import OpenRouterPlateAgent
     from run_video_pipeline.data_capture import ReviewStore
     from run_video_pipeline.marker_localizer import TounesMarkerLocalizer
-    from run_video_pipeline.ocr import get_reader
     from run_video_pipeline.plate_detector import PlateDetector
     from run_video_pipeline.prototype_pipeline import PrototypePlatePipeline
     from run_video_pipeline.run_video_prototype import (
@@ -51,10 +53,10 @@ def run_video_analysis(video: Path, *, job_id: str, max_frames: int | None = Non
         raise ValueError("The uploaded file is not a readable video.")
     fps = float(capture.get(cv2.CAP_PROP_FPS) or 25.0)
     capture.release()
-    counting_reader = CountingReader(get_reader())
+    counting_reader = CountingReader()
     pipeline = PrototypePlatePipeline(
         counting_reader, TounesMarkerLocalizer(config.WORD_DETECTOR_PATH),
-        OpenRouterPlateAgent(enabled=agent_enabled), ReviewStore(job_dir / "captures"),
+        ReviewStore(job_dir / "captures"),
         classifier_factory=create_classifier,
     )
     runner = VideoPrototypeRunner(
@@ -64,9 +66,11 @@ def run_video_analysis(video: Path, *, job_id: str, max_frames: int | None = Non
     )
     metrics = runner.run(video, output, max_frames=max_frames,
                          selected_crops_dir=job_dir / "selected_crops")
+    log.info("Video job %s: encoding browser video", job_id)
     prepare_browser_video(output)
+    log.info("Video job %s: complete", job_id)
     metrics.update({
-        "agent_enabled": agent_enabled, "job_id": job_id,
+        "job_id": job_id,
         "output_video_url": f"/api/license-plate/jobs/{job_id}/annotated.mp4/",
     })
     return metrics
@@ -91,6 +95,8 @@ class RTSPManager:
             return self._preview
 
     def start(self, payload: dict) -> dict:
+        if "agent_enabled" in payload:
+            raise ValueError("agent_enabled was removed; license-plate recognition is local only")
         url = str(payload.get("url", "")).strip()
         parsed = urlparse(url)
         if parsed.scheme.lower() not in {"rtsp", "rtsps"} or not parsed.hostname:
@@ -106,7 +112,6 @@ class RTSPManager:
             from run_rtsp_pipeline.run_rtsp_prototype import DEFAULT_TRACKER
             args = SimpleNamespace(
                 url=url, camera_id=str(payload.get("camera_id") or "cam-1")[:80],
-                agent_enabled=bool(payload.get("agent_enabled", False)),
                 max_frames=_optional_positive_int(payload.get("max_frames")),
                 max_seconds=_optional_positive_float(payload.get("max_seconds")),
                 read_timeout=5.0, reconnect_delay=1.0, max_reconnects=3,

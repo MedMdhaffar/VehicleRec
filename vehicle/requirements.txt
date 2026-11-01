@@ -68,3 +68,7 @@ requests==2.33.1
 
 # Local plate-category classifier; official DINOv3's full hub import dependencies.
 -r ../services/license_plate_service/requirements-classifier.txt
+
+# The plate ONNX adapter is provisioned separately with --no-deps via
+# scripts/setup_local_plate_runtime.sh and requirements-detector.txt, to reuse
+# this OpenCV provider instead of installing opencv-python-headless alongside it.

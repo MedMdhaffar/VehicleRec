@@ -3,6 +3,9 @@ from __future__ import annotations
 import logging
 import re
 import statistics
+import unicodedata
+from pathlib import Path
+import os
 from dataclasses import dataclass
 from typing import Iterable
 
@@ -13,13 +16,17 @@ import run_video_pipeline.config as config
 log = logging.getLogger(__name__)
 
 
+def normalize_digits(text: str) -> str:
+    return "".join(str(unicodedata.decimal(c)) if c.isdecimal() else c for c in (text or ""))
+
+
 def normalize_plate_text(text: str) -> str:
-    """Canonical OCR comparison form while preserving the raw text separately."""
-    return re.sub(r"[^0-9A-Za-z]", "", text or "").upper()
+    """Preserve category words, digits and uncertain letters; normalize separators only."""
+    return re.sub(r"\s+", " ", normalize_digits(unicodedata.normalize("NFKC", text or ""))).strip().upper()
 
 
 def digits_only(text: str) -> str:
-    return re.sub(r"\D", "", text or "")
+    return "".join(c for c in normalize_digits(text) if c in "0123456789")
 
 
 @dataclass(frozen=True)
@@ -27,6 +34,7 @@ class OCRResult:
     raw_text: str
     normalized_text: str
     confidence: float
+    native_confidence: float | None = None
 
 
 class PlateReader:
@@ -36,9 +44,21 @@ class PlateReader:
 
     def __init__(self, rec_model: str = config.OCR_REC_MODEL):
         self.rec_model = rec_model
+        configured_dir = os.environ.get("REGISTRATION_OCR_MODEL_DIR", "")
+        model_dir = Path(configured_dir).expanduser()
+        if not configured_dir or not model_dir.is_absolute():
+            raise RuntimeError("REGISTRATION_OCR_MODEL_DIR must be an absolute path to installed local PP-OCRv6_medium_rec assets")
+        required = ("inference.json", "inference.pdiparams", "inference.yml")
+        if not all((model_dir / name).is_file() for name in required):
+            raise RuntimeError("Set REGISTRATION_OCR_MODEL_DIR to the installed local PP-OCRv6_medium_rec assets; runtime downloads are forbidden")
+        import yaml
+        identity = yaml.safe_load((model_dir / "inference.yml").read_text(encoding="utf-8"))
+        if identity.get("Global", {}).get("model_name") != rec_model:
+            raise RuntimeError(f"Registration OCR assets do not identify {rec_model}")
+        os.environ["PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK"] = "True"
         from paddleocr import TextRecognition
-
-        self.engine = TextRecognition(model_name=rec_model)
+        self.engine = TextRecognition(model_name=rec_model, model_dir=str(model_dir.resolve()),
+                                      device=os.environ.get("PLATE_OCR_DEVICE", "cpu"))
         log.info("Native PaddleOCR TextRecognition (%s) loaded.", rec_model)
 
     def _parse(self, out) -> OCRResult:
@@ -60,10 +80,11 @@ class PlateReader:
                         scores.append(float(line[1][1]))
                     except Exception:
                         pass
-        raw = " ".join(t.strip() for t in texts if t and t.strip())
+        raw = " ".join(t for t in texts if t)
         normalized = normalize_plate_text(raw)
-        conf = round(statistics.mean(scores), 4) if scores else 0.0
-        return OCRResult(raw_text=raw, normalized_text=normalized, confidence=conf)
+        native_confidence = statistics.mean(scores) if scores else 0.0
+        conf = round(native_confidence, 4)
+        return OCRResult(raw_text=raw, normalized_text=normalized, confidence=conf, native_confidence=native_confidence)
 
     def read_result(self, crop: np.ndarray) -> OCRResult:
         if crop is None or crop.size == 0:
@@ -73,8 +94,7 @@ class PlateReader:
                 return self._parse(self.engine.predict(crop))
             return self._parse(self.engine.ocr(crop))
         except Exception as exc:
-            log.warning("OCR error: %s", exc)
-            return OCRResult("", "", 0.0)
+            raise RuntimeError(f"Registration OCR failed: {exc}") from exc
 
     def read_batch(self, crops: Iterable[np.ndarray], batch_size: int = 16) -> list[OCRResult]:
         """Recognize tight plate crops in batches, preserving input order."""

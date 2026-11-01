@@ -2,3 +2,9 @@
 db.sqlite3
 *.mp4
 *.pth
+.runtime/
+__pycache__/
+*.egg-info/
+experiments/
+verification/
+scripts/

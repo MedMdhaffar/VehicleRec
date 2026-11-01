@@ -14,6 +14,7 @@ import numpy as np
 from pydantic import BaseModel, Field
 
 from run_video_pipeline.schemas import PlateCategory, UnifiedPlateResult
+from run_video_pipeline.policies import compact_result
 
 
 class HumanReview(BaseModel):
@@ -68,7 +69,7 @@ class ReviewStore:
                 "sample_id": stored.sample_id,
                 "timestamp": stored.timestamp,
                 "crop_path": str(crop_path),
-                "plate_text": stored.plate_text_normalized or stored.plate_text_raw,
+                **compact_result(stored),
                 "plate_category": stored.plate_category,
                 "confidence": stored.category_confidence,
                 "route": stored.route,
@@ -104,6 +105,7 @@ class ReviewStore:
                 "previous_sample_id": quality.get("previous_sample_id"),
                 "supersedes_sample_id": quality.get("supersedes_sample_id"),
                 "classification": stored.classification.model_dump(mode="json") if stored.classification else None,
+                "number_recognition": stored.number.model_dump(mode="json") if stored.number else None,
                 "marker": stored.marker.model_dump(mode="json"),
                 "warning": stored.warning,
                 "timing": stored.timing.model_dump(mode="json"),
@@ -117,6 +119,10 @@ class ReviewStore:
                 raise
             self._sample_ids.add(stored.sample_id)
             return stored
+
+    def record_event(self, payload: dict) -> None:
+        with self._lock:
+            self._append(self.debug_path, payload)
 
     def mark_track_final(self, sample_id: str) -> None:
         """Append the final selection for a track without rewriting its prediction."""
@@ -195,7 +201,9 @@ class ReviewStore:
                 sample_id = payload.get("sample_id")
                 if not sample_id:
                     continue
-                if payload.get("record_type") == "track_finalization":
+                if payload.get("record_type") == "track_decision":
+                    output.setdefault(sample_id, {}).update({key: payload.get(key) for key in ("identity_conflict", "category_conflict", "category_conflict_samples", "replacement_reason", "attempt_sample_ids")})
+                elif payload.get("record_type") == "track_finalization":
                     output.setdefault(sample_id, {})["final_for_track"] = True
                 else:
                     final = output.get(sample_id, {}).get("final_for_track", False)
@@ -258,8 +266,9 @@ class ReviewStore:
             "route", "model_version", "frame_index", "image_width", "image_height",
             "bbox", "bbox_coordinate_context", "detector_confidence", "best_crop_score",
             "crop_area", "sharpness", "recognition_trigger_reason", "attempt_number",
-            "final_for_track", "previous_sample_id", "supersedes_sample_id",
-            "quality_metadata", "reviewer", "review_timestamp", "review_notes",
+            "final_for_track", "previous_sample_id", "supersedes_sample_id", "identity_conflict", "category_conflict", "replacement_reason",
+            "quality_metadata", "plugin_category", "category_decision_source", "recognition_policy",
+            "registration_fields", "normalized_number", "recognition_status", "unresolved_reason", "reviewer", "review_timestamp", "review_notes",
         ]
         rows = []
         for sample_id, review in reviews.items():
@@ -271,7 +280,7 @@ class ReviewStore:
                     "frame_index", "image_width", "image_height", "bbox",
                     "bbox_coordinate_context", "detector_confidence", "best_crop_score",
                     "crop_area", "sharpness", "recognition_trigger_reason", "attempt_number",
-                    "final_for_track", "previous_sample_id", "supersedes_sample_id",
+                    "final_for_track", "previous_sample_id", "supersedes_sample_id", "identity_conflict", "category_conflict", "replacement_reason",
                 )
             }
             rows.append({
@@ -305,7 +314,13 @@ class ReviewStore:
                 "final_for_track": debug.get("final_for_track", False),
                 "previous_sample_id": debug.get("previous_sample_id", ""),
                 "supersedes_sample_id": debug.get("supersedes_sample_id", ""),
+                "identity_conflict": debug.get("identity_conflict", False),
+                "category_conflict": debug.get("category_conflict", False),
+                "replacement_reason": debug.get("replacement_reason"),
                 "quality_metadata": json.dumps(quality, ensure_ascii=False, separators=(",", ":")),
+                "plugin_category": prediction.get("predicted_category"),
+                **{key: (json.dumps(prediction.get(key), ensure_ascii=False) if key == "registration_fields" else prediction.get(key))
+                   for key in ("category_decision_source", "recognition_policy", "registration_fields", "normalized_number", "recognition_status", "unresolved_reason")},
                 "reviewer": review.get("reviewer", ""), "review_timestamp": review.get("review_timestamp", ""),
                 "review_notes": review.get("review_notes", ""),
             })

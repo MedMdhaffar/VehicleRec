@@ -1,3 +1,4 @@
+import logging
 import re
 import uuid
 from pathlib import Path
@@ -9,6 +10,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .service import rtsp_manager, run_video_analysis
+from .progress import video_request_progress
+
+
+log = logging.getLogger(__name__)
 
 
 @api_view(["GET"])
@@ -18,10 +23,18 @@ def health(request):
 
 @api_view(["POST"])
 def analyze(request):
+    job_id = uuid.uuid4().hex
+    with video_request_progress(job_id):
+        return _analyze(request, job_id)
+
+
+def _analyze(request, job_id):
+    if "agent_enabled" in request.data:
+        return Response({"error": "agent_enabled was removed; license-plate recognition is local only", "code": "removed_option"}, status=400)
     upload = request.FILES.get("video")
     if upload is None:
         return Response({"error": "Attach a video in the 'video' field."}, status=400)
-    job_id = uuid.uuid4().hex
+    log.info("Video job %s: receiving upload (%d bytes)", job_id, upload.size)
     job_dir = Path(settings.MEDIA_ROOT) / "license_plate" / job_id
     job_dir.mkdir(parents=True, exist_ok=True)
     suffix = Path(upload.name).suffix.lower() if upload.name else ".mp4"
@@ -37,12 +50,12 @@ def analyze(request):
             raise ValueError("max_frames must be positive.")
         result = run_video_analysis(
             source, job_id=job_id, max_frames=max_frames,
-            agent_enabled=str(request.data.get("agent_enabled", "false")).lower() == "true",
         )
         return Response(result)
     except (ValueError, TypeError) as exc:
         return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as exc:
+        log.exception("Video job %s failed", job_id)
         return Response({"error": f"Pipeline failed: {exc}"}, status=500)
 
 

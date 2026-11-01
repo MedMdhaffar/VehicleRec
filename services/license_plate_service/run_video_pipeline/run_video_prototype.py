@@ -3,7 +3,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import math
+import os
 import statistics
 import threading
 import time
@@ -18,10 +20,10 @@ import yaml
 
 import run_video_pipeline.config as config
 from run_video_pipeline.classification import create_classifier
-from run_video_pipeline.agent import OpenRouterPlateAgent
 from run_video_pipeline.data_capture import ReviewStore
 from run_video_pipeline.marker_localizer import TounesMarkerLocalizer
-from run_video_pipeline.ocr import get_reader
+from run_video_pipeline.ocr import PlateReader
+from run_video_pipeline.policies import compact_result
 from run_video_pipeline.plate_detector import (
     PlateCrop,
     PlateDetector,
@@ -30,6 +32,8 @@ from run_video_pipeline.plate_detector import (
 )
 from run_video_pipeline.prototype_pipeline import PrototypePlatePipeline
 from run_video_pipeline.schemas import UnifiedPlateResult
+
+log = logging.getLogger(__name__)
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_TRACKER = Path(__file__).resolve().parent / "trackers/bytetrack_plates.yaml"
@@ -151,7 +155,7 @@ def crop_quality(crop: np.ndarray, detector_confidence: float) -> float:
 class RecognitionAttempt:
     result: UnifiedPlateResult
     low_level_ocr_calls: int
-    agent_calls: int
+    queue_wait_ms: float = 0.0
     crop_score: float = 0.0
     crop_area: int = 0
     crop_sharpness: float = 0.0
@@ -186,6 +190,15 @@ class TrackState:
     submitted_frames: list[int] = field(default_factory=list)
     completed_frames: list[int | None] = field(default_factory=list)
     pending: Future | None = None
+    deferred_reason: str | None = None
+    deferred_since: float | None = None
+    deferred_source_ref: str | Path | None = None
+    deferred_count: int = 0
+    scheduling_result: UnifiedPlateResult | None = None
+    category_conflict: bool = False
+    category_conflict_samples: list[str] = field(default_factory=list)
+    identity_conflict: bool = False
+    identity_conflict_samples: list[str] = field(default_factory=list)
     cached_attempt_index: int | None = None
     result_replaced: bool = False
     replacement_reason: str | None = None
@@ -229,7 +242,7 @@ class TrackState:
     @property
     def final_result(self) -> UnifiedPlateResult | None:
         if self.cached_attempt_index is None:
-            return None
+            return self.scheduling_result
         return self.attempts[self.cached_attempt_index].result
 
     @property
@@ -286,6 +299,9 @@ class TrackState:
             return
         current = self.final_result
         candidate = attempt.result
+        if current and current.predicted_category and candidate.predicted_category and current.predicted_category != candidate.predicted_category:
+            self.category_conflict = True
+            self.category_conflict_samples.extend([current.sample_id, candidate.sample_id])
         if candidate.status != "accepted":
             self.replacement_reason = "recheck not accepted; kept initial result"
             return
@@ -294,25 +310,34 @@ class TrackState:
             self.result_replaced = True
             self.replacement_reason = "accepted recheck replaced unresolved initial result"
             return
-        current_text = current.plate_text_normalized or current.plate_text_raw
-        candidate_text = candidate.plate_text_normalized or candidate.plate_text_raw
-        if candidate_text == current_text and candidate.category_confidence >= current.category_confidence - 0.02:
+        current_identity = (current.predicted_category, tuple(sorted(current.registration_fields.items())))
+        candidate_identity = (candidate.predicted_category, tuple(sorted(candidate.registration_fields.items())))
+        if candidate_identity != current_identity:
+            self.identity_conflict = True
+            self.identity_conflict_samples.extend([current.sample_id, candidate.sample_id])
+            self.replacement_reason = "identity conflict; retained accepted initial result for review evidence"
+        elif candidate.recognition_policy == current.recognition_policy and candidate.text_confidence >= current.text_confidence - confidence_gain:
             self.cached_attempt_index = len(self.attempts) - 1
             self.result_replaced = True
-            self.replacement_reason = "same identity confirmed on substantially better crop"
-        elif candidate.category_confidence >= current.category_confidence + confidence_gain:
-            self.cached_attempt_index = len(self.attempts) - 1
-            self.result_replaced = True
-            self.replacement_reason = "different identity replaced by higher-confidence better-crop result"
+            self.replacement_reason = "same category and validated fields confirmed on better crop"
         else:
-            self.replacement_reason = "recheck disagreed without sufficient confidence gain"
+            self.replacement_reason = "recheck has weaker or incomparable registration evidence"
+
 
 
 class CountingReader:
-    def __init__(self, delegate):
+    def __init__(self, delegate=None, factory=PlateReader):
         self.delegate = delegate
+        self.factory = factory
         self._lock = threading.Lock()
         self.calls = 0
+
+    def initialize(self):
+        if self.delegate is None:
+            self.delegate = self.factory()
+
+    def close(self):
+        self.delegate = None
 
     def read_result(self, crop):
         with self._lock:
@@ -401,7 +426,7 @@ def save_track_crops(directory: Path, tracks: dict[int, TrackState]) -> dict[int
 def _safe_ascii(value: str | None) -> str:
     if not value:
         return ""
-    return " ".join(value.encode("ascii", "ignore").decode("ascii").split())
+    return " ".join(value.replace("تونس", "T").encode("ascii", "ignore").decode("ascii").split())
 
 
 def annotate_frame(
@@ -417,17 +442,18 @@ def annotate_frame(
         if result is None:
             text, category, source_name, status, confidence = "", "unknown", "none", "pending", 0.0
         else:
-            text = _safe_ascii(result.plate_text_normalized or result.plate_text_raw)
-            category, source_name, status = result.plate_category, result.source, result.status
-            confidence = result.category_confidence
-            if status not in {"accepted", "rejected", "unavailable"}:
-                status = "unavailable"
+            text = _safe_ascii(result.normalized_number if result.status == "accepted" else result.unresolved_reason)
+            category, source_name, status = result.plate_category, result.category_decision_source or result.source, result.status
+            confidence = result.text_confidence
         x1, y1, x2, y2 = bbox
         color = (20, 190, 20) if status == "accepted" else (0, 165, 255)
         cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
         label = (
             f"T{track_id_prefix}{track_id} | {text or '<no text>'} | {category} | "
             f"{confidence:.2f} | {source_name} | {status}"
+            + (f" | {result.sample_id[:8]} | {result.timing.total_ms:.0f}ms" if result else "")
+            + (" | IDENTITY CONFLICT" if tracks[track_id].identity_conflict else "")
+            + (" | CATEGORY CONFLICT" if tracks[track_id].category_conflict else "")
         )
         (label_width, label_height), _ = cv2.getTextSize(
             label, cv2.FONT_HERSHEY_SIMPLEX, 0.48, 1
@@ -493,6 +519,7 @@ class VideoPrototypeRunner:
         replacement_confidence_gain: float = 0.02,
         camera_id: str = "static-video",
         track_id_prefix: str = "",
+        max_pending: int | None = None,
     ):
         if min_candidates < 1:
             raise ValueError("min_candidates must be positive")
@@ -502,6 +529,12 @@ class VideoPrototypeRunner:
             raise ValueError("retry_improvement must be greater than 1")
         if association_padding < 0:
             raise ValueError("association padding must be non-negative")
+        self.max_pending = max_pending if max_pending is not None else int(os.environ.get("PLATE_MAX_PENDING", "4"))
+        if self.max_pending < 1:
+            raise ValueError("max_pending must be positive")
+        self.deferred_events = 0
+        self._source_ref = None
+        self.initialization_ms = 0.0
         self.pipeline = pipeline
         self.detector = detector
         self.tracker = tracker
@@ -523,7 +556,9 @@ class VideoPrototypeRunner:
         self.executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="plate-recognition")
         try:
             # Fail before frame processing, and initialize on the actual inference thread.
-            self.executor.submit(self.pipeline.initialize_classifier).result()
+            initialization_started = time.perf_counter()
+            self.executor.submit(self._initialize_models).result()
+            self.initialization_ms = (time.perf_counter() - initialization_started) * 1000
         except BaseException:
             self.executor.shutdown(wait=True)
             raise
@@ -533,6 +568,30 @@ class VideoPrototypeRunner:
         self.crop_scoring_times_ms: list[float] = []
         self.detections_per_frame: list[int] = []
         self.tracked_outputs_per_frame: list[int] = []
+
+    def _initialize_models(self):
+        started = time.perf_counter()
+        log.info("Loading plate category classifier...")
+        self.pipeline.initialize_classifier()
+        log.info("Plate category classifier ready")
+        self.classifier_initialization_ms = (time.perf_counter() - started) * 1000
+        try:
+            log.info("Loading registration OCR...")
+            self.reader.initialize()
+            log.info("Loading marker and plate detectors...")
+            self.pipeline.marker_localizer.load()
+            if self.detector is not None:
+                self.detector.load()
+            log.info("Recognition models ready")
+        except Exception:
+            self._release_models()
+            raise
+
+    def _release_models(self):
+        try:
+            self.pipeline.release_classifier()
+        finally:
+            self.reader.close()
 
     def _recognize(
         self,
@@ -548,15 +607,17 @@ class VideoPrototypeRunner:
         image_height: int = 0,
         attempt_number: int = 1,
         previous_sample_id: str | None = None,
+        eligible_at: float | None = None,
     ) -> RecognitionAttempt:
         before_ocr = self.reader.calls
-        before_agent = self.pipeline.counters.snapshot()["agent_calls"]
+        queue_wait_ms = (time.perf_counter() - eligible_at) * 1000 if eligible_at is not None else 0.0
         result = self.pipeline.process_crop(
             plate,
             original_image_ref=f"{source_ref}#frame={crop_frame}",
             camera_id=self.camera_id,
             track_id=f"{self.track_id_prefix}{track_id}",
             quality={
+                "queue_wait_ms": queue_wait_ms,
                 "frame_index": crop_frame,
                 "image_width": image_width,
                 "image_height": image_height,
@@ -571,11 +632,10 @@ class VideoPrototypeRunner:
                 "supersedes_sample_id": previous_sample_id,
             },
         )
-        after_agent = self.pipeline.counters.snapshot()["agent_calls"]
         return RecognitionAttempt(
             result=result,
             low_level_ocr_calls=self.reader.calls - before_ocr,
-            agent_calls=int(after_agent - before_agent),
+            queue_wait_ms=queue_wait_ms,
             crop_score=crop_score,
             crop_area=crop_area,
             crop_sharpness=crop_sharpness,
@@ -586,6 +646,22 @@ class VideoPrototypeRunner:
     def _submit(self, state: TrackState, source_ref: str | Path, trigger_reason: str) -> None:
         if state.pending is not None or state.best_crop is None or len(state.attempts) >= 2:
             return
+        self._source_ref = source_ref
+        if state.deferred_since is None:
+            state.deferred_source_ref = source_ref
+            state.deferred_since = time.perf_counter()
+        if sum(track.pending is not None for track in self.tracks.values()) >= self.max_pending:
+            if state.deferred_reason is None:
+                state.deferred_count += 1
+                self.deferred_events += 1
+            state.deferred_reason = state.deferred_reason or trigger_reason
+            return
+        source_ref = state.deferred_source_ref or source_ref
+        trigger_reason = state.deferred_reason or trigger_reason
+        eligible_at = state.deferred_since
+        state.deferred_reason = None
+        state.deferred_since = None
+        state.deferred_source_ref = None
         state.submitted_qualities.append(state.best_score)
         state.submitted_frames.append(state.best_frame)
         plate = PlateCrop(state.best_crop.copy(), state.best_bbox, state.best_confidence)
@@ -603,6 +679,7 @@ class VideoPrototypeRunner:
             state.best_image_height,
             len(state.attempts) + 1,
             state.attempts[-1].result.sample_id if state.attempts else None,
+            eligible_at,
         )
 
     def _drain(self, source_ref: str | Path, frame_index: int | None) -> None:
@@ -611,16 +688,52 @@ class VideoPrototypeRunner:
                 state.record_attempt(state.pending.result(), self.replacement_confidence_gain)
                 state.completed_frames.append(frame_index)
                 state.pending = None
+            if state.deferred_reason and state.pending is None:
+                self._submit(state, source_ref, state.deferred_reason)
             if state.recheck_is_warranted(
                 self.retry_improvement, self.recheck_detail_improvement
             ):
                 self._submit(state, source_ref, "substantially_better_crop_recheck")
+
+    def record_capacity_expiry(self, state):
+        """Persist unscheduled stale work explicitly instead of retaining crops forever."""
+        import uuid
+        from datetime import datetime, timezone
+        from run_video_pipeline.schemas import NumberRecognition, PlateTiming
+        reason = "queue_capacity_retention_limit"
+        self.pipeline.store.record_event({
+            "record_type": "scheduling_expiry", "track_id": f"{self.track_id_prefix}{state.track_id}",
+            "reason": reason, "deferred_trigger": state.deferred_reason,
+            "deferred_wait_ms": (time.perf_counter() - state.deferred_since) * 1000 if state.deferred_since else 0.0,
+            "timestamp": datetime.now(timezone.utc).isoformat(), "bbox": list(state.best_bbox),
+        })
+        if state.final_result is None:
+            state.scheduling_result = self.pipeline.store.capture(UnifiedPlateResult(
+                sample_id=str(uuid.uuid4()), timestamp=datetime.now(timezone.utc).isoformat(),
+                route="unknown", route_confidence=0, route_reason=reason, source="none", model_version="not_run",
+                bbox=list(state.best_bbox), detector_confidence=state.best_confidence,
+                camera_id=self.camera_id, track_id=f"{self.track_id_prefix}{state.track_id}",
+                original_image_ref=f"{state.deferred_source_ref}#frame={state.best_frame}",
+                timing=PlateTiming(queue_wait_ms=(time.perf_counter() - state.deferred_since) * 1000 if state.deferred_since else 0.0),
+                status="unresolved", recognition_status="unresolved", unresolved_reason=reason,
+                number=NumberRecognition(policy="unselected", outcome="unresolved", reason=reason),
+                evidence={"quality": {"recognition_trigger_reason": state.deferred_reason, "frame_index": state.best_frame}},
+            ), state.best_crop)
+        state.deferred_reason = None
+        state.deferred_since = None
 
     def finalize_track(self, state: TrackState) -> None:
         """Append which immutable attempt became the final cached track result."""
         if state.final_metadata_written or state.final_result is None:
             return
         self.pipeline.store.mark_track_final(state.final_result.sample_id)
+        self.pipeline.store.record_event({
+            "schema_version": 2, "record_type": "track_decision", "sample_id": state.final_result.sample_id,
+            "identity_conflict": state.identity_conflict,
+                "category_conflict": state.category_conflict,
+                "category_conflict_samples": state.category_conflict_samples, "replacement_reason": state.replacement_reason,
+            "attempt_sample_ids": [attempt.result.sample_id for attempt in state.attempts],
+        })
         state.final_metadata_written = True
 
     def process_frame(
@@ -697,8 +810,11 @@ class VideoPrototypeRunner:
         if self._finished:
             return
         try:
-            self.executor.submit(self.pipeline.release_classifier).result()
+            while any(state.pending is not None or state.deferred_reason for state in self.tracks.values()):
+                self._drain(self._source_ref or "processing_shutdown", None)
+                time.sleep(0.01)
         finally:
+            self.executor.submit(self._release_models).result()
             self.executor.shutdown(wait=True)
             self._finished = True
 
@@ -718,7 +834,7 @@ class VideoPrototypeRunner:
             self.pending_snapshots.append({
                 track_id for track_id, state in self.tracks.items() if state.pending is not None
             })
-            while any(state.pending is not None for state in self.tracks.values()):
+            while any(state.pending is not None or state.deferred_reason for state in self.tracks.values()):
                 self._drain(source_ref, None)
                 self.pending_snapshots.append({
                     track_id for track_id, state in self.tracks.items() if state.pending is not None
@@ -751,6 +867,8 @@ class VideoPrototypeRunner:
         frame_tracks: list[list[tuple[int, tuple[int, int, int, int]]]] = []
         frame_index = 0
         loop_started = time.perf_counter()
+        last_progress = loop_started
+        log.info("Processing video %s (frame limit: %s)", video, max_frames or "entire video")
         try:
             while max_frames is None or frame_index < max_frames:
                 ok, frame = capture.read()
@@ -761,6 +879,11 @@ class VideoPrototypeRunner:
                 )
                 frame_tracks.append(annotations)
                 frame_index += 1
+                now = time.perf_counter()
+                if frame_index == 1 or now - last_progress >= 5:
+                    log.info("Video %s: processed %d frames, %.2f FPS, %d tracks",
+                             video, frame_index, frame_index / max(now - loop_started, 0.001), len(self.tracks))
+                    last_progress = now
         except BaseException:
             self.close()
             raise
@@ -768,9 +891,11 @@ class VideoPrototypeRunner:
             capture.release()
         frame_loop_seconds = time.perf_counter() - loop_started
 
+        log.info("Video %s: frame processing finished; waiting for queued OCR", video)
         recognition_drain_seconds = self.finish(video)
         analysis_seconds = time.perf_counter() - loop_started
 
+        log.info("Video %s: OCR complete; writing annotated video", video)
         annotation_seconds = annotate_video(
             video, output, frame_tracks, self.tracks, fps, (width, height)
         )
@@ -784,25 +909,14 @@ class VideoPrototypeRunner:
         accepted = [result for result in results if result.status == "accepted"]
         route_counts = {
             route: sum(result.route == route for result in results)
-            for route in ("private_local", "agent", "unknown")
+            for route in ("private_local", "local", "unknown")
         }
         total_observations = sum(state.candidate_count for state in self.tracks.values())
         pipeline_attempts = len(attempts)
         low_level_ocr_calls = sum(attempt.low_level_ocr_calls for attempt in attempts)
-        agent_calls = sum(attempt.agent_calls for attempt in attempts)
-        agent_observations = sum(
-            state.candidate_count for state in self.tracks.values()
-            if state.final_result is not None and state.final_result.route == "agent"
-        )
         local_latencies = [attempt.result.timing.local_total_ms for attempt in attempts]
-        api_latencies = [attempt.result.timing.api_ms for attempt in attempts if attempt.agent_calls]
         total_latencies = [attempt.result.timing.total_ms for attempt in attempts]
         routing_latencies = [attempt.result.timing.routing_ms for attempt in attempts]
-        agent_track_ids = {
-            track_id for track_id, state in self.tracks.items()
-            if state.final_result is not None and state.final_result.route == "agent"
-        }
-        agent_pending_depths = [len(snapshot & agent_track_ids) for snapshot in self.pending_snapshots]
         track_metrics = {}
         for track_id, state in sorted(self.tracks.items()):
             result = state.final_result
@@ -819,7 +933,12 @@ class VideoPrototypeRunner:
                 "selected_best_crops": len(state.submitted_qualities),
                 "recognition_attempts": len(state.attempts),
                 "low_level_ocr_calls": sum(item.low_level_ocr_calls for item in state.attempts),
-                "agent_calls": sum(item.agent_calls for item in state.attempts),
+                **(compact_result(result) if result else {}),
+                "identity_conflict": state.identity_conflict,
+                "category_conflict": state.category_conflict,
+                "category_conflict_samples": state.category_conflict_samples,
+                "identity_conflict_samples": state.identity_conflict_samples,
+                "deferred_attempts": state.deferred_count,
                 "selected_crop_frame": selected_frame,
                 "selected_crop_score": round(selected_score, 3) if selected_score is not None else None,
                 "selected_best_crop_path": crop_paths.get(track_id, {}).get("recognized"),
@@ -842,8 +961,10 @@ class VideoPrototypeRunner:
                         "frame": attempt.crop_frame,
                         "crop_score": round(attempt.crop_score, 3),
                         "trigger_reason": attempt.trigger_reason,
-                        "text": attempt.result.plate_text_normalized
-                        or attempt.result.plate_text_raw,
+                        "text": attempt.result.normalized_number if attempt.result.status == "accepted" else "",
+                        "sample_id": attempt.result.sample_id,
+                        "recognition_policy": attempt.result.recognition_policy,
+                        "unresolved_reason": attempt.result.unresolved_reason,
                         "category": attempt.result.plate_category,
                         "confidence": round(attempt.result.category_confidence, 4),
                         "route": attempt.result.route,
@@ -854,14 +975,13 @@ class VideoPrototypeRunner:
                 ],
                 "result_replaced": state.result_replaced,
                 "replacement_reason": state.replacement_reason,
-                "text": (result.plate_text_normalized or result.plate_text_raw) if result else None,
+                "text": result.normalized_number if result and result.status == "accepted" else "",
                 "category": result.plate_category if result else "unknown",
                 "confidence": round(result.category_confidence, 4) if result else 0.0,
                 "route": result.route if result else "unknown",
                 "source": result.source if result else "none",
                 "status": result.status if result else "unresolved",
                 "local_latency_ms": round(result.timing.local_total_ms, 3) if result else 0.0,
-                "api_latency_ms": round(result.timing.api_ms, 3) if result else 0.0,
                 "total_recognition_latency_ms": round(result.timing.total_ms, 3) if result else 0.0,
             }
         unresolved = [
@@ -875,6 +995,7 @@ class VideoPrototypeRunner:
             if detections > tracked
         ]
         return {
+            "detector": self.detector.metadata if self.detector is not None and isinstance(self.detector.metadata, dict) else {},
             "video": str(video),
             "output_video": str(output),
             "frames": frame_index,
@@ -893,12 +1014,9 @@ class VideoPrototypeRunner:
             "unresolved_tracks": unresolved,
             "route_counts": route_counts,
             "local_percent": round(route_counts["private_local"] / len(results) * 100, 3) if results else 0.0,
-            "agent_percent": round(route_counts["agent"] / len(results) * 100, 3) if results else 0.0,
             "recognition_attempts": pipeline_attempts,
             "low_level_ocr_calls": low_level_ocr_calls,
-            "agent_calls": agent_calls,
             "local_recognition_latency_ms": _summary(local_latencies),
-            "api_latency_ms": _summary(api_latencies),
             "total_recognition_latency_ms": _summary(total_latencies),
             "routing_latency_ms": _summary(routing_latencies),
             "plate_detection_time_ms": _summary(self.detection_times_ms),
@@ -917,10 +1035,6 @@ class VideoPrototypeRunner:
             "frames_with_unconfirmed_detections": len(unconfirmed_frames),
             "unconfirmed_detection_frame_ranges": _frame_ranges(unconfirmed_frames),
             "recognition_calls_avoided_vs_every_observation": max(0, total_observations - pipeline_attempts),
-            "agent_calls_avoided_vs_every_plate_observation": max(
-                0, total_observations - agent_calls
-            ),
-            "agent_calls_avoided_vs_every_agent_observation": max(0, agent_observations - agent_calls),
             "retry_count": sum(max(0, len(state.attempts) - 1) for state in self.tracks.values()),
             "replacement_count": sum(state.result_replaced for state in self.tracks.values()),
             "maximum_attempts_per_track": max(
@@ -937,12 +1051,6 @@ class VideoPrototypeRunner:
                 "recheck_area_or_sharpness_improvement": self.recheck_detail_improvement,
                 "replacement_confidence_gain": self.replacement_confidence_gain,
             },
-            "agent_request_retries": max(
-                0, agent_calls - sum(attempt.agent_calls > 0 for attempt in attempts)
-            ),
-            "agent_failures": sum(
-                attempt.agent_calls > 0 and attempt.result.status != "accepted" for attempt in attempts
-            ),
             "recognition_worker_concurrency": 1,
             "max_pending_recognition_tasks": max(
                 (len(snapshot) for snapshot in self.pending_snapshots), default=0
@@ -950,15 +1058,12 @@ class VideoPrototypeRunner:
             "mean_pending_recognition_tasks": round(
                 statistics.mean(len(snapshot) for snapshot in self.pending_snapshots), 3
             ) if self.pending_snapshots else 0.0,
-            "max_pending_agent_tasks": max(agent_pending_depths, default=0),
-            "mean_pending_agent_tasks": round(statistics.mean(agent_pending_depths), 3)
-            if agent_pending_depths else 0.0,
-            "agent_tasks_completed_before_video_end": sum(
-                state.final_result is not None
-                and state.final_result.route == "agent"
-                and any(frame is not None for frame in state.completed_frames)
-                for state in self.tracks.values()
-            ),
+            "initialization_ms": self.initialization_ms,
+            "classification_initialization_ms": self.classifier_initialization_ms,
+            "max_pending_capacity": self.max_pending,
+            "deferred_attempts": self.deferred_events,
+            "queue_wait_ms": _summary([item.queue_wait_ms for item in attempts]),
+            "classification_latency_ms": _summary([item.result.timing.classification_ms for item in attempts]),
             "gpu_memory": _gpu_memory(),
             "ignored_short_tracks": [
                 track_id for track_id, state in self.tracks.items()
@@ -985,9 +1090,8 @@ def main() -> int:
     parser.add_argument("--selected-crops-dir", type=Path)
     parser.add_argument("--track-summary-output", type=Path)
     parser.add_argument("--tracker-config", type=Path, default=DEFAULT_TRACKER)
-    parser.add_argument("--agent-enabled", action="store_true")
     parser.add_argument("--conf", type=float, default=None)
-    parser.add_argument("--imgsz", type=int, default=None)
+    parser.add_argument("--imgsz", type=int, choices=[640], default=None, help="Fixed ONNX input size; only 640 is supported")
     parser.add_argument("--association-padding", type=float, default=DEFAULT_ASSOCIATION_PADDING)
     parser.add_argument("--strong-quality", type=float, default=12000.0)
     parser.add_argument("--strong-min-candidates", type=int, default=3)
@@ -1000,21 +1104,22 @@ def main() -> int:
     parser.add_argument("--replacement-confidence-gain", type=float, default=0.02)
     parser.add_argument("--max-frames", type=int)
     args = parser.parse_args()
+    from run_video_pipeline.onnx_detector import validate_options
+    validate_options(args.conf, args.imgsz)
 
     capture = cv2.VideoCapture(str(args.video))
     if not capture.isOpened():
         raise SystemExit(f"Could not open video: {args.video}")
     fps = float(capture.get(cv2.CAP_PROP_FPS) or 25.0)
     capture.release()
-    mode = "agent" if args.agent_enabled else "local_only"
+    mode = "local_only"
     output = args.output or DEFAULT_OUTPUT_ROOT / f"{args.video.stem}_{mode}_annotated.mp4"
     metrics_output = args.metrics_output or output.with_suffix(".metrics.json")
 
-    counting_reader = CountingReader(get_reader())
+    counting_reader = CountingReader()
     pipeline = PrototypePlatePipeline(
         counting_reader,
         TounesMarkerLocalizer(config.WORD_DETECTOR_PATH),
-        OpenRouterPlateAgent(enabled=args.agent_enabled),
         ReviewStore(args.capture_root),
         classifier_factory=create_classifier,
     )
@@ -1038,7 +1143,6 @@ def main() -> int:
         args.video, output, conf=args.conf, imgsz=args.imgsz, max_frames=args.max_frames,
         selected_crops_dir=args.selected_crops_dir,
     )
-    metrics["agent_enabled"] = args.agent_enabled
     metrics_output.parent.mkdir(parents=True, exist_ok=True)
     metrics_output.write_text(json.dumps(metrics, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     track_summary_output = args.track_summary_output or metrics_output.with_name(

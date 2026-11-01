@@ -5,7 +5,7 @@ import re
 from dataclasses import dataclass
 from typing import Literal
 
-from run_video_pipeline.ocr import OCRResult, normalize_plate_text
+from run_video_pipeline.ocr import OCRResult, normalize_plate_text, normalize_digits
 
 ParserStatus = Literal["valid", "ambiguous", "invalid"]
 
@@ -66,7 +66,7 @@ def parse_private_plate(
     every legal 1–3 digit / 1–4 digit split is enumerated and a result is valid
     only when that split is unique.
     """
-    raw_text = raw_text or ""
+    raw_text = normalize_digits(raw_text or "")
     explicit = _EXPLICIT_MARKER.fullmatch(raw_text)
     if explicit is None and normalized_ocr_text is not None:
         explicit = _EXPLICIT_MARKER.fullmatch(normalized_ocr_text)
@@ -88,6 +88,7 @@ def parse_private_plate(
         if normalized_ocr_text is None
         else normalize_plate_text(normalized_ocr_text)
     )
+    comparison_text = re.sub(r"[\s-]", "", comparison_text)
     if not comparison_text:
         return PrivatePlateParseResult(status="invalid", reason="no OCR text")
     if not comparison_text.isascii() or not comparison_text.isdigit():

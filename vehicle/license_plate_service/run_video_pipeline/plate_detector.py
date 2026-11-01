@@ -159,35 +159,47 @@ class PlateDetector:
     def model_loaded(self) -> bool:
         return self._model is not None
 
+    @property
+    def metadata(self) -> dict:
+        return dict(self._model.metadata) if self._model is not None else {}
+
     def load(self) -> None:
-        from ultralytics import YOLO
-        self._model = YOLO(self.model_path)
-        log.info("Loaded plate detector: %s", self.model_path)
+        from run_video_pipeline.onnx_detector import LocalPlateBackend
+        with self._lock:
+            if self._model is None:
+                backend = LocalPlateBackend(self.model_path)
+                backend.load()
+                self._model = backend
 
     def predict(
-        self,
-        image: np.ndarray,
-        conf: Optional[float] = None,
-        imgsz: Optional[int] = None,
+        self, image: np.ndarray, conf: Optional[float] = None, imgsz: Optional[int] = None,
     ) -> list[Detection]:
+        from run_video_pipeline.onnx_detector import validate_options
+        threshold = validate_options(conf, imgsz)
+        if not isinstance(image, np.ndarray) or image.dtype != np.uint8 or image.ndim != 3 or image.shape[2] != 3 or not image.size:
+            raise ValueError('Plate detector expects a nonempty original BGR uint8 HxWx3 frame')
         if self._model is None:
-            if not Path(self.model_path).exists():
-                log.warning("Plate detector weights not found at %s — returning []", self.model_path)
-                return []
             self.load()
-
-        effective_conf  = conf  if conf  is not None else config.PLATE_CONF
-        effective_imgsz = imgsz if imgsz is not None else config.DETECT_IMGSZ
-
         with self._lock:
-            results = self._model.predict(
-                image, conf=effective_conf, imgsz=effective_imgsz, verbose=False
-            )[0]
-
-        out: list[Detection] = []
-        for b in results.boxes:
-            x1, y1, x2, y2 = (int(v) for v in b.xyxy[0].tolist())
-            out.append((x1, y1, x2, y2, float(b.conf[0])))
+            results = self._model.predict(image)
+        height, width = image.shape[:2]
+        out = []
+        for result in results:
+            try:
+                box = result.bounding_box
+                confidence = float(result.confidence)
+            except (AttributeError, TypeError, ValueError, OverflowError):
+                log.warning('Skipping invalid plate-detector result: %r', result)
+                continue
+            if not math.isfinite(confidence) or not 0 <= confidence <= 1:
+                continue
+            if confidence < threshold:
+                continue
+            # The library already reverses letterbox and returns original-coordinate integers.
+            # Clip once; no resizing, rescaling or additional crop padding here.
+            clipped = clamp_bbox((box.x1, box.y1, box.x2, box.y2), width, height)
+            if clipped is not None:
+                out.append((*clipped, confidence))
         return out
 
     def detect_and_crop(

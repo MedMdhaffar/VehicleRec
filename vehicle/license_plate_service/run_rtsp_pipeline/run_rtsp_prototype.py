@@ -16,11 +16,10 @@ from typing import Callable
 import cv2
 
 from run_video_pipeline.classification import create_classifier
+from run_video_pipeline.policies import compact_result
 import run_rtsp_pipeline.config as config
-from run_rtsp_pipeline.agent import OpenRouterPlateAgent
 from run_rtsp_pipeline.data_capture import ReviewStore
 from run_rtsp_pipeline.marker_localizer import TounesMarkerLocalizer
-from run_rtsp_pipeline.ocr import get_reader
 from run_rtsp_pipeline.plate_detector import PlateDetector
 from run_rtsp_pipeline.prototype_pipeline import PrototypePlatePipeline
 from run_rtsp_pipeline.run_video_prototype import (
@@ -47,10 +46,8 @@ class LiveTotals:
     tracks_seen: int = 0
     tracks_recognized: int = 0
     local_results: int = 0
-    agent_results: int = 0
     unresolved_track_count: int = 0
     ocr_calls: int = 0
-    agent_calls: int = 0
     recognition_attempts: int = 0
     recent_unresolved_tracks: deque[str] = field(
         default_factory=lambda: deque(maxlen=100)
@@ -66,9 +63,7 @@ class LiveTotals:
             self.recent_unresolved_tracks.append(persisted_track_id)
         if result is not None:
             self.local_results += result.route == "private_local"
-            self.agent_results += result.route == "agent"
         self.ocr_calls += sum(attempt.low_level_ocr_calls for attempt in state.attempts)
-        self.agent_calls += sum(attempt.agent_calls for attempt in state.attempts)
         self.recognition_attempts += len(state.attempts)
 
 
@@ -91,6 +86,8 @@ def _retire_stale_tracks(
     ]
     for track_id in stale_ids:
         state = runner.tracks.pop(track_id)
+        if state.deferred_reason:
+            runner.record_capacity_expiry(state)
         finalize_track = getattr(runner, "finalize_track", None)
         if finalize_track is not None:
             finalize_track(state)
@@ -153,11 +150,11 @@ def live_track_results(runner: VideoPrototypeRunner) -> list[dict]:
             })
             continue
         status = result.status
-        if status not in {"accepted", "rejected", "unavailable"}:
-            status = "unavailable"
         output.append({
             "track_id": persisted_id,
-            "plate_text": result.plate_text_normalized or result.plate_text_raw,
+            **compact_result(result),
+            "identity_conflict": state.identity_conflict,
+            "category_conflict": state.category_conflict,
             "plate_category": result.plate_category,
             "confidence": round(result.category_confidence, 4),
             "source": result.source,
@@ -351,13 +348,11 @@ def _rtsp_summary(
         "tracks_seen": totals.tracks_seen + active.tracks_seen,
         "tracks_recognized": totals.tracks_recognized + active.tracks_recognized,
         "local_results": totals.local_results + active.local_results,
-        "agent_results": totals.agent_results + active.agent_results,
         "unresolved_track_count": (
             totals.unresolved_track_count + active.unresolved_track_count
         ),
         "unresolved_tracks": unresolved[-100:],
         "ocr_calls": totals.ocr_calls + active.ocr_calls,
-        "agent_calls": totals.agent_calls + active.agent_calls,
         "recognition_attempts": totals.recognition_attempts + active.recognition_attempts,
         "recognition_drain_seconds": round(recognition_drain_seconds, 3),
         "connection_sessions": reader.connection_generation,
@@ -366,6 +361,7 @@ def _rtsp_summary(
         "diagnostic_history_frames": LIVE_HISTORY_LIMIT,
         "record_output": str(record_output) if record_output else None,
         "stop_reason": reader.stop_reason or "completed",
+        "scheduling": {"capacity": runner.max_pending, "deferred_events": runner.deferred_events},
     }
 
 
@@ -382,7 +378,6 @@ def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--url", default=os.environ.get("RTSP_URL"))
     parser.add_argument("--camera-id", default=os.environ.get("RTSP_CAMERA_ID", "cam-1"))
-    parser.add_argument("--agent-enabled", action="store_true")
     parser.add_argument("--max-frames", type=int)
     parser.add_argument("--max-seconds", type=float)
     parser.add_argument("--read-timeout", type=float, default=5.0, metavar="SECONDS")
@@ -397,8 +392,10 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--selected-crops-dir", type=Path)
     parser.add_argument("--tracker-config", type=Path, default=DEFAULT_TRACKER)
     parser.add_argument("--conf", type=float)
-    parser.add_argument("--imgsz", type=int)
+    parser.add_argument("--imgsz", type=int, choices=[640], help="Fixed ONNX input size")
     args = parser.parse_args()
+    from run_video_pipeline.onnx_detector import validate_options
+    validate_options(args.conf, args.imgsz)
     if not args.url:
         parser.error("--url or RTSP_URL is required")
     if args.max_frames is not None and args.max_frames < 1:
@@ -447,11 +444,9 @@ def run_rtsp(
             "tracks_seen": 0,
             "tracks_recognized": 0,
             "local_results": 0,
-            "agent_results": 0,
             "unresolved_track_count": 0,
             "unresolved_tracks": [],
             "ocr_calls": 0,
-            "agent_calls": 0,
             "recognition_attempts": 0,
             "recognition_drain_seconds": 0.0,
             "connection_sessions": reader.connection_generation,
@@ -460,16 +455,14 @@ def run_rtsp(
             "diagnostic_history_frames": LIVE_HISTORY_LIMIT,
             "record_output": str(args.record_output) if args.record_output else None,
             "stop_reason": reader.stop_reason or "RTSP source unavailable",
-            "agent_enabled": args.agent_enabled,
         }
         _notify(on_update, {**summary, "running": False, "results": []})
         return summary
     try:
-        counting_reader = CountingReader(get_reader())
+        counting_reader = CountingReader()
         pipeline = PrototypePlatePipeline(
             counting_reader,
             TounesMarkerLocalizer(config.WORD_DETECTOR_PATH),
-            OpenRouterPlateAgent(enabled=args.agent_enabled),
             ReviewStore(args.capture_root),
             classifier_factory=create_classifier,
         )
@@ -555,6 +548,9 @@ def run_rtsp(
                     item["status"] == "accepted" for item in current_results
                 ),
                 "results": current_results,
+                "scheduling": {"pending": sum(t.pending is not None for t in runner.tracks.values()),
+                               "deferred": sum(t.deferred_reason is not None for t in runner.tracks.values()),
+                               "capacity": runner.max_pending, "deferred_events": runner.deferred_events},
             })
     finally:
         if stop_event.is_set() and reader.stop_reason is None:
@@ -586,7 +582,7 @@ def run_rtsp(
         recognition_drain_seconds=recognition_drain_seconds,
         record_output=args.record_output,
     )
-    summary["agent_enabled"] = args.agent_enabled
+    summary["detector"] = detector.metadata
     _notify(on_update, {
         **summary,
         "running": False,

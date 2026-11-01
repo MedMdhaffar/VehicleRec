@@ -50,6 +50,24 @@ class BrowserVideoTests(SimpleTestCase):
             self.assertEqual(list(Path(directory).iterdir()), [path])
 
 
+class VideoProgressTests(SimpleTestCase):
+    def test_heartbeat_logs_during_blocking_work_and_stops_on_error(self):
+        import threading
+        from .progress import video_request_progress
+        heartbeat_seen = threading.Event()
+        def capture(message, *args):
+            if 'still active' in message:
+                heartbeat_seen.set()
+        with patch('license_plate_service.progress.log.info', side_effect=capture) as logged:
+            with self.assertRaisesRegex(RuntimeError, 'inference failed'):
+                with video_request_progress('test-heartbeat', interval=.01):
+                    self.assertTrue(heartbeat_seen.wait(2))
+                    raise RuntimeError('inference failed')
+            self.assertIn('request reached Django', logged.call_args_list[0].args[0])
+            self.assertIn('request finished', logged.call_args_list[-1].args[0])
+        self.assertFalse(any(t.name == 'video-progress-test-heartbeat' for t in threading.enumerate()))
+
+
 class LicensePlateApiTests(TestCase):
     def test_health(self):
         response = self.client.get("/api/license-plate/health/")
@@ -94,7 +112,7 @@ class ClassifierServiceTests(SimpleTestCase):
         from .service import run_video_analysis
         with tempfile.TemporaryDirectory() as media_root, override_settings(MEDIA_ROOT=media_root), patch(
             'run_video_pipeline.classification.create_classifier'
-        ) as factory, patch('run_video_pipeline.ocr.get_reader'), patch(
+        ) as factory, patch('run_video_pipeline.ocr.PlateReader'), patch(
             'run_video_pipeline.prototype_pipeline.PrototypePlatePipeline'
         ) as pipeline, patch('run_video_pipeline.run_video_prototype.VideoPrototypeRunner') as runner, patch(
             'run_video_pipeline.run_video_prototype._build_tracker'
@@ -104,6 +122,7 @@ class ClassifierServiceTests(SimpleTestCase):
             runner.return_value.run.return_value = {}
             run_video_analysis(Path(media_root)/'source.mp4', job_id='test')
             self.assertIs(pipeline.call_args.kwargs['classifier_factory'], factory)
+            self.assertTrue(runner.call_args.args[1].model_path.endswith('yolo-v9-t-640-license-plates-end2end.onnx'))
             factory.assert_not_called()
             capture.return_value.release.assert_called_once()
 
@@ -121,3 +140,70 @@ class ClassifierServiceTests(SimpleTestCase):
         self.assertFalse(state['running'])
         self.assertEqual(state['status'], 'error')
         self.assertIn('index incompatible', state['error'])
+
+
+class RemovedRemoteOptionTests(SimpleTestCase):
+    def test_video_rejects_legacy_option_even_when_false(self):
+        response = self.client.post('/api/license-plate/analyze/', {'agent_enabled': 'false'})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['code'], 'removed_option')
+
+    def test_camera_rejects_legacy_option(self):
+        response = self.client.post('/api/license-plate/rtsp/', {'agent_enabled': False}, content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('local only', response.json()['error'])
+
+
+class WholePlateApiTests(SimpleTestCase):
+    def test_upload_preserves_formatted_results_and_hides_rejected_numbers(self):
+        """Real policy/storage/compact projection; inference and video adapter mocked."""
+        import numpy as np
+        from .service import _ensure_pipeline_import_path
+        _ensure_pipeline_import_path()
+        from run_video_pipeline.data_capture import ReviewStore
+        from run_video_pipeline.ocr import OCRResult
+        from run_video_pipeline.plate_detector import PlateCrop
+        from run_video_pipeline.prototype_pipeline import PrototypePlatePipeline
+        from run_video_pipeline.policies import compact_result
+        from run_video_pipeline.schemas import CategoryClassification
+        with tempfile.TemporaryDirectory() as directory, override_settings(MEDIA_ROOT=directory):
+            reader = Mock()
+            marker = Mock()
+            pipeline = PrototypePlatePipeline(reader, marker, ReviewStore(Path(directory)/'captures'),
+                                               classifier_factory=lambda: Mock())
+            pipeline.initialize_classifier()
+            for category, text, expected in [('nt', '0012', '0012 nt'),
+                                               ('idara', '09-0012', '09 - 0012'),
+                                               ('shorta', '0012', 'shorta 0012'),
+                                               ('idara', '090012', '')]:
+                reader.read_result.return_value = OCRResult(text, text, .99)
+                with patch('run_video_pipeline.pipeline.classify_crop', return_value=CategoryClassification(
+                    status='completed', final_category=category
+                )):
+                    result = pipeline.process_crop(PlateCrop(np.zeros((20, 120, 3), dtype=np.uint8), (0, 0, 120, 20), .99))
+                compact = compact_result(result)
+                with patch('license_plate_service.views.run_video_analysis', return_value={'tracks': {'1': compact}}):
+                    response = self.client.post('/api/license-plate/analyze/', {
+                        'video': SimpleUploadedFile('clip.mp4', b'mocked-video'), 'max_frames': '1',
+                    })
+                self.assertEqual(response.status_code, 200)
+                row = response.json()['tracks']['1']
+                self.assertEqual(row['plate_text'], expected)
+                self.assertEqual(row['normalized_number'], expected or None)
+                if not expected:
+                    self.assertEqual(row['registration_fields'], {})
+                    self.assertEqual(row['unresolved_reason'], 'missing_idara_separator')
+            marker.locate.assert_not_called()
+
+
+class DetectorStartupApiTests(SimpleTestCase):
+    def test_detector_missing_assets_and_provider_failures_are_reported(self):
+        for failure in (FileNotFoundError('Local t-640 weights missing'), RuntimeError('ONNX provider fallback rejected')):
+            with tempfile.TemporaryDirectory() as directory, override_settings(MEDIA_ROOT=directory), patch(
+                'license_plate_service.views.run_video_analysis', side_effect=failure
+            ):
+                response = self.client.post('/api/license-plate/analyze/', {
+                    'video': SimpleUploadedFile('clip.mp4', b'mocked video'), 'max_frames': '1',
+                })
+            self.assertEqual(response.status_code, 500)
+            self.assertIn(str(failure), response.json()['error'])

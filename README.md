@@ -47,8 +47,7 @@ recordings to H.264 with `yuv420p` pixels and fast-start MP4 metadata so they ca
 play in the browser. Standalone pipelines retain their OpenCV output format.
 
 The computer-vision services require the packages listed in
-`vehicle/requirements.txt`, model weights, and (for optional agent fallbacks)
-the relevant OpenRouter API key environment variables.
+`vehicle/requirements.txt`, model weights, and locally installed registration OCR assets. Other services retain their own configuration.
 
 ## Frontend setup
 
@@ -148,7 +147,49 @@ cached for fully offline execution; the category plugin includes its own Arabic
 OCR model. CPU thread limits can be set in the process environment for bounded
 verification; they do not change model configuration.
 
-The existing external-agent route remains for successful classifications whose
-registration evidence does not meet the existing local acceptance rules. This
-is not yet the final fallback-free system. Development checks must leave
-`--agent-enabled` unset and use `OPENROUTER_ENABLED=false`.
+License-plate recognition is fully local. `tunis` uses the existing conservative
+private-plate validation. Whole-crop OCR now implements the user-specified
+application formats for `idara` (`group1 - group2`), `nt` (`digits nt`) and
+`shorta` (`shorta digits`). `WHOLE_PLATE_MIN_OCR_CONF` defaults to `0.90`,
+a conservative starting value, not an independently calibrated threshold.
+Unambiguous numeric fields, sufficient OCR confidence and no contradictory
+category marker are required; classification supplies labels, never digits.
+See [the policy report](docs/whole_plate_number_policies.md) for extraction rules,
+real development-crop mismatches and rerun commands. No external
+recognition route or manual approval is available. See
+[the local completion audit](docs/license_plate_local_completion.md) for exact
+capabilities, setup, queue behavior and verification limitations.
+
+### Dedicated local recognition runtime
+
+```bash
+bash scripts/setup_local_plate_runtime.sh
+export REGISTRATION_OCR_MODEL_DIR=/absolute/path/to/PP-OCRv6_medium_rec
+bash scripts/run_local_plate.sh django check
+bash scripts/run_local_plate.sh django runserver
+bash scripts/run_local_plate.sh video /absolute/video.mp4 --max-frames 60
+```
+
+The default setup creates `.runtime/plates/venv` and installs backend dependencies
+there. A host with an existing persistent CV environment may explicitly reuse its
+site-packages with `PLATE_BASE_SITE_PACKAGES=/absolute/site-packages` and
+`PLATE_PYTHON=/absolute/python`. The new environment installs supplemental packages
+without upgrading the host environment. Runtime caches stay under `.runtime`.
+Normal startup requires existing local weights; registration OCR never downloads
+a model. Classifier and registration CPU/GPU selectors are `PLATE_CLASSIFIER_DEVICE`
+and `PLATE_OCR_DEVICE`; CPU is the default, and GPU behavior requires host validation.
+`PLATE_MAX_PENDING` bounds recognition tasks; see the audit for deferral semantics.
+
+### Active plate detector
+
+The license-plate pipeline now defaults to the local ONNX
+`yolo-v9-t-640-license-plate-end2end`, not the archived `best.pt`.
+Run `bash scripts/setup_local_plate_runtime.sh` for explicit provisioning, then
+`bash scripts/run_local_plate.sh preflight` for offline model/provider validation.
+Normal uploads/video/RTSP never download weights. CPU is the explicit default;
+GPU requests must be supported or explicitly permit CPU fallback. Input is fixed
+at 640; obsolete `DETECT_IMGSZ=960`/`--imgsz 960` fail clearly.
+The Tunis YOLO marker model and unrelated vehicle detectors are unchanged.
+See [the t-640 integration audit](docs/detector_t640_integration.md) for exact
+configuration, local asset provenance, nine development-image results, commands,
+limitations and rollback.

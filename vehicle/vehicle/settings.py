@@ -136,3 +136,15 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 1024
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {"pipeline": {"format": "{asctime} {levelname} {name}: {message}", "style": "{"}},
+    "handlers": {"pipeline_console": {"class": "logging.StreamHandler", "formatter": "pipeline"}},
+    "loggers": {
+        name: {"handlers": ["pipeline_console"], "level": "INFO", "propagate": False}
+        for name in ("license_plate_service", "run_video_pipeline")
+    },
+}

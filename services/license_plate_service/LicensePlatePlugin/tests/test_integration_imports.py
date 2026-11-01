@@ -44,8 +44,6 @@ assert rtsp_prototype.analyze_plate_crop is recognition.analyze_plate_crop
 assert video_prototype.analyze_plate_crop is recognition.analyze_plate_crop
 assert rtsp_runner.PrototypePlatePipeline is video_prototype.PrototypePlatePipeline
 assert rtsp_prototype.route_plate.__module__ == "run_video_pipeline.routing"
-assert rtsp.get_reader.__module__ == "run_rtsp_pipeline.ocr"
-assert rtsp.get_reader.__globals__["config"].__name__ == "run_video_pipeline.config"
 print(mode, "imports verified:", recognition.__file__, license_plate_plugin.__file__)
 '''
         # Remove source-path injection: the plugin must resolve via installation.

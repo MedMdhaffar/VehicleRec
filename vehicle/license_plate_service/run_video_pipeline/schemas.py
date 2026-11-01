@@ -17,15 +17,28 @@ class CategoryClassification(BaseModel):
     conflict: bool = False
     arabic_ocr_failed: bool = False
     error: Optional[str] = None
+    observed_markers: list[str] = Field(default_factory=list)
+    category_only_text: str = ""
     classification_ms: float = 0.0
     visual_ms: float = 0.0
     arabic_ocr_ms: float = 0.0
+
+
+class NumberRecognition(BaseModel):
+    policy: str
+    outcome: Literal["recognized", "unresolved", "error"]
+    reason: Optional[str] = None
+    fields: dict[str, str] = Field(default_factory=dict)
+    normalized_number: Optional[str] = None
+    checks: dict[str, Any] = Field(default_factory=dict)
+    regions: list[dict[str, Any]] = Field(default_factory=list)
 
 
 class PlateDetection(BaseModel):
     """Unified result for one detected (or directly supplied) plate crop."""
 
     classification: Optional[CategoryClassification] = Field(default=None, exclude=True)
+    number: Optional[NumberRecognition] = Field(default=None, exclude=True)
     bbox: list[int]  # [x1, y1, x2, y2]
     detector_confidence: Optional[float]
     raw_ocr: str
@@ -58,8 +71,8 @@ class PlateRecognitionResponse(BaseModel):
     annotated_image_b64: Optional[str] = None
 
 
-PlateCategory = Literal["private", "temporary", "diplomatic", "military", "foreign", "other", "unknown"]
-PlateRoute = Literal["private_local", "agent", "unknown"]
+PlateCategory = Literal["private", "temporary", "diplomatic", "military", "foreign", "other", "unknown", "administrative", "police"]
+PlateRoute = Literal["private_local", "local", "unknown"]
 
 
 class MarkerEvidence(BaseModel):
@@ -76,14 +89,13 @@ class PlateTiming(BaseModel):
     ocr_ms: float = 0.0
     parser_ms: float = 0.0
     local_total_ms: float = 0.0
-    image_preparation_ms: float = 0.0
-    api_ms: float = 0.0
-    agent_total_ms: float = 0.0
+    queue_wait_ms: float = 0.0
     total_ms: float = 0.0
 
 
 class UnifiedPlateResult(BaseModel):
     classification: Optional[CategoryClassification] = Field(default=None, exclude=True)
+    number: Optional[NumberRecognition] = Field(default=None, exclude=True)
     sample_id: str
     timestamp: str
     plate_text_raw: str = ""
@@ -94,7 +106,7 @@ class UnifiedPlateResult(BaseModel):
     route: PlateRoute
     route_confidence: float = Field(ge=0.0, le=1.0)
     route_reason: str
-    source: Literal["local_ocr", "agent", "none"]
+    source: Literal["local_ocr", "none"]
     model_version: str
     bbox: list[int]
     detector_confidence: Optional[float] = None
@@ -103,7 +115,14 @@ class UnifiedPlateResult(BaseModel):
     camera_id: Optional[str] = None
     track_id: Optional[str] = None
     marker: MarkerEvidence = Field(default_factory=MarkerEvidence)
-    status: Literal["accepted", "rejected", "unavailable", "error", "unknown"]
+    status: Literal["accepted", "unresolved", "error"]
+    predicted_category: Optional[str] = None
+    category_decision_source: Optional[str] = None
+    recognition_policy: str = "unselected"
+    recognition_status: Literal["recognized", "unresolved", "error"] = "unresolved"
+    unresolved_reason: Optional[str] = None
+    registration_fields: dict[str, str] = Field(default_factory=dict)
+    normalized_number: Optional[str] = None
     warning: Optional[str] = None
     timing: PlateTiming = Field(default_factory=PlateTiming)
     evidence: dict[str, Any] = Field(default_factory=dict)
