@@ -3,7 +3,10 @@ import axios from "axios";
 import "./App.css";
 import PlateLab from "./PlateLab";
 
-const API = (import.meta.env.VITE_API_URL || "http://localhost:8000").replace(/\/$/, "");
+const API = (import.meta.env.VITE_API_URL || "http://localhost:8000").replace(
+  /\/$/,
+  "",
+);
 const apiUrl = (path) => `${API}${path}`;
 
 function Metric({ label, value }) {
@@ -246,7 +249,13 @@ function App() {
     <div className="shell">
       <aside>
         <a className="brand" href="#top">
-          <span className="brand-mark">V</span>
+          <img
+            className="brand-mark"
+            src={`${import.meta.env.BASE_URL}logo.svg`}
+            alt=""
+            width="40"
+            height="40"
+          />
           <span>
             VEHICLE<b>AI</b>
           </span>
@@ -286,7 +295,12 @@ function App() {
           </div>
         </header>
         <div className="tabs">
-          <button className={mode === "lab" ? "active" : ""} onClick={() => setMode("lab")}>Plate Lab <span>✦</span></button>
+          <button
+            className={mode === "lab" ? "active" : ""}
+            onClick={() => setMode("lab")}
+          >
+            Plate Lab <span>✦</span>
+          </button>
           <button
             className={mode === "video" ? "active" : ""}
             onClick={() => {
@@ -330,7 +344,9 @@ function App() {
             <button onClick={() => setError("")}>×</button>
           </div>
         )}
-        {mode === "lab" ? <PlateLab apiUrl={apiUrl} /> : mode === "video" ? (
+        {mode === "lab" ? (
+          <PlateLab apiUrl={apiUrl} />
+        ) : mode === "video" ? (
           <>
             <section className="workspace-card">
               <div className="card-head">
