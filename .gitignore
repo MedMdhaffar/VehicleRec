@@ -10,3 +10,4 @@ verification/
 scripts/   
 docs/
 investigation/
+*.pdiparams
