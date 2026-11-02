@@ -118,6 +118,7 @@ class TounesMarkerLocalizer:
                         images,
                         conf=inference_conf,
                         imgsz=config.WORD_IMGSZ,
+                        device=0,
                         verbose=False,
                     )
                 for index, result in zip(valid_indices, results):

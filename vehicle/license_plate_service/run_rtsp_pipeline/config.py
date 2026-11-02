@@ -36,7 +36,7 @@ PRIVATE_ROUTE_MIN_MARKER_CONF = float(
 CAPTURE_ROOT = Path(os.environ.get("PLATE_CAPTURE_DIR", str(_MODELS_DIR.parent / "data_capture")))
 
 # Fixed t-640 ONNX contract. Providers are explicit; never infer GPU from an environment name.
-PLATE_DETECTOR_PROVIDERS = os.environ.get("PLATE_DETECTOR_PROVIDERS", "CPUExecutionProvider")
+PLATE_DETECTOR_PROVIDERS = os.environ.get("PLATE_DETECTOR_PROVIDERS", "CUDAExecutionProvider")
 PLATE_DETECTOR_ALLOW_CPU_FALLBACK = os.environ.get("PLATE_DETECTOR_ALLOW_CPU_FALLBACK", "0") == "1"
 PLATE_DETECTOR_INTRA_OP_THREADS = int(os.environ.get("PLATE_DETECTOR_INTRA_OP_THREADS", "2"))
 PLATE_DETECTOR_INTER_OP_THREADS = int(os.environ.get("PLATE_DETECTOR_INTER_OP_THREADS", "1"))

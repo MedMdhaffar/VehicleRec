@@ -49,6 +49,7 @@ def _locate_safely(
     localizer: MarkerLocalizer | None,
     crop: np.ndarray,
     bbox,
+    *, config=config,
 ) -> MarkerLocalization:
     if localizer is None:
         return MarkerLocalization(detected=False)
@@ -59,7 +60,7 @@ def _locate_safely(
         raise MarkerLocalizationError(f"Marker localization failed for bbox {bbox}: {exc}") from exc
 
 
-def needs_region_ocr(ocr_result: OCRResult, marker: MarkerLocalization) -> bool:
+def needs_region_ocr(ocr_result: OCRResult, marker: MarkerLocalization, *, config=config) -> bool:
     """Whether existing conservative fusion can use marker-split OCR evidence."""
     return (
         parse_private_ocr(ocr_result).status == "ambiguous"
@@ -75,6 +76,7 @@ def assemble_plate_detection(
     marker: MarkerLocalization,
     left_result: OCRResult | None = None,
     right_result: OCRResult | None = None,
+    *, config=config,
 ) -> PlateDetection:
     """Apply the production parser/fusion policy to already-computed evidence."""
     parsed = parse_private_ocr(ocr_result)
@@ -138,6 +140,7 @@ def _analyze_plate_crop(
     *,
     timing: dict[str, float] | None = None,
     classifier=None,
+    config=config,
 ) -> PlateDetection:
     """Recognize and parse one safe crop while preserving partial results."""
     classification = classify_crop(classifier, detection.crop)
@@ -173,7 +176,7 @@ def _analyze_plate_crop(
         if ocr_result.native_confidence is not None:
             ocr_result = OCRResult(ocr_result.raw_text, ocr_result.normalized_text, ocr_result.native_confidence)
         started = time.perf_counter()
-        number = recognize_whole_number(classification.final_category, ocr_result, classification)
+        number = recognize_whole_number(classification.final_category, ocr_result, classification, config=config)
         parser_seconds = time.perf_counter() - started
         if timing is not None:
             timing.update(ocr_ms=ocr_seconds * 1000, parser_ms=parser_seconds * 1000,
@@ -187,14 +190,14 @@ def _analyze_plate_crop(
             registration_number=number.fields.get('registration_number'),
         )
     started = time.perf_counter()
-    marker = _locate_safely(marker_localizer, detection.crop, detection.bbox)
+    marker = _locate_safely(marker_localizer, detection.crop, detection.bbox, config=config)
     marker_seconds = time.perf_counter() - started
     left_result = OCRResult("", "", 0.0)
     right_result = OCRResult("", "", 0.0)
 
     # Explicit OCR markers and uniquely structured whole-crop OCR retain their
     # existing parser result. Marker evidence resolves only ambiguous digits.
-    if needs_region_ocr(ocr_result, marker):
+    if needs_region_ocr(ocr_result, marker, config=config):
         regions = split_around_marker(detection.crop, marker)
         if regions is not None:
             started = time.perf_counter()
@@ -202,7 +205,7 @@ def _analyze_plate_crop(
             right_result = _read_safely(reader, regions[1], detection.bbox)
             ocr_seconds += time.perf_counter() - started
     started = time.perf_counter()
-    result = assemble_plate_detection(detection, ocr_result, marker, left_result, right_result)
+    result = assemble_plate_detection(detection, ocr_result, marker, left_result, right_result, config=config)
     result.classification = classification
     parser_seconds = time.perf_counter() - started
     if timing is not None:
@@ -232,7 +235,7 @@ def analyze_image(
     ]
 
 
-def analyze_plate_crop(detection, reader, marker_localizer=None, *, timing=None, classifier=None):
+def analyze_plate_crop(detection, reader, marker_localizer=None, *, timing=None, classifier=None, config=config):
     """Classify once and dispatch; errors never fall back to a different policy."""
     from run_video_pipeline.policies import validate_tunis
     from run_video_pipeline.classification import EvidenceClassifier
@@ -256,12 +259,12 @@ def analyze_plate_crop(detection, reader, marker_localizer=None, *, timing=None,
             return result
     reader = RecordingReader()
     try:
-        result = _analyze_plate_crop(detection, reader, marker_localizer, timing=timing, classifier=classifier)
+        result = _analyze_plate_crop(detection, reader, marker_localizer, timing=timing, classifier=classifier, config=config)
         if result.number is None:
             if result.classification is None or result.classification.status == "error":
                 result.number = NumberRecognition(policy="unselected", outcome="error", reason="classification_failure")
             else:
-                result.number = validate_tunis(result, detection.crop.shape)
+                result.number = validate_tunis(result, detection.crop.shape, config=config)
         return result
     except Exception as exc:
         # Preserve category evidence if OCR raises: the recording proxy is filled

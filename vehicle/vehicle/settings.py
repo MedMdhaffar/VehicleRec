@@ -25,11 +25,16 @@ SECRET_KEY = 'django-insecure-@93$*l60#yytwr6$gv9m1k65zvew&%s-x^#ks0_l)schxg9(&g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+
+CORS_ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
+    if origin.strip()
+]
 ALLOWED_HOSTS = []
 
 
@@ -44,9 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-
     'api',
-
     "license_plate_service",
     "vehicle_classification_manufacturer_service",
     "vehicle_color_service",

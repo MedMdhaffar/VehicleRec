@@ -23,7 +23,7 @@ MARKERS = {
 DASHES = str.maketrans({char: '-' for char in '‐‑‒–—−﹘﹣－'})
 
 
-def recognize_whole_number(category, reading, classification):
+def recognize_whole_number(category, reading, classification, *, config=config):
     """Extract strings first, then validate; retain rejected evidence in checks."""
     threshold = config.WHOLE_PLATE_MIN_OCR_CONF
     if not math.isfinite(threshold) or not 0 <= threshold <= 1:

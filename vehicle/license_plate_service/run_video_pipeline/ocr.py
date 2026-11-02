@@ -44,9 +44,12 @@ class PlateReader:
 
     def __init__(self, rec_model: str = config.OCR_REC_MODEL):
         self.rec_model = rec_model
-        configured_dir = os.environ.get("REGISTRATION_OCR_MODEL_DIR", "")
-        model_dir = Path(configured_dir).expanduser()
-        if not configured_dir or not model_dir.is_absolute():
+        model_dir = (
+            Path(__file__).resolve().parent
+            / "models"
+            / "PP-OCRv6_medium_rec"
+        )        
+        if not model_dir or not model_dir.is_absolute():
             raise RuntimeError("REGISTRATION_OCR_MODEL_DIR must be an absolute path to installed local PP-OCRv6_medium_rec assets")
         required = ("inference.json", "inference.pdiparams", "inference.yml")
         if not all((model_dir / name).is_file() for name in required):
@@ -58,7 +61,7 @@ class PlateReader:
         os.environ["PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK"] = "True"
         from paddleocr import TextRecognition
         self.engine = TextRecognition(model_name=rec_model, model_dir=str(model_dir.resolve()),
-                                      device=os.environ.get("PLATE_OCR_DEVICE", "cpu"))
+                                      device=os.environ.get("PLATE_OCR_DEVICE", "gpu:0"))
         log.info("Native PaddleOCR TextRecognition (%s) loaded.", rec_model)
 
     def _parse(self, out) -> OCRResult:

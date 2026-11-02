@@ -8,7 +8,7 @@ from run_video_pipeline.schemas import CategoryClassification
 
 def create_classifier():
     """Called once on each recognition worker, before processing any frames."""
-    from license_plate_plugin import PlateCategoryClassifier, load_default_config
+    from .license_plate_plugin import PlateCategoryClassifier, load_default_config
 
     import os
     from dataclasses import replace

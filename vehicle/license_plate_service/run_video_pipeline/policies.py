@@ -27,7 +27,7 @@ def select_policy(category):
 
 
 
-def validate_tunis(result, crop_shape):
+def validate_tunis(result, crop_shape, *, config=config):
     checks = {
         "valid_private_fields": result.parser_status == "valid" and result.normalized_plate is not None,
         "reliable_tounes_marker": result.marker_reliable and result.marker_bbox is not None and result.marker_confidence >= config.PRIVATE_ROUTE_MIN_MARKER_CONF,

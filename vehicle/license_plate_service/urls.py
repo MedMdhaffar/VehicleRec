@@ -1,10 +1,14 @@
 from django.urls import path
 
-from .views import analyze, artifact, health, rtsp_preview, rtsp_session, stop_rtsp_session
+from . import debug_views
+from .views import analysis_options, analyze, artifact, rtsp_preview, rtsp_session, stop_rtsp_session
 
 
 urlpatterns = [
-    path("health/", health, name="license-plate-health"),
+    path("settings/", analysis_options, name="license-plate-settings"),
+    path("jobs/", debug_views.jobs, name="license-plate-jobs"),
+    path("jobs/<str:job_id>/debug/", debug_views.job_detail, name="license-plate-debug"),
+    path("jobs/<str:job_id>/debug/crops/<str:filename>/", debug_views.crop, name="license-plate-crop"),
     path("analyze/", analyze, name="license-plate-analyze"),
     path("rtsp/", rtsp_session, name="license-plate-rtsp"),
     path("rtsp/stop/", stop_rtsp_session, name="license-plate-rtsp-stop"),

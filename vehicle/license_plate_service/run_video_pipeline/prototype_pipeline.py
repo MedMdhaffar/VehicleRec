@@ -2,6 +2,7 @@
 import threading
 import time
 import uuid
+from run_video_pipeline import config
 from datetime import datetime, timezone
 from run_video_pipeline.data_capture import ReviewStore
 from run_video_pipeline.pipeline import analyze_plate_crop
@@ -23,7 +24,8 @@ class RuntimeCounters:
 
 
 class PrototypePlatePipeline:
-    def __init__(self, reader, marker_localizer, store: ReviewStore, *, classifier_factory):
+    def __init__(self, reader, marker_localizer, store: ReviewStore, *, classifier_factory, config=config):
+        self.config = config
         self.classifier_factory = classifier_factory
         self.classifier = None
         self._recognition_lock = threading.Lock()
@@ -54,7 +56,7 @@ class PrototypePlatePipeline:
     def _process_crop(self, detection, *, original_image_ref=None, camera_id=None, track_id=None, sample_id=None, quality=None):
         started = time.perf_counter()
         timing = {}
-        local = analyze_plate_crop(detection, self.reader, self.marker_localizer, timing=timing, classifier=self.classifier)
+        local = analyze_plate_crop(detection, self.reader, self.marker_localizer, timing=timing, classifier=self.classifier, config=self.config)
         category = local.classification
         number = local.number
         decision = route_plate(detection.crop, local)

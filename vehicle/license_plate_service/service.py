@@ -30,7 +30,7 @@ def _jobs_root() -> Path:
     return root
 
 
-def run_video_analysis(video: Path, *, job_id: str, max_frames: int | None = None) -> dict:
+def run_video_analysis(video: Path, *, job_id: str, max_frames: int | None = None, analysis_settings: dict | None = None) -> dict:
     """Run the packaged video pipeline and return its JSON-safe metrics."""
     log.info("Video job %s: loading pipeline dependencies", job_id)
     import cv2
@@ -39,12 +39,18 @@ def run_video_analysis(video: Path, *, job_id: str, max_frames: int | None = Non
     from run_video_pipeline import config
     from run_video_pipeline.data_capture import ReviewStore
     from run_video_pipeline.marker_localizer import TounesMarkerLocalizer
-    from run_video_pipeline.plate_detector import PlateDetector
+    from run_video_pipeline.plate_detector import PlateDetector   #detect license plate region
     from run_video_pipeline.prototype_pipeline import PrototypePlatePipeline
     from run_video_pipeline.run_video_prototype import (
-        DEFAULT_ASSOCIATION_PADDING, DEFAULT_TRACKER, CountingReader,
+        DEFAULT_TRACKER, CountingReader,
         VideoPrototypeRunner, _build_tracker,
     )
+
+    from .analysis_settings import parse_settings, pipeline_config, RUNNER_FIELDS, TRACKER_FIELDS
+    values = parse_settings(analysis_settings)
+    run_config = pipeline_config(values)
+    runner_options = {key: values[key] for key, *_ in RUNNER_FIELDS}
+    tracker_options = {key: values[key] for key, *_ in TRACKER_FIELDS}
 
     job_dir = _jobs_root() / job_id
     output = job_dir / "annotated.mp4"
@@ -53,23 +59,25 @@ def run_video_analysis(video: Path, *, job_id: str, max_frames: int | None = Non
         raise ValueError("The uploaded file is not a readable video.")
     fps = float(capture.get(cv2.CAP_PROP_FPS) or 25.0)
     capture.release()
-    counting_reader = CountingReader()
+
+    counting_reader = CountingReader() #this tracks how many times the license plate is read 
     pipeline = PrototypePlatePipeline(
         counting_reader, TounesMarkerLocalizer(config.WORD_DETECTOR_PATH),
         ReviewStore(job_dir / "captures"),
-        classifier_factory=create_classifier,
+        classifier_factory=create_classifier, config=run_config,
     )
     runner = VideoPrototypeRunner(
         pipeline, PlateDetector(config.PLATE_DETECTOR_PATH),
-        _build_tracker(DEFAULT_TRACKER, fps), counting_reader,
-        association_padding=DEFAULT_ASSOCIATION_PADDING,
+        _build_tracker(DEFAULT_TRACKER, fps, overrides=tracker_options), counting_reader,
+        dedup_iou=run_config.PLATE_DEDUP_IOU, **runner_options,
     )
-    metrics = runner.run(video, output, max_frames=max_frames,
+    metrics = runner.run(video, output, max_frames=max_frames, conf=run_config.PLATE_CONF,
                          selected_crops_dir=job_dir / "selected_crops")
     log.info("Video job %s: encoding browser video", job_id)
     prepare_browser_video(output)
     log.info("Video job %s: complete", job_id)
     metrics.update({
+        "analysis_settings": values,
         "job_id": job_id,
         "output_video_url": f"/api/license-plate/jobs/{job_id}/annotated.mp4/",
     })

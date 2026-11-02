@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 MODEL_ID = 'yolo-v9-t-640-license-plate-end2end'
 MODEL_FILENAME = 'yolo-v9-t-640-license-plates-end2end.onnx'
 MODEL_SHA256 = 'c3c1026ca7d0585dd88084d68182dd897113712fa734ae1557ca70174440c076'
-MODEL_URL = 'https://github.com/ankandrew/open-image-models/releases/download/assets/' + MODEL_FILENAME
+# MODEL_URL = 'https://github.com/ankandrew/open-image-models/releases/download/assets/' + MODEL_FILENAME
 
 
 def validate_options(conf=None, imgsz=None):
@@ -27,7 +27,7 @@ def validate_options(conf=None, imgsz=None):
     return float(threshold)
 
 
-class StrictSession:
+class StrictSession:   # a wrapper onnx runtime 
     """Observe native errors that open-image-models 0.6.0 otherwise swallows."""
     def __init__(self, session):
         self.session = session
@@ -82,6 +82,10 @@ class LocalPlateBackend:
         effective = [p for p in requested if p in available]
         if fallback and 'CPUExecutionProvider' not in effective:
             effective.append('CPUExecutionProvider')
+        if 'CUDAExecutionProvider' in effective:
+            # Reuse PyTorch's CUDA libraries for normal Django and CLI launches.
+            import torch
+            ort.preload_dlls()
         options = ort.SessionOptions()
         options.intra_op_num_threads = config.PLATE_DETECTOR_INTRA_OP_THREADS
         options.inter_op_num_threads = config.PLATE_DETECTOR_INTER_OP_THREADS

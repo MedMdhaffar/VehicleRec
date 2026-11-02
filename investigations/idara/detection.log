@@ -1,0 +1,20 @@
+120 [(511, 516, 1018, 647, 0.8494747281074524)] [(511, 516, 1018, 647, 0.8494747281074524)]
+140 [(510, 516, 1015, 647, 0.8487389087677002)] [(510, 516, 1015, 647, 0.8487389087677002)]
+160 [(510, 516, 1015, 647, 0.8487389087677002)] [(510, 516, 1015, 647, 0.8487389087677002)]
+180 [(510, 516, 1015, 647, 0.8487389087677002)] [(510, 516, 1015, 647, 0.8487389087677002)]
+200 [(510, 516, 1015, 647, 0.8487389087677002)] [(510, 516, 1015, 647, 0.8487389087677002)]
+220 [(510, 516, 1015, 647, 0.8487389087677002)] [(510, 516, 1015, 647, 0.8487389087677002)]
+240 [(548, 490, 1012, 623, 0.8756110668182373)] [(548, 490, 1012, 623, 0.8756110668182373)]
+260 [(548, 490, 1012, 623, 0.8756594061851501)] [(548, 490, 1012, 623, 0.8756594061851501)]
+280 [(548, 490, 1012, 623, 0.8756594061851501)] [(548, 490, 1012, 623, 0.8756594061851501)]
+300 [(548, 490, 1012, 623, 0.8756594061851501)] [(548, 490, 1012, 623, 0.8756594061851501)]
+/home/intern/.venv/lib/python3.11/site-packages/paddle/utils/cpp_extension/extension_utils.py:712: UserWarning: No ccache found. Please be aware that recompiling all source files may be required. You can download and install ccache from: https://github.com/ccache/ccache/blob/master/doc/INSTALL.md
+  warnings.warn(warning_message)
+ReduceMeanCheckIfOneDNNSupport
+ReduceMeanCheckIfOneDNNSupport
+ReduceMeanCheckIfOneDNNSupport
+ReduceMeanCheckIfOneDNNSupport
+ReduceMeanCheckIfOneDNNSupport
+ReduceMeanCheckIfOneDNNSupport
+manual 120 idara 17- 138956 recognized
+manual 240 idara 17 - 148885 recognized

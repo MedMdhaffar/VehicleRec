@@ -1,4 +1,5 @@
 import logging
+import json
 import re
 import uuid
 from pathlib import Path
@@ -11,14 +12,16 @@ from rest_framework.response import Response
 
 from .service import rtsp_manager, run_video_analysis
 from .progress import video_request_progress
+from .analysis_settings import parse_settings, settings_schema
 
 
 log = logging.getLogger(__name__)
 
 
+
 @api_view(["GET"])
-def health(request):
-    return Response({"service": "license-plate", "status": "ready"})
+def analysis_options(request):
+    return Response(settings_schema())
 
 
 @api_view(["POST"])
@@ -29,11 +32,13 @@ def analyze(request):
 
 
 def _analyze(request, job_id):
-    if "agent_enabled" in request.data:
-        return Response({"error": "agent_enabled was removed; license-plate recognition is local only", "code": "removed_option"}, status=400)
     upload = request.FILES.get("video")
     if upload is None:
         return Response({"error": "Attach a video in the 'video' field."}, status=400)
+    try:
+        analysis_settings = parse_settings(request.data.get("analysis_settings"))
+    except ValueError as exc:
+        return Response({"error": str(exc)}, status=400)
     log.info("Video job %s: receiving upload (%d bytes)", job_id, upload.size)
     job_dir = Path(settings.MEDIA_ROOT) / "license_plate" / job_id
     job_dir.mkdir(parents=True, exist_ok=True)
@@ -49,8 +54,11 @@ def _analyze(request, job_id):
         if max_frames is not None and max_frames < 1:
             raise ValueError("max_frames must be positive.")
         result = run_video_analysis(
-            source, job_id=job_id, max_frames=max_frames,
+            source, job_id=job_id, max_frames=max_frames, analysis_settings=analysis_settings,
         )
+        result["analysis_settings"] = analysis_settings
+        result["input_name"] = upload.name
+        (job_dir / "summary.json").write_text(json.dumps(result, ensure_ascii=False), encoding="utf-8")
         return Response(result)
     except (ValueError, TypeError) as exc:
         return Response({"error": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
@@ -86,7 +94,7 @@ def rtsp_preview(request):
     return HttpResponse(frame, content_type="image/jpeg")
 
 
-@api_view(["GET"])
+@api_view(["GET"])   #this will save the video file to the server and return it to the user
 def artifact(request, job_id, filename):
     if not re.fullmatch(r"[0-9a-f]{32}", job_id) or filename not in {"annotated.mp4", "recording.mp4"}:
         raise Http404

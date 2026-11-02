@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import "./App.css";
+import PlateLab from "./PlateLab";
 
-const API = import.meta.env.VITE_API_URL.replace(/\/$/, "");
+const API = (import.meta.env.VITE_API_URL || "http://localhost:8000").replace(/\/$/, "");
 const apiUrl = (path) => `${API}${path}`;
 
 function Metric({ label, value }) {
@@ -98,7 +99,7 @@ function ResultsTable({ rows = [] }) {
 }
 
 function App() {
-  const [mode, setMode] = useState("video");
+  const [mode, setMode] = useState("lab");
   const [backend, setBackend] = useState("checking");
   const [file, setFile] = useState(null);
   const [dragging, setDragging] = useState(false);
@@ -124,7 +125,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get(apiUrl("/api/license-plate/health/"))
+      .get(apiUrl("/api/health/"))
       .then(() => setBackend("online"))
       .catch(() => setBackend("offline"));
   }, []);
@@ -270,7 +271,7 @@ function App() {
           <small>License Plate Service</small>
         </div>
       </aside>
-      <main id="top">
+      <main id="top" className={mode === "lab" ? "lab-workspace" : undefined}>
         <header>
           <div>
             <p className="eyebrow">Computer vision workspace</p>
@@ -285,6 +286,7 @@ function App() {
           </div>
         </header>
         <div className="tabs">
+          <button className={mode === "lab" ? "active" : ""} onClick={() => setMode("lab")}>Plate Lab <span>✦</span></button>
           <button
             className={mode === "video" ? "active" : ""}
             onClick={() => {
@@ -328,7 +330,7 @@ function App() {
             <button onClick={() => setError("")}>×</button>
           </div>
         )}
-        {mode === "video" ? (
+        {mode === "lab" ? <PlateLab apiUrl={apiUrl} /> : mode === "video" ? (
           <>
             <section className="workspace-card">
               <div className="card-head">

@@ -6,18 +6,10 @@
     "checkpoint_filename": "dinov3_vits16_pretrain_lvd1689m-08c60483.pth",
     "checkpoint_sha256": "08c60483bc63c04f533611e34bf70b120eedb7240f469bc16e9e20bf344b941d",
     "official_repository_revision": "6876159a11b4df116f30f667f8c9888617df0751",
-    "patch_size_hw": [
-      16,
-      16
-    ],
+    "patch_size_hw": [16, 16],
     "component_dimension": 384,
     "combined_dimension": 1536,
-    "view_order": [
-      "whole",
-      "left",
-      "centre",
-      "right"
-    ],
+    "view_order": ["whole", "left", "centre", "right"],
     "view_weights": {
       "whole": 0.25,
       "left": 0.25,
@@ -33,11 +25,7 @@
       "target_area": 50176,
       "max_long_edge": 1008,
       "max_patch_count": 512,
-      "padding_rgb": [
-        124,
-        116,
-        104
-      ],
+      "padding_rgb": [124, 116, 104],
       "interpolation": "bicubic",
       "rounding": "round-half-up",
       "odd_padding": "extra right or bottom"
@@ -45,16 +33,8 @@
     "normalization": {
       "rgb": true,
       "rescale_factor": 0.00392156862745098,
-      "mean": [
-        0.485,
-        0.456,
-        0.406
-      ],
-      "std": [
-        0.229,
-        0.224,
-        0.225
-      ]
+      "mean": [0.485, 0.456, 0.406],
+      "std": [0.229, 0.224, 0.225]
     }
   },
   "compatibility_fingerprint": "ff5483e3633f97e7601da3386023b140c729c9bea201ab33b35e3774a7c6f8ec",
@@ -222,12 +202,7 @@
       "physical_plate_id": null,
       "group_id": null,
       "feature_metadata": {
-        "view_order": [
-          "whole",
-          "left",
-          "centre",
-          "right"
-        ],
+        "view_order": ["whole", "left", "centre", "right"],
         "weights": {
           "whole": 0.25,
           "left": 0.25,
@@ -238,64 +213,27 @@
         "l2_norm": 1.0,
         "views": {
           "whole": {
-            "source_xyxy": [
-              0,
-              0,
-              680,
-              159
-            ],
+            "source_xyxy": [0, 0, 680, 159],
             "preprocessing": {
-              "original_dimensions_hw": [
-                159,
-                680
-              ],
+              "original_dimensions_hw": [159, 680],
               "requested_scale": 0.6812319366671905,
               "scale_after_long_edge_limit": 0.6812319366671905,
               "scale_used_before_integer_rounding": 0.6812319366671905,
-              "effective_scale_xy": [
-                0.6808823529411765,
-                0.6792452830188679
-              ],
-              "resized_dimensions_hw": [
-                108,
-                463
-              ],
+              "effective_scale_xy": [0.6808823529411765, 0.6792452830188679],
+              "resized_dimensions_hw": [108, 463],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                0,
-                2,
-                1,
-                2
-              ],
+              "padding_ltrb": [0, 2, 1, 2],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                112,
-                464
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                7,
-                29
-              ],
+              "final_dimensions_hw": [112, 464],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [7, 29],
               "patch_count": 203,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                112,
-                464
-              ],
+              "tensor_shape": [1, 3, 112, 464],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -307,64 +245,27 @@
             "forward_seconds": 0.1537272049972671
           },
           "left": {
-            "source_xyxy": [
-              0,
-              0,
-              340,
-              159
-            ],
+            "source_xyxy": [0, 0, 340, 159],
             "preprocessing": {
-              "original_dimensions_hw": [
-                159,
-                340
-              ],
+              "original_dimensions_hw": [159, 340],
               "requested_scale": 0.9634074439564302,
               "scale_after_long_edge_limit": 0.9634074439564302,
               "scale_used_before_integer_rounding": 0.9634074439564302,
-              "effective_scale_xy": [
-                0.9647058823529412,
-                0.9622641509433962
-              ],
-              "resized_dimensions_hw": [
-                153,
-                328
-              ],
+              "effective_scale_xy": [0.9647058823529412, 0.9622641509433962],
+              "resized_dimensions_hw": [153, 328],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                4,
-                3,
-                4,
-                4
-              ],
+              "padding_ltrb": [4, 3, 4, 4],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                160,
-                336
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                10,
-                21
-              ],
+              "final_dimensions_hw": [160, 336],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [10, 21],
               "patch_count": 210,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                160,
-                336
-              ],
+              "tensor_shape": [1, 3, 160, 336],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -376,64 +277,27 @@
             "forward_seconds": 0.07798584400006803
           },
           "centre": {
-            "source_xyxy": [
-              170,
-              0,
-              510,
-              159
-            ],
+            "source_xyxy": [170, 0, 510, 159],
             "preprocessing": {
-              "original_dimensions_hw": [
-                159,
-                340
-              ],
+              "original_dimensions_hw": [159, 340],
               "requested_scale": 0.9634074439564302,
               "scale_after_long_edge_limit": 0.9634074439564302,
               "scale_used_before_integer_rounding": 0.9634074439564302,
-              "effective_scale_xy": [
-                0.9647058823529412,
-                0.9622641509433962
-              ],
-              "resized_dimensions_hw": [
-                153,
-                328
-              ],
+              "effective_scale_xy": [0.9647058823529412, 0.9622641509433962],
+              "resized_dimensions_hw": [153, 328],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                4,
-                3,
-                4,
-                4
-              ],
+              "padding_ltrb": [4, 3, 4, 4],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                160,
-                336
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                10,
-                21
-              ],
+              "final_dimensions_hw": [160, 336],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [10, 21],
               "patch_count": 210,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                160,
-                336
-              ],
+              "tensor_shape": [1, 3, 160, 336],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -445,64 +309,27 @@
             "forward_seconds": 0.06962393700086977
           },
           "right": {
-            "source_xyxy": [
-              340,
-              0,
-              680,
-              159
-            ],
+            "source_xyxy": [340, 0, 680, 159],
             "preprocessing": {
-              "original_dimensions_hw": [
-                159,
-                340
-              ],
+              "original_dimensions_hw": [159, 340],
               "requested_scale": 0.9634074439564302,
               "scale_after_long_edge_limit": 0.9634074439564302,
               "scale_used_before_integer_rounding": 0.9634074439564302,
-              "effective_scale_xy": [
-                0.9647058823529412,
-                0.9622641509433962
-              ],
-              "resized_dimensions_hw": [
-                153,
-                328
-              ],
+              "effective_scale_xy": [0.9647058823529412, 0.9622641509433962],
+              "resized_dimensions_hw": [153, 328],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                4,
-                3,
-                4,
-                4
-              ],
+              "padding_ltrb": [4, 3, 4, 4],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                160,
-                336
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                10,
-                21
-              ],
+              "final_dimensions_hw": [160, 336],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [10, 21],
               "patch_count": 210,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                160,
-                336
-              ],
+              "tensor_shape": [1, 3, 160, 336],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -525,12 +352,7 @@
       "physical_plate_id": null,
       "group_id": null,
       "feature_metadata": {
-        "view_order": [
-          "whole",
-          "left",
-          "centre",
-          "right"
-        ],
+        "view_order": ["whole", "left", "centre", "right"],
         "weights": {
           "whole": 0.25,
           "left": 0.25,
@@ -541,64 +363,27 @@
         "l2_norm": 1.0,
         "views": {
           "whole": {
-            "source_xyxy": [
-              0,
-              0,
-              650,
-              203
-            ],
+            "source_xyxy": [0, 0, 650, 203],
             "preprocessing": {
-              "original_dimensions_hw": [
-                203,
-                650
-              ],
+              "original_dimensions_hw": [203, 650],
               "requested_scale": 0.6166565105383952,
               "scale_after_long_edge_limit": 0.6166565105383952,
               "scale_used_before_integer_rounding": 0.6166565105383952,
-              "effective_scale_xy": [
-                0.6169230769230769,
-                0.6157635467980296
-              ],
-              "resized_dimensions_hw": [
-                125,
-                401
-              ],
+              "effective_scale_xy": [0.6169230769230769, 0.6157635467980296],
+              "resized_dimensions_hw": [125, 401],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                7,
-                1,
-                8,
-                2
-              ],
+              "padding_ltrb": [7, 1, 8, 2],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                128,
-                416
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                8,
-                26
-              ],
+              "final_dimensions_hw": [128, 416],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [8, 26],
               "patch_count": 208,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                128,
-                416
-              ],
+              "tensor_shape": [1, 3, 128, 416],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -610,64 +395,27 @@
             "forward_seconds": 0.06638009200105444
           },
           "left": {
-            "source_xyxy": [
-              0,
-              0,
-              325,
-              203
-            ],
+            "source_xyxy": [0, 0, 325, 203],
             "preprocessing": {
-              "original_dimensions_hw": [
-                203,
-                325
-              ],
+              "original_dimensions_hw": [203, 325],
               "requested_scale": 0.8720840005290659,
               "scale_after_long_edge_limit": 0.8720840005290659,
               "scale_used_before_integer_rounding": 0.8720840005290659,
-              "effective_scale_xy": [
-                0.8707692307692307,
-                0.8719211822660099
-              ],
-              "resized_dimensions_hw": [
-                177,
-                283
-              ],
+              "effective_scale_xy": [0.8707692307692307, 0.8719211822660099],
+              "resized_dimensions_hw": [177, 283],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                2,
-                7,
-                3,
-                8
-              ],
+              "padding_ltrb": [2, 7, 3, 8],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                192,
-                288
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                12,
-                18
-              ],
+              "final_dimensions_hw": [192, 288],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [12, 18],
               "patch_count": 216,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                192,
-                288
-              ],
+              "tensor_shape": [1, 3, 192, 288],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -679,64 +427,27 @@
             "forward_seconds": 0.06767086800027755
           },
           "centre": {
-            "source_xyxy": [
-              162,
-              0,
-              488,
-              203
-            ],
+            "source_xyxy": [162, 0, 488, 203],
             "preprocessing": {
-              "original_dimensions_hw": [
-                203,
-                326
-              ],
+              "original_dimensions_hw": [203, 326],
               "requested_scale": 0.870745421074612,
               "scale_after_long_edge_limit": 0.870745421074612,
               "scale_used_before_integer_rounding": 0.870745421074612,
-              "effective_scale_xy": [
-                0.8711656441717791,
-                0.8719211822660099
-              ],
-              "resized_dimensions_hw": [
-                177,
-                284
-              ],
+              "effective_scale_xy": [0.8711656441717791, 0.8719211822660099],
+              "resized_dimensions_hw": [177, 284],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                2,
-                7,
-                2,
-                8
-              ],
+              "padding_ltrb": [2, 7, 2, 8],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                192,
-                288
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                12,
-                18
-              ],
+              "final_dimensions_hw": [192, 288],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [12, 18],
               "patch_count": 216,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                192,
-                288
-              ],
+              "tensor_shape": [1, 3, 192, 288],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -748,64 +459,27 @@
             "forward_seconds": 0.06919039799686288
           },
           "right": {
-            "source_xyxy": [
-              325,
-              0,
-              650,
-              203
-            ],
+            "source_xyxy": [325, 0, 650, 203],
             "preprocessing": {
-              "original_dimensions_hw": [
-                203,
-                325
-              ],
+              "original_dimensions_hw": [203, 325],
               "requested_scale": 0.8720840005290659,
               "scale_after_long_edge_limit": 0.8720840005290659,
               "scale_used_before_integer_rounding": 0.8720840005290659,
-              "effective_scale_xy": [
-                0.8707692307692307,
-                0.8719211822660099
-              ],
-              "resized_dimensions_hw": [
-                177,
-                283
-              ],
+              "effective_scale_xy": [0.8707692307692307, 0.8719211822660099],
+              "resized_dimensions_hw": [177, 283],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                2,
-                7,
-                3,
-                8
-              ],
+              "padding_ltrb": [2, 7, 3, 8],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                192,
-                288
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                12,
-                18
-              ],
+              "final_dimensions_hw": [192, 288],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [12, 18],
               "patch_count": 216,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                192,
-                288
-              ],
+              "tensor_shape": [1, 3, 192, 288],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -828,12 +502,7 @@
       "physical_plate_id": null,
       "group_id": null,
       "feature_metadata": {
-        "view_order": [
-          "whole",
-          "left",
-          "centre",
-          "right"
-        ],
+        "view_order": ["whole", "left", "centre", "right"],
         "weights": {
           "whole": 0.25,
           "left": 0.25,
@@ -844,64 +513,27 @@
         "l2_norm": 1.0000001192092896,
         "views": {
           "whole": {
-            "source_xyxy": [
-              0,
-              0,
-              800,
-              159
-            ],
+            "source_xyxy": [0, 0, 800, 159],
             "preprocessing": {
-              "original_dimensions_hw": [
-                159,
-                800
-              ],
+              "original_dimensions_hw": [159, 800],
               "requested_scale": 0.6280648125830895,
               "scale_after_long_edge_limit": 0.6280648125830895,
               "scale_used_before_integer_rounding": 0.6280648125830895,
-              "effective_scale_xy": [
-                0.6275,
-                0.6289308176100629
-              ],
-              "resized_dimensions_hw": [
-                100,
-                502
-              ],
+              "effective_scale_xy": [0.6275, 0.6289308176100629],
+              "resized_dimensions_hw": [100, 502],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                5,
-                6,
-                5,
-                6
-              ],
+              "padding_ltrb": [5, 6, 5, 6],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                112,
-                512
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                7,
-                32
-              ],
+              "final_dimensions_hw": [112, 512],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [7, 32],
               "patch_count": 224,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                112,
-                512
-              ],
+              "tensor_shape": [1, 3, 112, 512],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -913,64 +545,27 @@
             "forward_seconds": 0.073951420999947
           },
           "left": {
-            "source_xyxy": [
-              0,
-              0,
-              400,
-              159
-            ],
+            "source_xyxy": [0, 0, 400, 159],
             "preprocessing": {
-              "original_dimensions_hw": [
-                159,
-                400
-              ],
+              "original_dimensions_hw": [159, 400],
               "requested_scale": 0.8882177760043214,
               "scale_after_long_edge_limit": 0.8882177760043214,
               "scale_used_before_integer_rounding": 0.8882177760043214,
-              "effective_scale_xy": [
-                0.8875,
-                0.8867924528301887
-              ],
-              "resized_dimensions_hw": [
-                141,
-                355
-              ],
+              "effective_scale_xy": [0.8875, 0.8867924528301887],
+              "resized_dimensions_hw": [141, 355],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                6,
-                1,
-                7,
-                2
-              ],
+              "padding_ltrb": [6, 1, 7, 2],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                144,
-                368
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                9,
-                23
-              ],
+              "final_dimensions_hw": [144, 368],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [9, 23],
               "patch_count": 207,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                144,
-                368
-              ],
+              "tensor_shape": [1, 3, 144, 368],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -982,64 +577,27 @@
             "forward_seconds": 0.06080199300049571
           },
           "centre": {
-            "source_xyxy": [
-              200,
-              0,
-              600,
-              159
-            ],
+            "source_xyxy": [200, 0, 600, 159],
             "preprocessing": {
-              "original_dimensions_hw": [
-                159,
-                400
-              ],
+              "original_dimensions_hw": [159, 400],
               "requested_scale": 0.8882177760043214,
               "scale_after_long_edge_limit": 0.8882177760043214,
               "scale_used_before_integer_rounding": 0.8882177760043214,
-              "effective_scale_xy": [
-                0.8875,
-                0.8867924528301887
-              ],
-              "resized_dimensions_hw": [
-                141,
-                355
-              ],
+              "effective_scale_xy": [0.8875, 0.8867924528301887],
+              "resized_dimensions_hw": [141, 355],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                6,
-                1,
-                7,
-                2
-              ],
+              "padding_ltrb": [6, 1, 7, 2],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                144,
-                368
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                9,
-                23
-              ],
+              "final_dimensions_hw": [144, 368],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [9, 23],
               "patch_count": 207,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                144,
-                368
-              ],
+              "tensor_shape": [1, 3, 144, 368],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -1051,64 +609,27 @@
             "forward_seconds": 0.060395461001462536
           },
           "right": {
-            "source_xyxy": [
-              400,
-              0,
-              800,
-              159
-            ],
+            "source_xyxy": [400, 0, 800, 159],
             "preprocessing": {
-              "original_dimensions_hw": [
-                159,
-                400
-              ],
+              "original_dimensions_hw": [159, 400],
               "requested_scale": 0.8882177760043214,
               "scale_after_long_edge_limit": 0.8882177760043214,
               "scale_used_before_integer_rounding": 0.8882177760043214,
-              "effective_scale_xy": [
-                0.8875,
-                0.8867924528301887
-              ],
-              "resized_dimensions_hw": [
-                141,
-                355
-              ],
+              "effective_scale_xy": [0.8875, 0.8867924528301887],
+              "resized_dimensions_hw": [141, 355],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                6,
-                1,
-                7,
-                2
-              ],
+              "padding_ltrb": [6, 1, 7, 2],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                144,
-                368
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                9,
-                23
-              ],
+              "final_dimensions_hw": [144, 368],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [9, 23],
               "patch_count": 207,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                144,
-                368
-              ],
+              "tensor_shape": [1, 3, 144, 368],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -1131,12 +652,7 @@
       "physical_plate_id": null,
       "group_id": null,
       "feature_metadata": {
-        "view_order": [
-          "whole",
-          "left",
-          "centre",
-          "right"
-        ],
+        "view_order": ["whole", "left", "centre", "right"],
         "weights": {
           "whole": 0.25,
           "left": 0.25,
@@ -1147,64 +663,27 @@
         "l2_norm": 1.0,
         "views": {
           "whole": {
-            "source_xyxy": [
-              0,
-              0,
-              823,
-              200
-            ],
+            "source_xyxy": [0, 0, 823, 200],
             "preprocessing": {
-              "original_dimensions_hw": [
-                200,
-                823
-              ],
+              "original_dimensions_hw": [200, 823],
               "requested_scale": 0.5521195214608235,
               "scale_after_long_edge_limit": 0.5521195214608235,
               "scale_used_before_integer_rounding": 0.5521195214608235,
-              "effective_scale_xy": [
-                0.551640340218712,
-                0.55
-              ],
-              "resized_dimensions_hw": [
-                110,
-                454
-              ],
+              "effective_scale_xy": [0.551640340218712, 0.55],
+              "resized_dimensions_hw": [110, 454],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                5,
-                1,
-                5,
-                1
-              ],
+              "padding_ltrb": [5, 1, 5, 1],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                112,
-                464
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                7,
-                29
-              ],
+              "final_dimensions_hw": [112, 464],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [7, 29],
               "patch_count": 203,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                112,
-                464
-              ],
+              "tensor_shape": [1, 3, 112, 464],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -1216,64 +695,27 @@
             "forward_seconds": 0.05892710500120302
           },
           "left": {
-            "source_xyxy": [
-              0,
-              0,
-              412,
-              200
-            ],
+            "source_xyxy": [0, 0, 412, 200],
             "preprocessing": {
-              "original_dimensions_hw": [
-                200,
-                412
-              ],
+              "original_dimensions_hw": [200, 412],
               "requested_scale": 0.7803409760066118,
               "scale_after_long_edge_limit": 0.7803409760066118,
               "scale_used_before_integer_rounding": 0.7803409760066118,
-              "effective_scale_xy": [
-                0.7815533980582524,
-                0.78
-              ],
-              "resized_dimensions_hw": [
-                156,
-                322
-              ],
+              "effective_scale_xy": [0.7815533980582524, 0.78],
+              "resized_dimensions_hw": [156, 322],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                7,
-                2,
-                7,
-                2
-              ],
+              "padding_ltrb": [7, 2, 7, 2],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                160,
-                336
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                10,
-                21
-              ],
+              "final_dimensions_hw": [160, 336],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [10, 21],
               "patch_count": 210,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                160,
-                336
-              ],
+              "tensor_shape": [1, 3, 160, 336],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -1285,64 +727,27 @@
             "forward_seconds": 0.059501858999283286
           },
           "centre": {
-            "source_xyxy": [
-              205,
-              0,
-              618,
-              200
-            ],
+            "source_xyxy": [205, 0, 618, 200],
             "preprocessing": {
-              "original_dimensions_hw": [
-                200,
-                413
-              ],
+              "original_dimensions_hw": [200, 413],
               "requested_scale": 0.7793956807159276,
               "scale_after_long_edge_limit": 0.7793956807159276,
               "scale_used_before_integer_rounding": 0.7793956807159276,
-              "effective_scale_xy": [
-                0.7796610169491526,
-                0.78
-              ],
-              "resized_dimensions_hw": [
-                156,
-                322
-              ],
+              "effective_scale_xy": [0.7796610169491526, 0.78],
+              "resized_dimensions_hw": [156, 322],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                7,
-                2,
-                7,
-                2
-              ],
+              "padding_ltrb": [7, 2, 7, 2],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                160,
-                336
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                10,
-                21
-              ],
+              "final_dimensions_hw": [160, 336],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [10, 21],
               "patch_count": 210,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                160,
-                336
-              ],
+              "tensor_shape": [1, 3, 160, 336],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -1354,64 +759,27 @@
             "forward_seconds": 0.07321577100083232
           },
           "right": {
-            "source_xyxy": [
-              411,
-              0,
-              823,
-              200
-            ],
+            "source_xyxy": [411, 0, 823, 200],
             "preprocessing": {
-              "original_dimensions_hw": [
-                200,
-                412
-              ],
+              "original_dimensions_hw": [200, 412],
               "requested_scale": 0.7803409760066118,
               "scale_after_long_edge_limit": 0.7803409760066118,
               "scale_used_before_integer_rounding": 0.7803409760066118,
-              "effective_scale_xy": [
-                0.7815533980582524,
-                0.78
-              ],
-              "resized_dimensions_hw": [
-                156,
-                322
-              ],
+              "effective_scale_xy": [0.7815533980582524, 0.78],
+              "resized_dimensions_hw": [156, 322],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                7,
-                2,
-                7,
-                2
-              ],
+              "padding_ltrb": [7, 2, 7, 2],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                160,
-                336
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                10,
-                21
-              ],
+              "final_dimensions_hw": [160, 336],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [10, 21],
               "patch_count": 210,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                160,
-                336
-              ],
+              "tensor_shape": [1, 3, 160, 336],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -1434,12 +802,7 @@
       "physical_plate_id": null,
       "group_id": null,
       "feature_metadata": {
-        "view_order": [
-          "whole",
-          "left",
-          "centre",
-          "right"
-        ],
+        "view_order": ["whole", "left", "centre", "right"],
         "weights": {
           "whole": 0.25,
           "left": 0.25,
@@ -1450,64 +813,27 @@
         "l2_norm": 1.0,
         "views": {
           "whole": {
-            "source_xyxy": [
-              0,
-              0,
-              129,
-              35
-            ],
+            "source_xyxy": [0, 0, 129, 35],
             "preprocessing": {
-              "original_dimensions_hw": [
-                35,
-                129
-              ],
+              "original_dimensions_hw": [35, 129],
               "requested_scale": 3.3336433964318446,
               "scale_after_long_edge_limit": 3.3336433964318446,
               "scale_used_before_integer_rounding": 3.3336433964318446,
-              "effective_scale_xy": [
-                3.3333333333333335,
-                3.342857142857143
-              ],
-              "resized_dimensions_hw": [
-                117,
-                430
-              ],
+              "effective_scale_xy": [3.3333333333333335, 3.342857142857143],
+              "resized_dimensions_hw": [117, 430],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                1,
-                5,
-                1,
-                6
-              ],
+              "padding_ltrb": [1, 5, 1, 6],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                128,
-                432
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                8,
-                27
-              ],
+              "final_dimensions_hw": [128, 432],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [8, 27],
               "patch_count": 216,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                128,
-                432
-              ],
+              "tensor_shape": [1, 3, 128, 432],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -1519,64 +845,27 @@
             "forward_seconds": 0.0635692480027501
           },
           "left": {
-            "source_xyxy": [
-              0,
-              0,
-              65,
-              35
-            ],
+            "source_xyxy": [0, 0, 65, 35],
             "preprocessing": {
-              "original_dimensions_hw": [
-                35,
-                65
-              ],
+              "original_dimensions_hw": [35, 65],
               "requested_scale": 4.696316068514194,
               "scale_after_long_edge_limit": 4.696316068514194,
               "scale_used_before_integer_rounding": 4.696316068514194,
-              "effective_scale_xy": [
-                4.6923076923076925,
-                4.685714285714286
-              ],
-              "resized_dimensions_hw": [
-                164,
-                305
-              ],
+              "effective_scale_xy": [4.6923076923076925, 4.685714285714286],
+              "resized_dimensions_hw": [164, 305],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                7,
-                6,
-                8,
-                6
-              ],
+              "padding_ltrb": [7, 6, 8, 6],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                176,
-                320
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                11,
-                20
-              ],
+              "final_dimensions_hw": [176, 320],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [11, 20],
               "patch_count": 220,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                176,
-                320
-              ],
+              "tensor_shape": [1, 3, 176, 320],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -1588,64 +877,27 @@
             "forward_seconds": 0.06177704999936395
           },
           "centre": {
-            "source_xyxy": [
-              32,
-              0,
-              97,
-              35
-            ],
+            "source_xyxy": [32, 0, 97, 35],
             "preprocessing": {
-              "original_dimensions_hw": [
-                35,
-                65
-              ],
+              "original_dimensions_hw": [35, 65],
               "requested_scale": 4.696316068514194,
               "scale_after_long_edge_limit": 4.696316068514194,
               "scale_used_before_integer_rounding": 4.696316068514194,
-              "effective_scale_xy": [
-                4.6923076923076925,
-                4.685714285714286
-              ],
-              "resized_dimensions_hw": [
-                164,
-                305
-              ],
+              "effective_scale_xy": [4.6923076923076925, 4.685714285714286],
+              "resized_dimensions_hw": [164, 305],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                7,
-                6,
-                8,
-                6
-              ],
+              "padding_ltrb": [7, 6, 8, 6],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                176,
-                320
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                11,
-                20
-              ],
+              "final_dimensions_hw": [176, 320],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [11, 20],
               "patch_count": 220,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                176,
-                320
-              ],
+              "tensor_shape": [1, 3, 176, 320],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -1657,64 +909,27 @@
             "forward_seconds": 0.06337951800014707
           },
           "right": {
-            "source_xyxy": [
-              64,
-              0,
-              129,
-              35
-            ],
+            "source_xyxy": [64, 0, 129, 35],
             "preprocessing": {
-              "original_dimensions_hw": [
-                35,
-                65
-              ],
+              "original_dimensions_hw": [35, 65],
               "requested_scale": 4.696316068514194,
               "scale_after_long_edge_limit": 4.696316068514194,
               "scale_used_before_integer_rounding": 4.696316068514194,
-              "effective_scale_xy": [
-                4.6923076923076925,
-                4.685714285714286
-              ],
-              "resized_dimensions_hw": [
-                164,
-                305
-              ],
+              "effective_scale_xy": [4.6923076923076925, 4.685714285714286],
+              "resized_dimensions_hw": [164, 305],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                7,
-                6,
-                8,
-                6
-              ],
+              "padding_ltrb": [7, 6, 8, 6],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                176,
-                320
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                11,
-                20
-              ],
+              "final_dimensions_hw": [176, 320],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [11, 20],
               "patch_count": 220,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                176,
-                320
-              ],
+              "tensor_shape": [1, 3, 176, 320],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -1737,12 +952,7 @@
       "physical_plate_id": null,
       "group_id": null,
       "feature_metadata": {
-        "view_order": [
-          "whole",
-          "left",
-          "centre",
-          "right"
-        ],
+        "view_order": ["whole", "left", "centre", "right"],
         "weights": {
           "whole": 0.25,
           "left": 0.25,
@@ -1753,64 +963,27 @@
         "l2_norm": 1.0,
         "views": {
           "whole": {
-            "source_xyxy": [
-              0,
-              0,
-              516,
-              136
-            ],
+            "source_xyxy": [0, 0, 516, 136],
             "preprocessing": {
-              "original_dimensions_hw": [
-                136,
-                516
-              ],
+              "original_dimensions_hw": [136, 516],
               "requested_scale": 0.8455780744447908,
               "scale_after_long_edge_limit": 0.8455780744447908,
               "scale_used_before_integer_rounding": 0.8455780744447908,
-              "effective_scale_xy": [
-                0.8449612403100775,
-                0.8455882352941176
-              ],
-              "resized_dimensions_hw": [
-                115,
-                436
-              ],
+              "effective_scale_xy": [0.8449612403100775, 0.8455882352941176],
+              "resized_dimensions_hw": [115, 436],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                6,
-                6,
-                6,
-                7
-              ],
+              "padding_ltrb": [6, 6, 6, 7],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                128,
-                448
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                8,
-                28
-              ],
+              "final_dimensions_hw": [128, 448],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [8, 28],
               "patch_count": 224,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                128,
-                448
-              ],
+              "tensor_shape": [1, 3, 128, 448],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -1822,64 +995,27 @@
             "forward_seconds": 0.05837113399684313
           },
           "left": {
-            "source_xyxy": [
-              0,
-              0,
-              258,
-              136
-            ],
+            "source_xyxy": [0, 0, 258, 136],
             "preprocessing": {
-              "original_dimensions_hw": [
-                136,
-                258
-              ],
+              "original_dimensions_hw": [136, 258],
               "requested_scale": 1.1958279809251497,
               "scale_after_long_edge_limit": 1.1958279809251497,
               "scale_used_before_integer_rounding": 1.1958279809251497,
-              "effective_scale_xy": [
-                1.197674418604651,
-                1.1985294117647058
-              ],
-              "resized_dimensions_hw": [
-                163,
-                309
-              ],
+              "effective_scale_xy": [1.197674418604651, 1.1985294117647058],
+              "resized_dimensions_hw": [163, 309],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                5,
-                6,
-                6,
-                7
-              ],
+              "padding_ltrb": [5, 6, 6, 7],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                176,
-                320
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                11,
-                20
-              ],
+              "final_dimensions_hw": [176, 320],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [11, 20],
               "patch_count": 220,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                176,
-                320
-              ],
+              "tensor_shape": [1, 3, 176, 320],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -1891,64 +1027,27 @@
             "forward_seconds": 0.061502425000071526
           },
           "centre": {
-            "source_xyxy": [
-              129,
-              0,
-              387,
-              136
-            ],
+            "source_xyxy": [129, 0, 387, 136],
             "preprocessing": {
-              "original_dimensions_hw": [
-                136,
-                258
-              ],
+              "original_dimensions_hw": [136, 258],
               "requested_scale": 1.1958279809251497,
               "scale_after_long_edge_limit": 1.1958279809251497,
               "scale_used_before_integer_rounding": 1.1958279809251497,
-              "effective_scale_xy": [
-                1.197674418604651,
-                1.1985294117647058
-              ],
-              "resized_dimensions_hw": [
-                163,
-                309
-              ],
+              "effective_scale_xy": [1.197674418604651, 1.1985294117647058],
+              "resized_dimensions_hw": [163, 309],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                5,
-                6,
-                6,
-                7
-              ],
+              "padding_ltrb": [5, 6, 6, 7],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                176,
-                320
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                11,
-                20
-              ],
+              "final_dimensions_hw": [176, 320],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [11, 20],
               "patch_count": 220,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                176,
-                320
-              ],
+              "tensor_shape": [1, 3, 176, 320],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -1960,64 +1059,27 @@
             "forward_seconds": 0.06425394599864376
           },
           "right": {
-            "source_xyxy": [
-              258,
-              0,
-              516,
-              136
-            ],
+            "source_xyxy": [258, 0, 516, 136],
             "preprocessing": {
-              "original_dimensions_hw": [
-                136,
-                258
-              ],
+              "original_dimensions_hw": [136, 258],
               "requested_scale": 1.1958279809251497,
               "scale_after_long_edge_limit": 1.1958279809251497,
               "scale_used_before_integer_rounding": 1.1958279809251497,
-              "effective_scale_xy": [
-                1.197674418604651,
-                1.1985294117647058
-              ],
-              "resized_dimensions_hw": [
-                163,
-                309
-              ],
+              "effective_scale_xy": [1.197674418604651, 1.1985294117647058],
+              "resized_dimensions_hw": [163, 309],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                5,
-                6,
-                6,
-                7
-              ],
+              "padding_ltrb": [5, 6, 6, 7],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                176,
-                320
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                11,
-                20
-              ],
+              "final_dimensions_hw": [176, 320],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [11, 20],
               "patch_count": 220,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                176,
-                320
-              ],
+              "tensor_shape": [1, 3, 176, 320],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -2040,12 +1102,7 @@
       "physical_plate_id": null,
       "group_id": null,
       "feature_metadata": {
-        "view_order": [
-          "whole",
-          "left",
-          "centre",
-          "right"
-        ],
+        "view_order": ["whole", "left", "centre", "right"],
         "weights": {
           "whole": 0.25,
           "left": 0.25,
@@ -2056,64 +1113,27 @@
         "l2_norm": 1.0,
         "views": {
           "whole": {
-            "source_xyxy": [
-              0,
-              0,
-              562,
-              141
-            ],
+            "source_xyxy": [0, 0, 562, 141],
             "preprocessing": {
-              "original_dimensions_hw": [
-                141,
-                562
-              ],
+              "original_dimensions_hw": [141, 562],
               "requested_scale": 0.7957383777893191,
               "scale_after_long_edge_limit": 0.7957383777893191,
               "scale_used_before_integer_rounding": 0.7957383777893191,
-              "effective_scale_xy": [
-                0.7953736654804271,
-                0.7943262411347518
-              ],
-              "resized_dimensions_hw": [
-                112,
-                447
-              ],
+              "effective_scale_xy": [0.7953736654804271, 0.7943262411347518],
+              "resized_dimensions_hw": [112, 447],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                0,
-                0,
-                1,
-                0
-              ],
+              "padding_ltrb": [0, 0, 1, 0],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                112,
-                448
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                7,
-                28
-              ],
+              "final_dimensions_hw": [112, 448],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [7, 28],
               "patch_count": 196,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                112,
-                448
-              ],
+              "tensor_shape": [1, 3, 112, 448],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -2125,64 +1145,27 @@
             "forward_seconds": 0.09080575099869748
           },
           "left": {
-            "source_xyxy": [
-              0,
-              0,
-              281,
-              141
-            ],
+            "source_xyxy": [0, 0, 281, 141],
             "preprocessing": {
-              "original_dimensions_hw": [
-                141,
-                281
-              ],
+              "original_dimensions_hw": [141, 281],
               "requested_scale": 1.1253440059704207,
               "scale_after_long_edge_limit": 1.1253440059704207,
               "scale_used_before_integer_rounding": 1.1253440059704207,
-              "effective_scale_xy": [
-                1.1245551601423487,
-                1.127659574468085
-              ],
-              "resized_dimensions_hw": [
-                159,
-                316
-              ],
+              "effective_scale_xy": [1.1245551601423487, 1.127659574468085],
+              "resized_dimensions_hw": [159, 316],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                2,
-                0,
-                2,
-                1
-              ],
+              "padding_ltrb": [2, 0, 2, 1],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                160,
-                320
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                10,
-                20
-              ],
+              "final_dimensions_hw": [160, 320],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [10, 20],
               "patch_count": 200,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                160,
-                320
-              ],
+              "tensor_shape": [1, 3, 160, 320],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -2194,64 +1177,27 @@
             "forward_seconds": 0.06669281500217039
           },
           "centre": {
-            "source_xyxy": [
-              140,
-              0,
-              422,
-              141
-            ],
+            "source_xyxy": [140, 0, 422, 141],
             "preprocessing": {
-              "original_dimensions_hw": [
-                141,
-                282
-              ],
+              "original_dimensions_hw": [141, 282],
               "requested_scale": 1.1233469431616074,
               "scale_after_long_edge_limit": 1.1233469431616074,
               "scale_used_before_integer_rounding": 1.1233469431616074,
-              "effective_scale_xy": [
-                1.124113475177305,
-                1.1205673758865249
-              ],
-              "resized_dimensions_hw": [
-                158,
-                317
-              ],
+              "effective_scale_xy": [1.124113475177305, 1.1205673758865249],
+              "resized_dimensions_hw": [158, 317],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                1,
-                1,
-                2,
-                1
-              ],
+              "padding_ltrb": [1, 1, 2, 1],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                160,
-                320
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                10,
-                20
-              ],
+              "final_dimensions_hw": [160, 320],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [10, 20],
               "patch_count": 200,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                160,
-                320
-              ],
+              "tensor_shape": [1, 3, 160, 320],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -2263,64 +1209,27 @@
             "forward_seconds": 0.060719623001205036
           },
           "right": {
-            "source_xyxy": [
-              281,
-              0,
-              562,
-              141
-            ],
+            "source_xyxy": [281, 0, 562, 141],
             "preprocessing": {
-              "original_dimensions_hw": [
-                141,
-                281
-              ],
+              "original_dimensions_hw": [141, 281],
               "requested_scale": 1.1253440059704207,
               "scale_after_long_edge_limit": 1.1253440059704207,
               "scale_used_before_integer_rounding": 1.1253440059704207,
-              "effective_scale_xy": [
-                1.1245551601423487,
-                1.127659574468085
-              ],
-              "resized_dimensions_hw": [
-                159,
-                316
-              ],
+              "effective_scale_xy": [1.1245551601423487, 1.127659574468085],
+              "resized_dimensions_hw": [159, 316],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                2,
-                0,
-                2,
-                1
-              ],
+              "padding_ltrb": [2, 0, 2, 1],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                160,
-                320
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                10,
-                20
-              ],
+              "final_dimensions_hw": [160, 320],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [10, 20],
               "patch_count": 200,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                160,
-                320
-              ],
+              "tensor_shape": [1, 3, 160, 320],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -2343,12 +1252,7 @@
       "physical_plate_id": null,
       "group_id": null,
       "feature_metadata": {
-        "view_order": [
-          "whole",
-          "left",
-          "centre",
-          "right"
-        ],
+        "view_order": ["whole", "left", "centre", "right"],
         "weights": {
           "whole": 0.25,
           "left": 0.25,
@@ -2359,64 +1263,27 @@
         "l2_norm": 1.0,
         "views": {
           "whole": {
-            "source_xyxy": [
-              0,
-              0,
-              132,
-              39
-            ],
+            "source_xyxy": [0, 0, 132, 39],
             "preprocessing": {
-              "original_dimensions_hw": [
-                39,
-                132
-              ],
+              "original_dimensions_hw": [39, 132],
               "requested_scale": 3.121970170693139,
               "scale_after_long_edge_limit": 3.121970170693139,
               "scale_used_before_integer_rounding": 3.121970170693139,
-              "effective_scale_xy": [
-                3.121212121212121,
-                3.128205128205128
-              ],
-              "resized_dimensions_hw": [
-                122,
-                412
-              ],
+              "effective_scale_xy": [3.121212121212121, 3.128205128205128],
+              "resized_dimensions_hw": [122, 412],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                2,
-                3,
-                2,
-                3
-              ],
+              "padding_ltrb": [2, 3, 2, 3],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                128,
-                416
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                8,
-                26
-              ],
+              "final_dimensions_hw": [128, 416],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [8, 26],
               "patch_count": 208,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                128,
-                416
-              ],
+              "tensor_shape": [1, 3, 128, 416],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -2428,64 +1295,27 @@
             "forward_seconds": 0.06464437999966322
           },
           "left": {
-            "source_xyxy": [
-              0,
-              0,
-              66,
-              39
-            ],
+            "source_xyxy": [0, 0, 66, 39],
             "preprocessing": {
-              "original_dimensions_hw": [
-                39,
-                66
-              ],
+              "original_dimensions_hw": [39, 66],
               "requested_scale": 4.415132556718484,
               "scale_after_long_edge_limit": 4.415132556718484,
               "scale_used_before_integer_rounding": 4.415132556718484,
-              "effective_scale_xy": [
-                4.409090909090909,
-                4.410256410256411
-              ],
-              "resized_dimensions_hw": [
-                172,
-                291
-              ],
+              "effective_scale_xy": [4.409090909090909, 4.410256410256411],
+              "resized_dimensions_hw": [172, 291],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                6,
-                2,
-                7,
-                2
-              ],
+              "padding_ltrb": [6, 2, 7, 2],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                176,
-                304
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                11,
-                19
-              ],
+              "final_dimensions_hw": [176, 304],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [11, 19],
               "patch_count": 209,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                176,
-                304
-              ],
+              "tensor_shape": [1, 3, 176, 304],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -2497,64 +1327,27 @@
             "forward_seconds": 0.06905444799849647
           },
           "centre": {
-            "source_xyxy": [
-              33,
-              0,
-              99,
-              39
-            ],
+            "source_xyxy": [33, 0, 99, 39],
             "preprocessing": {
-              "original_dimensions_hw": [
-                39,
-                66
-              ],
+              "original_dimensions_hw": [39, 66],
               "requested_scale": 4.415132556718484,
               "scale_after_long_edge_limit": 4.415132556718484,
               "scale_used_before_integer_rounding": 4.415132556718484,
-              "effective_scale_xy": [
-                4.409090909090909,
-                4.410256410256411
-              ],
-              "resized_dimensions_hw": [
-                172,
-                291
-              ],
+              "effective_scale_xy": [4.409090909090909, 4.410256410256411],
+              "resized_dimensions_hw": [172, 291],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                6,
-                2,
-                7,
-                2
-              ],
+              "padding_ltrb": [6, 2, 7, 2],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                176,
-                304
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                11,
-                19
-              ],
+              "final_dimensions_hw": [176, 304],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [11, 19],
               "patch_count": 209,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                176,
-                304
-              ],
+              "tensor_shape": [1, 3, 176, 304],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -2566,64 +1359,27 @@
             "forward_seconds": 0.06474956399688381
           },
           "right": {
-            "source_xyxy": [
-              66,
-              0,
-              132,
-              39
-            ],
+            "source_xyxy": [66, 0, 132, 39],
             "preprocessing": {
-              "original_dimensions_hw": [
-                39,
-                66
-              ],
+              "original_dimensions_hw": [39, 66],
               "requested_scale": 4.415132556718484,
               "scale_after_long_edge_limit": 4.415132556718484,
               "scale_used_before_integer_rounding": 4.415132556718484,
-              "effective_scale_xy": [
-                4.409090909090909,
-                4.410256410256411
-              ],
-              "resized_dimensions_hw": [
-                172,
-                291
-              ],
+              "effective_scale_xy": [4.409090909090909, 4.410256410256411],
+              "resized_dimensions_hw": [172, 291],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                6,
-                2,
-                7,
-                2
-              ],
+              "padding_ltrb": [6, 2, 7, 2],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                176,
-                304
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                11,
-                19
-              ],
+              "final_dimensions_hw": [176, 304],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [11, 19],
               "patch_count": 209,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                176,
-                304
-              ],
+              "tensor_shape": [1, 3, 176, 304],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -2646,12 +1402,7 @@
       "physical_plate_id": null,
       "group_id": null,
       "feature_metadata": {
-        "view_order": [
-          "whole",
-          "left",
-          "centre",
-          "right"
-        ],
+        "view_order": ["whole", "left", "centre", "right"],
         "weights": {
           "whole": 0.25,
           "left": 0.25,
@@ -2662,64 +1413,27 @@
         "l2_norm": 1.0,
         "views": {
           "whole": {
-            "source_xyxy": [
-              0,
-              0,
-              157,
-              44
-            ],
+            "source_xyxy": [0, 0, 157, 44],
             "preprocessing": {
-              "original_dimensions_hw": [
-                44,
-                157
-              ],
+              "original_dimensions_hw": [44, 157],
               "requested_scale": 2.6950811958079637,
               "scale_after_long_edge_limit": 2.6950811958079637,
               "scale_used_before_integer_rounding": 2.6950811958079637,
-              "effective_scale_xy": [
-                2.694267515923567,
-                2.7045454545454546
-              ],
-              "resized_dimensions_hw": [
-                119,
-                423
-              ],
+              "effective_scale_xy": [2.694267515923567, 2.7045454545454546],
+              "resized_dimensions_hw": [119, 423],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                4,
-                4,
-                5,
-                5
-              ],
+              "padding_ltrb": [4, 4, 5, 5],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                128,
-                432
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                8,
-                27
-              ],
+              "final_dimensions_hw": [128, 432],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [8, 27],
               "patch_count": 216,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                128,
-                432
-              ],
+              "tensor_shape": [1, 3, 128, 432],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -2731,64 +1445,27 @@
             "forward_seconds": 0.07282102600220242
           },
           "left": {
-            "source_xyxy": [
-              0,
-              0,
-              79,
-              44
-            ],
+            "source_xyxy": [0, 0, 79, 44],
             "preprocessing": {
-              "original_dimensions_hw": [
-                44,
-                79
-              ],
+              "original_dimensions_hw": [44, 79],
               "requested_scale": 3.799339776695447,
               "scale_after_long_edge_limit": 3.799339776695447,
               "scale_used_before_integer_rounding": 3.799339776695447,
-              "effective_scale_xy": [
-                3.7974683544303796,
-                3.7954545454545454
-              ],
-              "resized_dimensions_hw": [
-                167,
-                300
-              ],
+              "effective_scale_xy": [3.7974683544303796, 3.7954545454545454],
+              "resized_dimensions_hw": [167, 300],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                2,
-                4,
-                2,
-                5
-              ],
+              "padding_ltrb": [2, 4, 2, 5],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                176,
-                304
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                11,
-                19
-              ],
+              "final_dimensions_hw": [176, 304],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [11, 19],
               "patch_count": 209,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                176,
-                304
-              ],
+              "tensor_shape": [1, 3, 176, 304],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -2800,64 +1477,27 @@
             "forward_seconds": 0.06263560600200435
           },
           "centre": {
-            "source_xyxy": [
-              39,
-              0,
-              118,
-              44
-            ],
+            "source_xyxy": [39, 0, 118, 44],
             "preprocessing": {
-              "original_dimensions_hw": [
-                44,
-                79
-              ],
+              "original_dimensions_hw": [44, 79],
               "requested_scale": 3.799339776695447,
               "scale_after_long_edge_limit": 3.799339776695447,
               "scale_used_before_integer_rounding": 3.799339776695447,
-              "effective_scale_xy": [
-                3.7974683544303796,
-                3.7954545454545454
-              ],
-              "resized_dimensions_hw": [
-                167,
-                300
-              ],
+              "effective_scale_xy": [3.7974683544303796, 3.7954545454545454],
+              "resized_dimensions_hw": [167, 300],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                2,
-                4,
-                2,
-                5
-              ],
+              "padding_ltrb": [2, 4, 2, 5],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                176,
-                304
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                11,
-                19
-              ],
+              "final_dimensions_hw": [176, 304],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [11, 19],
               "patch_count": 209,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                176,
-                304
-              ],
+              "tensor_shape": [1, 3, 176, 304],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -2869,64 +1509,27 @@
             "forward_seconds": 0.057717755997146014
           },
           "right": {
-            "source_xyxy": [
-              78,
-              0,
-              157,
-              44
-            ],
+            "source_xyxy": [78, 0, 157, 44],
             "preprocessing": {
-              "original_dimensions_hw": [
-                44,
-                79
-              ],
+              "original_dimensions_hw": [44, 79],
               "requested_scale": 3.799339776695447,
               "scale_after_long_edge_limit": 3.799339776695447,
               "scale_used_before_integer_rounding": 3.799339776695447,
-              "effective_scale_xy": [
-                3.7974683544303796,
-                3.7954545454545454
-              ],
-              "resized_dimensions_hw": [
-                167,
-                300
-              ],
+              "effective_scale_xy": [3.7974683544303796, 3.7954545454545454],
+              "resized_dimensions_hw": [167, 300],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                2,
-                4,
-                2,
-                5
-              ],
+              "padding_ltrb": [2, 4, 2, 5],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                176,
-                304
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                11,
-                19
-              ],
+              "final_dimensions_hw": [176, 304],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [11, 19],
               "patch_count": 209,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                176,
-                304
-              ],
+              "tensor_shape": [1, 3, 176, 304],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -2949,12 +1552,7 @@
       "physical_plate_id": null,
       "group_id": null,
       "feature_metadata": {
-        "view_order": [
-          "whole",
-          "left",
-          "centre",
-          "right"
-        ],
+        "view_order": ["whole", "left", "centre", "right"],
         "weights": {
           "whole": 0.25,
           "left": 0.25,
@@ -2965,64 +1563,27 @@
         "l2_norm": 1.0000001192092896,
         "views": {
           "whole": {
-            "source_xyxy": [
-              0,
-              0,
-              420,
-              132
-            ],
+            "source_xyxy": [0, 0, 420, 132],
             "preprocessing": {
-              "original_dimensions_hw": [
-                132,
-                420
-              ],
+              "original_dimensions_hw": [132, 420],
               "requested_scale": 0.951341424016901,
               "scale_after_long_edge_limit": 0.951341424016901,
               "scale_used_before_integer_rounding": 0.951341424016901,
-              "effective_scale_xy": [
-                0.9523809523809523,
-                0.9545454545454546
-              ],
-              "resized_dimensions_hw": [
-                126,
-                400
-              ],
+              "effective_scale_xy": [0.9523809523809523, 0.9545454545454546],
+              "resized_dimensions_hw": [126, 400],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                0,
-                1,
-                0,
-                1
-              ],
+              "padding_ltrb": [0, 1, 0, 1],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                128,
-                400
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                8,
-                25
-              ],
+              "final_dimensions_hw": [128, 400],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [8, 25],
               "patch_count": 200,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                128,
-                400
-              ],
+              "tensor_shape": [1, 3, 128, 400],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -3034,64 +1595,27 @@
             "forward_seconds": 0.06087483900046209
           },
           "left": {
-            "source_xyxy": [
-              0,
-              0,
-              210,
-              132
-            ],
+            "source_xyxy": [0, 0, 210, 132],
             "preprocessing": {
-              "original_dimensions_hw": [
-                132,
-                210
-              ],
+              "original_dimensions_hw": [132, 210],
               "requested_scale": 1.3453999442920348,
               "scale_after_long_edge_limit": 1.3453999442920348,
               "scale_used_before_integer_rounding": 1.3453999442920348,
-              "effective_scale_xy": [
-                1.3476190476190477,
-                1.3484848484848484
-              ],
-              "resized_dimensions_hw": [
-                178,
-                283
-              ],
+              "effective_scale_xy": [1.3476190476190477, 1.3484848484848484],
+              "resized_dimensions_hw": [178, 283],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                2,
-                7,
-                3,
-                7
-              ],
+              "padding_ltrb": [2, 7, 3, 7],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                192,
-                288
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                12,
-                18
-              ],
+              "final_dimensions_hw": [192, 288],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [12, 18],
               "patch_count": 216,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                192,
-                288
-              ],
+              "tensor_shape": [1, 3, 192, 288],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -3103,64 +1627,27 @@
             "forward_seconds": 0.06291772900294745
           },
           "centre": {
-            "source_xyxy": [
-              105,
-              0,
-              315,
-              132
-            ],
+            "source_xyxy": [105, 0, 315, 132],
             "preprocessing": {
-              "original_dimensions_hw": [
-                132,
-                210
-              ],
+              "original_dimensions_hw": [132, 210],
               "requested_scale": 1.3453999442920348,
               "scale_after_long_edge_limit": 1.3453999442920348,
               "scale_used_before_integer_rounding": 1.3453999442920348,
-              "effective_scale_xy": [
-                1.3476190476190477,
-                1.3484848484848484
-              ],
-              "resized_dimensions_hw": [
-                178,
-                283
-              ],
+              "effective_scale_xy": [1.3476190476190477, 1.3484848484848484],
+              "resized_dimensions_hw": [178, 283],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                2,
-                7,
-                3,
-                7
-              ],
+              "padding_ltrb": [2, 7, 3, 7],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                192,
-                288
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                12,
-                18
-              ],
+              "final_dimensions_hw": [192, 288],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [12, 18],
               "patch_count": 216,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                192,
-                288
-              ],
+              "tensor_shape": [1, 3, 192, 288],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -3172,64 +1659,27 @@
             "forward_seconds": 0.06593707400315907
           },
           "right": {
-            "source_xyxy": [
-              210,
-              0,
-              420,
-              132
-            ],
+            "source_xyxy": [210, 0, 420, 132],
             "preprocessing": {
-              "original_dimensions_hw": [
-                132,
-                210
-              ],
+              "original_dimensions_hw": [132, 210],
               "requested_scale": 1.3453999442920348,
               "scale_after_long_edge_limit": 1.3453999442920348,
               "scale_used_before_integer_rounding": 1.3453999442920348,
-              "effective_scale_xy": [
-                1.3476190476190477,
-                1.3484848484848484
-              ],
-              "resized_dimensions_hw": [
-                178,
-                283
-              ],
+              "effective_scale_xy": [1.3476190476190477, 1.3484848484848484],
+              "resized_dimensions_hw": [178, 283],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                2,
-                7,
-                3,
-                7
-              ],
+              "padding_ltrb": [2, 7, 3, 7],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                192,
-                288
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                12,
-                18
-              ],
+              "final_dimensions_hw": [192, 288],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [12, 18],
               "patch_count": 216,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                192,
-                288
-              ],
+              "tensor_shape": [1, 3, 192, 288],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -3252,12 +1702,7 @@
       "physical_plate_id": null,
       "group_id": null,
       "feature_metadata": {
-        "view_order": [
-          "whole",
-          "left",
-          "centre",
-          "right"
-        ],
+        "view_order": ["whole", "left", "centre", "right"],
         "weights": {
           "whole": 0.25,
           "left": 0.25,
@@ -3268,64 +1713,27 @@
         "l2_norm": 1.0,
         "views": {
           "whole": {
-            "source_xyxy": [
-              0,
-              0,
-              168,
-              54
-            ],
+            "source_xyxy": [0, 0, 168, 54],
             "preprocessing": {
-              "original_dimensions_hw": [
-                54,
-                168
-              ],
+              "original_dimensions_hw": [54, 168],
               "requested_scale": 2.351778943168525,
               "scale_after_long_edge_limit": 2.351778943168525,
               "scale_used_before_integer_rounding": 2.351778943168525,
-              "effective_scale_xy": [
-                2.3511904761904763,
-                2.3518518518518516
-              ],
-              "resized_dimensions_hw": [
-                127,
-                395
-              ],
+              "effective_scale_xy": [2.3511904761904763, 2.3518518518518516],
+              "resized_dimensions_hw": [127, 395],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                2,
-                0,
-                3,
-                1
-              ],
+              "padding_ltrb": [2, 0, 3, 1],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                128,
-                400
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                8,
-                25
-              ],
+              "final_dimensions_hw": [128, 400],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [8, 25],
               "patch_count": 200,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                128,
-                400
-              ],
+              "tensor_shape": [1, 3, 128, 400],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -3337,64 +1745,27 @@
             "forward_seconds": 0.06520730900228955
           },
           "left": {
-            "source_xyxy": [
-              0,
-              0,
-              84,
-              54
-            ],
+            "source_xyxy": [0, 0, 84, 54],
             "preprocessing": {
-              "original_dimensions_hw": [
-                54,
-                84
-              ],
+              "original_dimensions_hw": [54, 84],
               "requested_scale": 3.3259176771323924,
               "scale_after_long_edge_limit": 3.3259176771323924,
               "scale_used_before_integer_rounding": 3.3259176771323924,
-              "effective_scale_xy": [
-                3.3214285714285716,
-                3.3333333333333335
-              ],
-              "resized_dimensions_hw": [
-                180,
-                279
-              ],
+              "effective_scale_xy": [3.3214285714285716, 3.3333333333333335],
+              "resized_dimensions_hw": [180, 279],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                4,
-                6,
-                5,
-                6
-              ],
+              "padding_ltrb": [4, 6, 5, 6],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                192,
-                288
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                12,
-                18
-              ],
+              "final_dimensions_hw": [192, 288],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [12, 18],
               "patch_count": 216,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                192,
-                288
-              ],
+              "tensor_shape": [1, 3, 192, 288],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -3406,64 +1777,27 @@
             "forward_seconds": 0.062142116999893915
           },
           "centre": {
-            "source_xyxy": [
-              42,
-              0,
-              126,
-              54
-            ],
+            "source_xyxy": [42, 0, 126, 54],
             "preprocessing": {
-              "original_dimensions_hw": [
-                54,
-                84
-              ],
+              "original_dimensions_hw": [54, 84],
               "requested_scale": 3.3259176771323924,
               "scale_after_long_edge_limit": 3.3259176771323924,
               "scale_used_before_integer_rounding": 3.3259176771323924,
-              "effective_scale_xy": [
-                3.3214285714285716,
-                3.3333333333333335
-              ],
-              "resized_dimensions_hw": [
-                180,
-                279
-              ],
+              "effective_scale_xy": [3.3214285714285716, 3.3333333333333335],
+              "resized_dimensions_hw": [180, 279],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                4,
-                6,
-                5,
-                6
-              ],
+              "padding_ltrb": [4, 6, 5, 6],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                192,
-                288
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                12,
-                18
-              ],
+              "final_dimensions_hw": [192, 288],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [12, 18],
               "patch_count": 216,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                192,
-                288
-              ],
+              "tensor_shape": [1, 3, 192, 288],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -3475,64 +1809,27 @@
             "forward_seconds": 0.06261878599980264
           },
           "right": {
-            "source_xyxy": [
-              84,
-              0,
-              168,
-              54
-            ],
+            "source_xyxy": [84, 0, 168, 54],
             "preprocessing": {
-              "original_dimensions_hw": [
-                54,
-                84
-              ],
+              "original_dimensions_hw": [54, 84],
               "requested_scale": 3.3259176771323924,
               "scale_after_long_edge_limit": 3.3259176771323924,
               "scale_used_before_integer_rounding": 3.3259176771323924,
-              "effective_scale_xy": [
-                3.3214285714285716,
-                3.3333333333333335
-              ],
-              "resized_dimensions_hw": [
-                180,
-                279
-              ],
+              "effective_scale_xy": [3.3214285714285716, 3.3333333333333335],
+              "resized_dimensions_hw": [180, 279],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                4,
-                6,
-                5,
-                6
-              ],
+              "padding_ltrb": [4, 6, 5, 6],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                192,
-                288
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                12,
-                18
-              ],
+              "final_dimensions_hw": [192, 288],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [12, 18],
               "patch_count": 216,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                192,
-                288
-              ],
+              "tensor_shape": [1, 3, 192, 288],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -3555,12 +1852,7 @@
       "physical_plate_id": null,
       "group_id": null,
       "feature_metadata": {
-        "view_order": [
-          "whole",
-          "left",
-          "centre",
-          "right"
-        ],
+        "view_order": ["whole", "left", "centre", "right"],
         "weights": {
           "whole": 0.25,
           "left": 0.25,
@@ -3571,64 +1863,27 @@
         "l2_norm": 1.0,
         "views": {
           "whole": {
-            "source_xyxy": [
-              0,
-              0,
-              244,
-              61
-            ],
+            "source_xyxy": [0, 0, 244, 61],
             "preprocessing": {
-              "original_dimensions_hw": [
-                61,
-                244
-              ],
+              "original_dimensions_hw": [61, 244],
               "requested_scale": 1.8360655737704918,
               "scale_after_long_edge_limit": 1.8360655737704918,
               "scale_used_before_integer_rounding": 1.8360655737704918,
-              "effective_scale_xy": [
-                1.8360655737704918,
-                1.8360655737704918
-              ],
-              "resized_dimensions_hw": [
-                112,
-                448
-              ],
+              "effective_scale_xy": [1.8360655737704918, 1.8360655737704918],
+              "resized_dimensions_hw": [112, 448],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                0,
-                0,
-                0,
-                0
-              ],
+              "padding_ltrb": [0, 0, 0, 0],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                112,
-                448
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                7,
-                28
-              ],
+              "final_dimensions_hw": [112, 448],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [7, 28],
               "patch_count": 196,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                112,
-                448
-              ],
+              "tensor_shape": [1, 3, 112, 448],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -3640,64 +1895,27 @@
             "forward_seconds": 0.05963981300010346
           },
           "left": {
-            "source_xyxy": [
-              0,
-              0,
-              122,
-              61
-            ],
+            "source_xyxy": [0, 0, 122, 61],
             "preprocessing": {
-              "original_dimensions_hw": [
-                61,
-                122
-              ],
+              "original_dimensions_hw": [61, 122],
               "requested_scale": 2.596588835832568,
               "scale_after_long_edge_limit": 2.596588835832568,
               "scale_used_before_integer_rounding": 2.596588835832568,
-              "effective_scale_xy": [
-                2.598360655737705,
-                2.5901639344262297
-              ],
-              "resized_dimensions_hw": [
-                158,
-                317
-              ],
+              "effective_scale_xy": [2.598360655737705, 2.5901639344262297],
+              "resized_dimensions_hw": [158, 317],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                1,
-                1,
-                2,
-                1
-              ],
+              "padding_ltrb": [1, 1, 2, 1],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                160,
-                320
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                10,
-                20
-              ],
+              "final_dimensions_hw": [160, 320],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [10, 20],
               "patch_count": 200,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                160,
-                320
-              ],
+              "tensor_shape": [1, 3, 160, 320],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -3709,64 +1927,27 @@
             "forward_seconds": 0.06393669200042496
           },
           "centre": {
-            "source_xyxy": [
-              61,
-              0,
-              183,
-              61
-            ],
+            "source_xyxy": [61, 0, 183, 61],
             "preprocessing": {
-              "original_dimensions_hw": [
-                61,
-                122
-              ],
+              "original_dimensions_hw": [61, 122],
               "requested_scale": 2.596588835832568,
               "scale_after_long_edge_limit": 2.596588835832568,
               "scale_used_before_integer_rounding": 2.596588835832568,
-              "effective_scale_xy": [
-                2.598360655737705,
-                2.5901639344262297
-              ],
-              "resized_dimensions_hw": [
-                158,
-                317
-              ],
+              "effective_scale_xy": [2.598360655737705, 2.5901639344262297],
+              "resized_dimensions_hw": [158, 317],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                1,
-                1,
-                2,
-                1
-              ],
+              "padding_ltrb": [1, 1, 2, 1],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                160,
-                320
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                10,
-                20
-              ],
+              "final_dimensions_hw": [160, 320],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [10, 20],
               "patch_count": 200,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                160,
-                320
-              ],
+              "tensor_shape": [1, 3, 160, 320],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -3778,64 +1959,27 @@
             "forward_seconds": 0.06101232799846912
           },
           "right": {
-            "source_xyxy": [
-              122,
-              0,
-              244,
-              61
-            ],
+            "source_xyxy": [122, 0, 244, 61],
             "preprocessing": {
-              "original_dimensions_hw": [
-                61,
-                122
-              ],
+              "original_dimensions_hw": [61, 122],
               "requested_scale": 2.596588835832568,
               "scale_after_long_edge_limit": 2.596588835832568,
               "scale_used_before_integer_rounding": 2.596588835832568,
-              "effective_scale_xy": [
-                2.598360655737705,
-                2.5901639344262297
-              ],
-              "resized_dimensions_hw": [
-                158,
-                317
-              ],
+              "effective_scale_xy": [2.598360655737705, 2.5901639344262297],
+              "resized_dimensions_hw": [158, 317],
               "rounding_rule": "round-half-up; each dimension at least one pixel",
-              "padding_ltrb": [
-                1,
-                1,
-                2,
-                1
-              ],
+              "padding_ltrb": [1, 1, 2, 1],
               "odd_padding_rule": "extra pixel goes to right or bottom",
-              "final_dimensions_hw": [
-                160,
-                320
-              ],
-              "patch_size_hw": [
-                16,
-                16
-              ],
-              "patch_grid_hw": [
-                10,
-                20
-              ],
+              "final_dimensions_hw": [160, 320],
+              "patch_size_hw": [16, 16],
+              "patch_grid_hw": [10, 20],
               "patch_count": 200,
               "long_edge_limit_applied": false,
               "patch_count_limit_applied": false,
               "pixels_cropped": 0,
-              "padding_rgb": [
-                124,
-                116,
-                104
-              ],
+              "padding_rgb": [124, 116, 104],
               "resize_interpolation": "bicubic",
-              "tensor_shape": [
-                1,
-                3,
-                160,
-                320
-              ],
+              "tensor_shape": [1, 3, 160, 320],
               "tensor_dtype": "torch.float32"
             },
             "embedding": {
@@ -3851,9 +1995,6 @@
       }
     }
   ],
-  "embedding_shape": [
-    12,
-    1536
-  ],
+  "embedding_shape": [12, 1536],
   "embedding_dtype": "float32"
 }

@@ -507,6 +507,7 @@ class VideoPrototypeRunner:
         tracker,
         counting_reader: CountingReader,
         *,
+        dedup_iou: float = config.PLATE_DEDUP_IOU,
         association_padding: float = DEFAULT_ASSOCIATION_PADDING,
         strong_quality: float = 12000.0,
         strong_min_candidates: int = 3,
@@ -539,6 +540,7 @@ class VideoPrototypeRunner:
         self.detector = detector
         self.tracker = tracker
         self.reader = counting_reader
+        self.dedup_iou = dedup_iou
         self.association_padding = association_padding
         self.strong_quality = strong_quality
         self.strong_min_candidates = strong_min_candidates
@@ -749,7 +751,7 @@ class VideoPrototypeRunner:
         detection_started = time.perf_counter()
         detections = deduplicate_detections(
             self.detector.predict(frame, conf=conf, imgsz=imgsz),
-            iou_threshold=config.PLATE_DEDUP_IOU,
+            iou_threshold=self.dedup_iou,
         )
         self.detections_per_frame.append(len(detections))
         self.detection_times_ms.append((time.perf_counter() - detection_started) * 1000)
@@ -1073,11 +1075,16 @@ class VideoPrototypeRunner:
         }
 
 
-def _build_tracker(path: Path, fps: float):
+RUNNER_DEFAULTS = dict(VideoPrototypeRunner.__init__.__kwdefaults__)
+
+
+def _build_tracker(path: Path, fps: float, *, overrides=None):
     from ultralytics.trackers.byte_tracker import BYTETracker
 
     with path.open(encoding="utf-8") as handle:
-        arguments = SimpleNamespace(**yaml.safe_load(handle))
+        values = yaml.safe_load(handle)
+    values.update(overrides or {})
+    arguments = SimpleNamespace(**values)
     return BYTETracker(arguments, frame_rate=max(1, int(round(fps))))
 
 
