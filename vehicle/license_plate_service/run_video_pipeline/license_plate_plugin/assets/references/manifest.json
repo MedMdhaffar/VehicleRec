@@ -43,54 +43,6 @@
       "sha256": "3598db2a3b98103ece19c78cdd066c35b5b6d8f36d0a345d34465a88f7290999"
     },
     {
-      "id": "4",
-      "path": "images/4.png",
-      "source_project_path": "plates/nt/4.png",
-      "category": "nt",
-      "registration": "214172",
-      "expected_width": 823,
-      "expected_height": 200,
-      "physical_plate_id": null,
-      "group_id": null,
-      "sha256": "aba5f5dfb9dcba8cfdc246301f14de421fbbf5a0d3230eb9a8d230bc8443348f"
-    },
-    {
-      "id": "5",
-      "path": "images/5.png",
-      "source_project_path": "plates/nt/5.png",
-      "category": "nt",
-      "registration": "103679",
-      "expected_width": 129,
-      "expected_height": 35,
-      "physical_plate_id": null,
-      "group_id": null,
-      "sha256": "596120d9f02c1f5ebeee64bed0580e79aae451d4a12af33f29741d54cd7aa839"
-    },
-    {
-      "id": "6",
-      "path": "images/6.png",
-      "source_project_path": "plates/nt/6.png",
-      "category": "nt",
-      "registration": "176828",
-      "expected_width": 516,
-      "expected_height": 136,
-      "physical_plate_id": null,
-      "group_id": null,
-      "sha256": "9e037973dbf10e6318dec422d2d744a52d242dea1b88043f6adaa6cc498c50d2"
-    },
-    {
-      "id": "7",
-      "path": "images/7.png",
-      "source_project_path": "plates/nt/7.png",
-      "category": "nt",
-      "registration": "72775",
-      "expected_width": 562,
-      "expected_height": 141,
-      "physical_plate_id": null,
-      "group_id": null,
-      "sha256": "acf135237c7cc2c1b2d188139d5789d8a5eaa827877e77357896fb606cd2c547"
-    },
-    {
       "id": "8",
       "path": "images/8.png",
       "source_project_path": "plates/shorta/8.png",

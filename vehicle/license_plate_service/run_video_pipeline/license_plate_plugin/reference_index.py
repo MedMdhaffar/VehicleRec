@@ -18,6 +18,7 @@ from .utils import canonical_sha256, json_ready, sha256_file
 
 
 INDEX_SCHEMA_VERSION = 1
+EMBEDDING_CATEGORIES = frozenset({"tunis", "shorta", "idara"})
 
 
 def compatibility_record(config: PluginConfig, encoder: DinoV3Encoder) -> dict[str, Any]:
@@ -76,6 +77,8 @@ class ReferenceIndex:
         output_path: Path | None = None,
     ) -> "ReferenceIndex":
         records, manifest = load_reference_manifest(config.reference_manifest)
+        if not records or any(record["category"] not in EMBEDDING_CATEGORIES for record in records):
+            raise PluginError("Embedding references must contain only tunis, shorta or idara plates.")
         vectors, references = [], []
         for record in records:
             vector, metadata = extract_r2(record["image"], encoder, config.policy)
@@ -108,6 +111,7 @@ class ReferenceIndex:
         return index
 
     def save(self, manifest_sha256: str, manifest_payload: dict[str, Any]) -> None:
+        self._classification_indices()
         self.path.parent.mkdir(parents=True, exist_ok=True)
         metadata_path = self.path.with_suffix(".json")
         if self.path.exists() or metadata_path.exists():
@@ -153,7 +157,22 @@ class ReferenceIndex:
         norms = np.linalg.norm(embeddings, axis=1)
         if not np.all(np.isfinite(embeddings)) or not np.allclose(norms, 1.0, atol=1e-5):
             raise PluginError("Reference index contains non-finite or non-normalized embeddings.")
-        return cls(path, embeddings, references, compatibility, fingerprint)
+        index = cls(path, embeddings, references, compatibility, fingerprint)
+        index._classification_indices()
+        return index
+
+    def _classification_indices(self) -> list[int]:
+        if self.embeddings.shape != (len(self.references), 1536):
+            raise PluginError(f"Invalid reference index dimensions: {self.embeddings.shape}")
+        eligible = []
+        for index, reference in enumerate(self.references):
+            category = reference.get("category") if isinstance(reference, dict) else None
+            if not isinstance(category, str) or category not in EMBEDDING_CATEGORIES:
+                raise PluginError(f"Unsupported reference category at row {index}; expected tunis, shorta or idara.")
+            eligible.append(index)
+        if not eligible:
+            raise PluginError("No eligible tunis, shorta or idara references in the embedding index.")
+        return eligible
 
     def match(
         self,
@@ -167,7 +186,8 @@ class ReferenceIndex:
             raise PluginError("Query embedding must be a finite 1536-dimensional vector.")
         excluded = {str(value) for value in exclude_ids}
         eligible: list[int] = []
-        for index, reference in enumerate(self.references):
+        for index in self._classification_indices():
+            reference = self.references[index]
             if str(reference["id"]) in excluded:
                 continue
             if exclude_groups and any(
@@ -179,7 +199,7 @@ class ReferenceIndex:
             eligible.append(index)
         if not eligible:
             raise PluginError("No eligible references remain after exclusions.")
-        scores = self.embeddings @ query.astype(np.float32)
+        scores = dict(zip(eligible, self.embeddings[eligible] @ query.astype(np.float32)))
         best_score = max(float(scores[index]) for index in eligible)
         tied = [index for index in eligible if abs(float(scores[index]) - best_score) <= tie_tolerance]
         winner = min(tied, key=lambda index: deterministic_id_key(str(self.references[index]["id"])))

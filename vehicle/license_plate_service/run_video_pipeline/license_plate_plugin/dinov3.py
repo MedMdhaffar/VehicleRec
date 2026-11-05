@@ -33,7 +33,11 @@ def repository_revision(repo: Path) -> str | None:
 
 
 class DinoV3Encoder:
-    def __init__(self, repo: Path, checkpoint: Path, device: str = "cpu"):
+    def __init__(self, repo: Path, checkpoint: Path, device: str = "cuda:0"):
+        if torch.device(device).type != "cuda":
+            raise PluginError("DINOv3 requires a CUDA device; CPU execution is disabled.")
+        if not torch.cuda.is_available():
+            raise PluginError(f"CUDA device requested but unavailable: {device}")
         repo, checkpoint = repo.resolve(), checkpoint.resolve()
         if not (repo / "hubconf.py").is_file():
             raise PluginError(f"Official DINOv3 repository lacks hubconf.py: {repo}")
@@ -44,8 +48,6 @@ class DinoV3Encoder:
         digest = sha256_file(checkpoint)
         if digest != CHECKPOINT_SHA256:
             raise PluginError(f"DINOv3 checkpoint hash mismatch: {digest}")
-        if device.startswith("cuda") and not torch.cuda.is_available():
-            raise PluginError(f"CUDA device requested but unavailable: {device}")
         self.device = torch.device(device)
         try:
             self.model = torch.hub.load(

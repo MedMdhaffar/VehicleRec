@@ -19,10 +19,6 @@ class RuntimeCounters:
     def record(self):
         self.processed += 1
 
-    def snapshot(self):
-        return {"processed": self.processed}
-
-
 class PrototypePlatePipeline:
     def __init__(self, reader, marker_localizer, store: ReviewStore, *, classifier_factory, config=config):
         self.config = config

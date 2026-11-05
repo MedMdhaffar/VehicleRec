@@ -60,11 +60,3 @@ def load_reference_manifest(path: Path) -> tuple[list[dict[str, Any]], dict[str,
             }
         )
     return records, payload
-
-
-def same_group(first: dict[str, Any], second: dict[str, Any]) -> bool:
-    return any(
-        first.get(key) is not None and first.get(key) == second.get(key)
-        for key in ("physical_plate_id", "group_id")
-    )
-

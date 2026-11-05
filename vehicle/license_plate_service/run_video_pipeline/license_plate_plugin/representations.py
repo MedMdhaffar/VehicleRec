@@ -76,10 +76,3 @@ def extract_r2(
         "views": views,
         "total_feature_seconds": time.perf_counter() - total_started,
     }
-
-
-def r2_score(first: np.ndarray, second: np.ndarray) -> float:
-    if first.shape != (1536,) or second.shape != (1536,):
-        raise PluginError("R2 similarity requires two 1536-dimensional vectors.")
-    return float(np.dot(first.astype(np.float32), second.astype(np.float32)))
-

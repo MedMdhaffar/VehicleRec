@@ -13,7 +13,7 @@ from run_video_pipeline.marker_localizer import (
     split_around_marker,
 )
 from run_video_pipeline.ocr import OCRResult, digits_only
-from run_video_pipeline.plate_detector import PlateCrop, PlateDetector
+from run_video_pipeline.plate_detector import PlateCrop
 from run_video_pipeline.private_plate_parser import parse_private_ocr, parse_private_plate
 from run_video_pipeline.schemas import PlateDetection, NumberRecognition
 from run_video_pipeline.classification import classify_crop
@@ -133,6 +133,56 @@ def assemble_plate_detection(
     )
 
 
+def _analyze_tunis_sides(detection, reader, marker_localizer, classification, *, timing, config):
+    """Locate the separator first; read only the two registration digit regions."""
+    started = time.perf_counter()
+    marker = _locate_safely(marker_localizer, detection.crop, detection.bbox, config=config)
+    if timing is not None:
+        timing["marker_ms"] = (time.perf_counter() - started) * 1000
+    reliable = (
+        marker.detected and marker.bbox is not None
+        and marker.confidence >= max(config.MARKER_RELIABLE_CONF, config.PRIVATE_ROUTE_MIN_MARKER_CONF)
+    )
+    result = PlateDetection(
+        classification=classification, bbox=list(detection.bbox),
+        detector_confidence=detection.confidence, raw_ocr="", normalized_ocr="",
+        ocr_confidence=0.0, parser_status="invalid", resolution_source="marker_sides_ocr",
+        marker_detected=marker.detected, marker_reliable=reliable,
+        marker_confidence=marker.confidence, marker_bbox=list(marker.bbox) if marker.bbox is not None else None,
+        marker_center_x=marker.center_x,
+    )
+    valid_bounds = reliable and 0 < marker.bbox[0] < marker.bbox[2] < detection.crop.shape[1]
+    regions = split_around_marker(detection.crop, marker) if valid_bounds else None
+    if regions is None:
+        reason = "invalid_marker_regions" if reliable else "insufficient_marker_evidence"
+        result.parser_reason = reason
+        result.number = NumberRecognition(policy="tunis_private", outcome="unresolved", reason=reason)
+        return result
+    started = time.perf_counter()
+    left = _read_safely(reader, regions[0], detection.bbox)
+    right = _read_safely(reader, regions[1], detection.bbox)
+    if timing is not None:
+        timing["ocr_ms"] = (time.perf_counter() - started) * 1000
+    started = time.perf_counter()
+    result.raw_ocr = f"{left.raw_text} {right.raw_text}"
+    result.normalized_ocr = f"{left.normalized_text} {right.normalized_text}"
+    result.ocr_confidence = min(left.confidence, right.confidence)
+    result.left_ocr, result.left_ocr_confidence = left.normalized_text, left.confidence
+    result.right_ocr, result.right_ocr_confidence = right.normalized_text, right.confidence
+    if (left.normalized_text.isascii() and left.normalized_text.isdigit()
+            and right.normalized_text.isascii() and right.normalized_text.isdigit()):
+        # The separator comes from the detector, never from registration OCR.
+        parsed = parse_private_plate(f"{left.normalized_text}T{right.normalized_text}")
+        result.parser_status, result.parser_reason = parsed.status, parsed.reason
+        result.series, result.registration_number = parsed.series, parsed.registration_number
+        result.normalized_plate = parsed.normalized_plate
+    else:
+        result.parser_reason = "marker-side OCR must contain digits only"
+    if timing is not None:
+        timing["parser_ms"] = (time.perf_counter() - started) * 1000
+    return result
+
+
 def _analyze_plate_crop(
     detection: PlateCrop,
     reader: OCRReader,
@@ -167,6 +217,13 @@ def _analyze_plate_crop(
             ),
         )
     total_started = time.perf_counter()
+    if classification.final_category == 'tunis' and not config.TUNIS_USE_LEGACY_WHOLE_OCR:
+        result = _analyze_tunis_sides(
+            detection, reader, marker_localizer, classification, timing=timing, config=config,
+        )
+        if timing is not None:
+            timing["local_total_ms"] = (time.perf_counter() - total_started) * 1000
+        return result
     started = time.perf_counter()
     ocr_result = _read_safely(reader, detection.crop, detection.bbox)
     ocr_seconds = time.perf_counter() - started
@@ -218,23 +275,6 @@ def _analyze_plate_crop(
     return result
 
 
-def analyze_image(
-    image: np.ndarray,
-    detector: PlateDetector,
-    reader: OCRReader,
-    marker_localizer: MarkerLocalizer | None = None,
-    *,
-    conf: float | None = None,
-    classifier=None,
-) -> list[PlateDetection]:
-    """Detect, safely crop, recognize, and parse every plate in an image."""
-    detections = detector.detect_and_crop(image, conf=conf)
-    return [
-        analyze_plate_crop(detection, reader, marker_localizer, classifier=classifier)
-        for detection in detections
-    ]
-
-
 def analyze_plate_crop(detection, reader, marker_localizer=None, *, timing=None, classifier=None, config=config):
     """Classify once and dispatch; errors never fall back to a different policy."""
     from run_video_pipeline.policies import validate_tunis
@@ -247,8 +287,12 @@ def analyze_plate_crop(detection, reader, marker_localizer=None, *, timing=None,
         def read_result(self, crop):
             height, width = detection.crop.shape[:2]
             index = len(region_records)
-            bbox = [0, 0, crop.shape[1], height] if index < 2 else [width - crop.shape[1], 0, width, height]
-            region_records.append({"role": ["whole", "left_digits", "right_digits"][min(index, 2)],
+            category = getattr(classifier, "last_evidence", None)
+            sides_only = category is not None and category.final_category == "tunis" and not config.TUNIS_USE_LEGACY_WHOLE_OCR
+            role = (["left_digits", "right_digits"][min(index, 1)] if sides_only
+                    else ["whole", "left_digits", "right_digits"][min(index, 2)])
+            bbox = [width - crop.shape[1], 0, width, height] if role == "right_digits" else [0, 0, crop.shape[1], height]
+            region_records.append({"role": role,
                                    "bbox": bbox, "coordinate_context": "crop_local_xyxy"})
             result = original_reader.read_result(crop)
             if not isinstance(result, OCRResult):
@@ -270,12 +314,14 @@ def analyze_plate_crop(detection, reader, marker_localizer=None, *, timing=None,
         # Preserve category evidence if OCR raises: the recording proxy is filled
         # by classify_bgr, so we do not classify a second time.
         category = getattr(classifier, "last_evidence", None)
+        sides_only = category is not None and category.final_category == "tunis" and not config.TUNIS_USE_LEGACY_WHOLE_OCR
+        evidence_readings = readings if sides_only else readings[:1]
         reason = "ocr_failure" if isinstance(exc, RegistrationOCRError) else (
             "marker_localization_failure" if isinstance(exc, MarkerLocalizationError) else "processing_failure")
         return PlateDetection(
             classification=category, bbox=list(detection.bbox), detector_confidence=detection.confidence,
-            raw_ocr=readings[0].raw_text if readings else "",
-            normalized_ocr=readings[0].normalized_text if readings else "",
+            raw_ocr=" ".join(r.raw_text for r in evidence_readings),
+            normalized_ocr=" ".join(r.normalized_text for r in evidence_readings),
             ocr_confidence=readings[0].confidence if readings else 0.0, parser_status="invalid",
             parser_reason=str(exc), number=NumberRecognition(policy=(f"{category.final_category}_whole_plate" if category and category.final_category in ("nt", "idara", "shorta") else "tunis_private"), outcome="error", reason=reason, regions=region_records,
                                                             checks={"error": str(exc), "partial_ocr": [{"raw": r.raw_text, "normalized": r.normalized_text, "confidence": r.confidence} for r in readings]}),

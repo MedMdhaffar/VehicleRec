@@ -58,17 +58,7 @@ class PlateDetection(BaseModel):
     left_ocr_confidence: float = 0.0
     right_ocr: str = ""
     right_ocr_confidence: float = 0.0
-    resolution_source: Literal["whole_ocr", "marker_left_right_ocr"] = "whole_ocr"
-
-
-class PlateRecognitionResponse(BaseModel):
-    request_id: str
-    timestamp: str
-    image_size: list[int]   # [w, h]
-    plate_count: int
-    plates: list[PlateDetection]
-    annotated_image: Optional[str] = None
-    annotated_image_b64: Optional[str] = None
+    resolution_source: Literal["whole_ocr", "marker_left_right_ocr", "marker_sides_ocr"] = "whole_ocr"
 
 
 PlateCategory = Literal["private", "temporary", "diplomatic", "military", "foreign", "other", "unknown", "administrative", "police"]
@@ -126,12 +116,3 @@ class UnifiedPlateResult(BaseModel):
     warning: Optional[str] = None
     timing: PlateTiming = Field(default_factory=PlateTiming)
     evidence: dict[str, Any] = Field(default_factory=dict)
-
-
-class PrototypeRecognitionResponse(BaseModel):
-    request_id: str
-    timestamp: str
-    image_size: list[int]
-    plate_count: int
-    plates: list[UnifiedPlateResult]
-    runtime_counters: dict[str, float | int]

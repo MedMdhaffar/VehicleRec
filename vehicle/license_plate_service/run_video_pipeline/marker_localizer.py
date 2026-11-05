@@ -38,6 +38,9 @@ class TounesMarkerLocalizer:
         return self._model is not None
 
     def load(self) -> None:
+        import torch
+        if not torch.cuda.is_available():
+            raise RuntimeError("Tounes marker detection requires a CUDA GPU; CPU fallback is disabled.")
         if not Path(self.model_path).is_file():
             raise FileNotFoundError(f"Tounes marker model not found: {self.model_path}")
         from ultralytics import YOLO

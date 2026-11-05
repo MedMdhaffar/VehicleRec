@@ -7,7 +7,6 @@ import unicodedata
 from pathlib import Path
 import os
 from dataclasses import dataclass
-from typing import Iterable
 
 import numpy as np
 
@@ -43,6 +42,12 @@ class PlateReader:
     """
 
     def __init__(self, rec_model: str = config.OCR_REC_MODEL):
+        device =  "gpu:0"
+        import paddle
+        if not device.startswith("gpu:") or not device[4:].isdigit():
+            raise RuntimeError("Registration OCR requires a gpu:<index> device; CPU execution is disabled.")
+        if not paddle.is_compiled_with_cuda() or int(device[4:]) >= paddle.device.cuda.device_count():
+            raise RuntimeError("Registration OCR requires CUDA-enabled Paddle and an available GPU; CPU fallback is disabled.")
         self.rec_model = rec_model
         model_dir = (
             Path(__file__).resolve().parent
@@ -61,7 +66,7 @@ class PlateReader:
         os.environ["PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK"] = "True"
         from paddleocr import TextRecognition
         self.engine = TextRecognition(model_name=rec_model, model_dir=str(model_dir.resolve()),
-                                      device=os.environ.get("PLATE_OCR_DEVICE", "gpu:0"))
+                                      device=device)
         log.info("Native PaddleOCR TextRecognition (%s) loaded.", rec_model)
 
     def _parse(self, out) -> OCRResult:
@@ -99,43 +104,7 @@ class PlateReader:
         except Exception as exc:
             raise RuntimeError(f"Registration OCR failed: {exc}") from exc
 
-    def read_batch(self, crops: Iterable[np.ndarray], batch_size: int = 16) -> list[OCRResult]:
-        """Recognize tight plate crops in batches, preserving input order."""
-        crop_list = list(crops)
-        if not crop_list:
-            return []
-        if batch_size < 1:
-            raise ValueError("batch_size must be positive")
-
-        results: list[OCRResult] = []
-        for start in range(0, len(crop_list), batch_size):
-            batch = crop_list[start:start + batch_size]
-            if not hasattr(self.engine, "predict"):
-                results.extend(self.read_result(crop) for crop in batch)
-                continue
-            try:
-                outputs = list(self.engine.predict(batch, batch_size=len(batch)))
-                if len(outputs) != len(batch):
-                    raise RuntimeError(
-                        f"OCR returned {len(outputs)} results for a batch of {len(batch)}"
-                    )
-                results.extend(self._parse([output]) for output in outputs)
-            except Exception as exc:
-                log.warning("Batched OCR failed (%s); retrying crops individually", exc)
-                results.extend(self.read_result(crop) for crop in batch)
-        return results
-
     def read(self, crop: np.ndarray) -> tuple[str, float]:
         """Backward-compatible normalized text/confidence API."""
         result = self.read_result(crop)
         return result.normalized_text, result.confidence
-
-
-_reader: "PlateReader | None" = None
-
-
-def get_reader() -> PlateReader:
-    global _reader
-    if _reader is None:
-        _reader = PlateReader(config.OCR_REC_MODEL)
-    return _reader

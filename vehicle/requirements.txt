@@ -53,7 +53,9 @@ open_image_models                 # for the plate detector
 
 # ── Plate OCR stack (NONE auto-installed by paddleocr) ──
 paddleocr==3.7.0
-paddlepaddle==3.3.1               # OCR inference backend (CPU build; use paddlepaddle-gpu only if needed)
+# Pin the Linux/Python 3.11 CUDA 11.8 wheel: its cuDNN 8 / CUDA 11 packages
+# avoid the conflicting cuDNN 9 pins in Paddle cu126 and PyTorch cu128.
+paddlepaddle-gpu @ https://paddle-whl.cdn.bcebos.com/stable/cu118/paddlepaddle-gpu/paddlepaddle_gpu-3.3.1-cp311-cp311-linux_x86_64.whl
 transformers==4.57.0              # Review/experimental model utilities; native plate OCR uses Paddle
 
 

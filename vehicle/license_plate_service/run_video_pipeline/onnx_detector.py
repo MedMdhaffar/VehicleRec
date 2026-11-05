@@ -72,21 +72,19 @@ class LocalPlateBackend:
         if package_version != "0.6.0":
             raise RuntimeError(f"Expected open-image-models 0.6.0, found {package_version}; run the documented detector setup")
         requested = [p.strip() for p in config.PLATE_DETECTOR_PROVIDERS.split(',') if p.strip()]
-        if not requested:
-            raise ValueError('PLATE_DETECTOR_PROVIDERS must specify at least one provider')
+        if requested != ['CUDAExecutionProvider']:
+            raise ValueError('Plate detection requires CUDAExecutionProvider; CPU execution is disabled.')
         available = ort.get_available_providers()
-        fallback = config.PLATE_DETECTOR_ALLOW_CPU_FALLBACK
-        missing = [p for p in requested if p not in available]
-        if missing and (not fallback or 'CPUExecutionProvider' not in available):
-            raise RuntimeError(f'Requested ONNX providers unavailable: {missing}; available={available}. Explicit CPU fallback is disabled.')
-        effective = [p for p in requested if p in available]
-        if fallback and 'CPUExecutionProvider' not in effective:
-            effective.append('CPUExecutionProvider')
-        if 'CUDAExecutionProvider' in effective:
-            # Reuse PyTorch's CUDA libraries for normal Django and CLI launches.
-            import torch
-            ort.preload_dlls()
+        if 'CUDAExecutionProvider' not in available:
+            raise RuntimeError(f'CUDAExecutionProvider unavailable: {available}. CPU fallback is disabled.')
+        effective = requested
+        # Reuse PyTorch's CUDA libraries for normal Django and CLI launches.
+        import torch
+        if not torch.cuda.is_available():
+            raise RuntimeError('Plate detection requires an available CUDA GPU; CPU fallback is disabled.')
+        ort.preload_dlls()
         options = ort.SessionOptions()
+        options.add_session_config_entry('session.disable_cpu_ep_fallback', '1')
         options.intra_op_num_threads = config.PLATE_DETECTOR_INTRA_OP_THREADS
         options.inter_op_num_threads = config.PLATE_DETECTOR_INTER_OP_THREADS
         if options.intra_op_num_threads < 1 or options.inter_op_num_threads < 1:
@@ -99,30 +97,27 @@ class LocalPlateBackend:
                                        conf_thresh=.001, batch_size=1, providers=effective, sess_options=options)
         session = detector.model
         actual = session.get_providers()
-        fallback_happened = requested[0] not in actual
-        if fallback_happened and not fallback:
-            raise RuntimeError(f'ONNX provider fallback rejected: requested={requested}, actual={actual}. Set PLATE_DETECTOR_ALLOW_CPU_FALLBACK=1 only to explicitly allow CPU fallback.')
+        # ORT may register CPU alongside CUDA even when CPU graph execution is disabled.
+        if not actual or actual[0] != 'CUDAExecutionProvider':
+            raise RuntimeError(f'ONNX provider fallback rejected: requested={requested}, actual={actual}. CPU fallback is disabled.')
+        if session.get_session_options().get_session_config_entry('session.disable_cpu_ep_fallback') != '1':
+            raise RuntimeError('ONNX session did not retain the required CPU fallback prohibition.')
         if session.get_inputs()[0].shape != [1, 3, 640, 640]:
             raise ValueError(f'Unexpected t-640 ONNX input shape: {session.get_inputs()[0].shape}')
-        # Disallow ORT's implicit run-time EP failure retry unless explicitly authorized.
-        if not fallback:
-            session.disable_fallback()
+        # Never retry failed GPU inference on CPU.
+        session.disable_fallback()
         detector.model = StrictSession(session)
         self.metadata = dict(model_id=MODEL_ID, checkpoint=str(self.path), sha256=actual_hash,
                              open_image_models_version='0.6.0', onnxruntime_version=ort.__version__,
                              requested_providers=requested, configured_providers=effective,
                              actual_providers=actual, available_providers=available,
-                             cpu_fallback_allowed=fallback, fallback_happened=fallback_happened,
+                             cpu_fallback_allowed=False, fallback_happened=False,
                              warnings=[str(w.message) for w in captured], precision='float32',
                              input_shape=[1, 3, 640, 640], embedded_score_floor=.001, embedded_nms_iou=.45,
                              library_output_threshold=.001, application_confidence=config.PLATE_CONF,
                              application_dedup_iou=config.PLATE_DEDUP_IOU,
                              intra_op_threads=options.intra_op_num_threads, inter_op_threads=options.inter_op_num_threads,
                              initialization_seconds=time.perf_counter() - started)
-        if missing or fallback_happened:
-            message=f'Explicit ONNX CPU fallback: requested={requested}, available={available}, actual={actual}'
-            self.metadata['warnings'].append(message)
-            log.warning(message)
         for message in self.metadata['warnings']:
             log.warning('Plate detector initialization: %s', message)
         self.detector = detector

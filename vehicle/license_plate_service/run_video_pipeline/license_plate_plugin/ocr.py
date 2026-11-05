@@ -32,7 +32,12 @@ def unwrap_paddle_result(result: Any) -> tuple[str, float | None, dict[str, Any]
 
 
 class ArabicRecognizer:
-    def __init__(self, model_dir: Path, device: str = "cpu"):
+    def __init__(self, model_dir: Path, device: str = "gpu:0"):
+        import paddle
+        if not device.startswith("gpu:") or not device[4:].isdigit():
+            raise PluginError("Arabic OCR requires a gpu:<index> device; CPU execution is disabled.")
+        if not paddle.is_compiled_with_cuda() or int(device[4:]) >= paddle.device.cuda.device_count():
+            raise PluginError("Arabic OCR requires CUDA-enabled Paddle and an available GPU; CPU fallback is disabled.")
         if not model_dir.is_dir():
             raise PluginError(f"PaddleOCR model directory is missing: {model_dir}")
         for name in ("inference.pdiparams", "inference.json", "inference.yml"):

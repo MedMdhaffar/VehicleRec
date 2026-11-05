@@ -1,4 +1,4 @@
-"""Load-once visual/OCR classifier and structured final decision."""
+"""OCR-first NT detection followed by three-category R2 cosine matching."""
 
 from __future__ import annotations
 
@@ -108,19 +108,8 @@ class PlateCategoryClassifier:
         exclude_groups: dict[str, Any] | None,
         expected_category: str | None,
     ) -> dict[str, Any]:
-        """Shared feature extraction, OCR, matching and decision implementation."""
+        """Check NT OCR first; otherwise match only the three visual categories."""
         total_started = time.perf_counter()
-        visual_started = time.perf_counter()
-        embedding, feature_metadata = extract_r2(image, self.encoder, self.config.policy)
-        visual = self.index.match(
-            embedding,
-            exclude_ids=exclude_reference_ids,
-            exclude_groups=exclude_groups,
-            tie_tolerance=self.config.tie_tolerance,
-            expected_category=expected_category,
-        )
-        visual_seconds = time.perf_counter() - visual_started
-
         geometry = calculate_geometry(image.shape, (16, 16), self.config.policy)
         resized, _padded = resize_and_pad(image, geometry, self.config.policy)
         if self.ocr is None:
@@ -140,16 +129,39 @@ class PlateCategoryClassifier:
             ocr = self.ocr.recognize(resized, submitted_path)
             parser = parse_nt_evidence(ocr["raw_text"]) if ocr["inference_status"] == "completed" else None
 
-        visual_category = visual["visual_category"]
-        nt_present = parser is not None and parser["decision"] == "present"
+        # Reuse the parser's normalized, boundary-checked marker detection.
+        # Conflicting markers remain recorded for downstream number validation.
+        nt_present = parser is not None and parser["matches"]["nt"]
+        visual_seconds = 0.0
+        feature_metadata = None
         if nt_present:
+            visual = {
+                "visual_category": None,
+                "nearest_reference_id": None,
+                "nearest_reference_category": None,
+                "nearest_similarity": None,
+                "predicted_category_margin": None,
+                "tie_flag": False,
+                "eligible_reference_count": 0,
+            }
             final_category = "nt"
             decision_source = "ocr_nt_evidence"
-            override = visual_category != "nt"
         else:
-            final_category = visual_category
+            # Failed/disabled OCR retains the visual fallback, but can never
+            # assign NT: ReferenceIndex matches only the three visual categories.
+            visual_started = time.perf_counter()
+            embedding, feature_metadata = extract_r2(image, self.encoder, self.config.policy)
+            visual = self.index.match(
+                embedding,
+                exclude_ids=exclude_reference_ids,
+                exclude_groups=exclude_groups,
+                tie_tolerance=self.config.tie_tolerance,
+                expected_category=expected_category,
+            )
+            visual_seconds = time.perf_counter() - visual_started
+            final_category = visual["visual_category"]
             decision_source = "visual_r2"
-            override = False
+        visual_category = visual["visual_category"]
         conflict = parser is not None and parser["decision"] == "conflicting"
         ocr_failure = ocr["inference_status"] == "failed"
         result = {
@@ -175,7 +187,7 @@ class PlateCategoryClassifier:
                 "visual_category": visual_category,
                 "final_category": final_category,
                 "source": decision_source,
-                "override_applied": override,
+                "override_applied": False,
                 "conflict_flag": conflict,
                 "ocr_failure_flag": ocr_failure,
                 "tie_flag": visual["tie_flag"],
@@ -194,7 +206,7 @@ class PlateCategoryClassifier:
         if expected_category is not None:
             result["evaluation"] = {
                 "expected_category": expected_category,
-                "visual_correct": visual_category == expected_category,
+                "visual_correct": None if nt_present else visual_category == expected_category,
                 "final_correct": final_category == expected_category,
             }
         return result
