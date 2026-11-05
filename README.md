@@ -76,14 +76,13 @@ complete and validate continuous, low-latency camera processing:
 
 ## Project map
 
-| Folder | Purpose |
-| --- | --- |
-| `vehicle/` | Django API and computer-vision services |
+| Folder                                              | Purpose                                    |
+| --------------------------------------------------- | ------------------------------------------ |
+| `vehicle/`                                          | Django API and computer-vision services    |
 | `vehicle/license_plate_service/run_video_pipeline/` | Offline plate pipeline and category plugin |
-| `vehicle/license_plate_service/run_rtsp_pipeline/` | Live-stream implementation scaffold |
-| `frontend/` | React / Vite workspace |
-| `services/` | Preserved standalone pipelines |
-| `docs/` | Technical notes and audits |
+| `vehicle/license_plate_service/run_rtsp_pipeline/`  | Live-stream implementation scaffold        |
+| `frontend/`                                         | React / Vite workspace                     |
+| `services/`                                         | Preserved standalone pipelines             |
 
 **Checks:** run `python manage.py check` from `vehicle/`, and
 `npm run lint` / `npm run build` from `frontend/`.
