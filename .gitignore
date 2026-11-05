@@ -9,6 +9,7 @@ experiments/
 verification/
 scripts/   
 docs/
-investigation/
+investigations/
 *.pdiparams
 media/
+
