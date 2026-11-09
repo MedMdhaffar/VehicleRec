@@ -1,7 +1,0 @@
-ultralytics
-torch
-transformers
-opencv-python
-Pillow
-numpy
-matplotlib

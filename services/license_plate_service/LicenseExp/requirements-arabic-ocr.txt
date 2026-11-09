@@ -1,3 +1,0 @@
-# Install PaddlePaddle 3.2.0 from its official CPU/GPU package index first;
-# this file pins the separate PaddleOCR application layer.
-paddleocr==3.7.0

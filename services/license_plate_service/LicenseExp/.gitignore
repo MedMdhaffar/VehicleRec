@@ -1,7 +1,0 @@
-# Ignore all PyTorch checkpoint files
-*.pth
-*.pt
-*.ckpt
-
-# Ignore model checkpoint directories
-checkpoints/

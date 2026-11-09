@@ -27,7 +27,7 @@ PLATE_DEDUP_IOU = float(os.environ.get("PLATE_DEDUP_IOU", "0.8"))#
 
 # Local private-plate acceptance thresholds.
 # Set to 1 only to restore the previous whole-plate OCR/fusion flow.
-TUNIS_USE_LEGACY_WHOLE_OCR = os.environ.get("TUNIS_USE_LEGACY_WHOLE_OCR", "0")
+TUNIS_USE_LEGACY_WHOLE_OCR = False
 
 
 
@@ -46,3 +46,13 @@ WHOLE_PLATE_MIN_OCR_CONF = float(os.environ.get("WHOLE_PLATE_MIN_OCR_CONF", "0.9
 PLATE_DETECTOR_PROVIDERS ="CUDAExecutionProvider"
 PLATE_DETECTOR_INTRA_OP_THREADS = int(os.environ.get("PLATE_DETECTOR_INTRA_OP_THREADS", "2"))
 PLATE_DETECTOR_INTER_OP_THREADS = int(os.environ.get("PLATE_DETECTOR_INTER_OP_THREADS", "1"))
+
+#The OCR model
+OCR_REC_MODEL = "PP-OCRv6_medium_rec"
+
+REGISTRATION_OCR_MODEL_DIR = Path(
+    os.environ.get(
+        "REGISTRATION_OCR_MODEL_DIR",
+        str(_MODELS_DIR / OCR_REC_MODEL),
+    )
+).expanduser()

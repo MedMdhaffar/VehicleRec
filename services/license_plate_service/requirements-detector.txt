@@ -1,8 +1,0 @@
-# Install with --no-deps AFTER the main CV requirements; reuse opencv-python,
-# not open-image-models' alternative opencv-python-headless distribution.
-open-image-models==0.6.0
-rich==15.0.0
-tqdm==4.67.3
-# An ONNX Runtime distribution is required. Existing vehicle/requirements.txt
-# installs onnxruntime-gpu (also supplies CPUExecutionProvider).
-# CPU-only deployments may install onnxruntime>=1.19.2,<2 INSTEAD; never both.

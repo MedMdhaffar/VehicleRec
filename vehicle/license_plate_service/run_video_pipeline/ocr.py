@@ -9,7 +9,6 @@ import os
 from dataclasses import dataclass
 
 import numpy as np
-
 import run_video_pipeline.config as config
 
 log = logging.getLogger(__name__)
@@ -42,23 +41,33 @@ class PlateReader:
     """
 
     def __init__(self, rec_model: str = config.OCR_REC_MODEL):
+        
         device =  "gpu:0"
+
         import paddle
+
         if not device.startswith("gpu:") or not device[4:].isdigit():
             raise RuntimeError("Registration OCR requires a gpu:<index> device; CPU execution is disabled.")
         if not paddle.is_compiled_with_cuda() or int(device[4:]) >= paddle.device.cuda.device_count():
             raise RuntimeError("Registration OCR requires CUDA-enabled Paddle and an available GPU; CPU fallback is disabled.")
         self.rec_model = rec_model
-        model_dir = (
-            Path(__file__).resolve().parent
-            / "models"
-            / "PP-OCRv6_medium_rec"
-        )        
-        if not model_dir or not model_dir.is_absolute():
-            raise RuntimeError("REGISTRATION_OCR_MODEL_DIR must be an absolute path to installed local PP-OCRv6_medium_rec assets")
+
+        model_dir = config.REGISTRATION_OCR_MODEL_DIR
+
+        if not model_dir.is_absolute():
+            raise RuntimeError(
+                f"REGISTRATION_OCR_MODEL_DIR must be absolute: {model_dir}"
+            )
+
         required = ("inference.json", "inference.pdiparams", "inference.yml")
-        if not all((model_dir / name).is_file() for name in required):
-            raise RuntimeError("Set REGISTRATION_OCR_MODEL_DIR to the installed local PP-OCRv6_medium_rec assets; runtime downloads are forbidden")
+        missing = [name for name in required if not (model_dir / name).is_file()]
+
+        if missing:
+            raise RuntimeError(
+                f"OCR model files missing in {model_dir}: {', '.join(missing)}"
+            )   
+         
+        
         import yaml
         identity = yaml.safe_load((model_dir / "inference.yml").read_text(encoding="utf-8"))
         if identity.get("Global", {}).get("model_name") != rec_model:
