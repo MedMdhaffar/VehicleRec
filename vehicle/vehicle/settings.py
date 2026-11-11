@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'api',
     "license_plate_service",
     "vehicle_classification_manufacturer_service",
-    "vehicle_color_service",
 ]
 
 MIDDLEWARE = [
@@ -148,6 +147,6 @@ LOGGING = {
     "handlers": {"pipeline_console": {"class": "logging.StreamHandler", "formatter": "pipeline"}},
     "loggers": {
         name: {"handlers": ["pipeline_console"], "level": "INFO", "propagate": False}
-        for name in ("license_plate_service", "run_video_pipeline")
+        for name in ("license_plate_service", "run_video_pipeline", "vehicle_classification_manufacturer_service")
     },
 }

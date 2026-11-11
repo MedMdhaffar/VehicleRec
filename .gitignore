@@ -14,3 +14,8 @@ investigations/
 media/
 
 AGENTS.md
+
+# Local llama.cpp vehicle-recognition model assets.
+*.whl
+*.safetensors
+*.gguf

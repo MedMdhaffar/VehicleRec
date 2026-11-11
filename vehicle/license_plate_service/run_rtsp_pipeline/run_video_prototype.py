@@ -1,8 +1,6 @@
 """Track plates in a prerecorded video and recognize the best crop once per track."""
 from __future__ import annotations
 
-import argparse
-import json
 import math
 import os
 import statistics
@@ -18,9 +16,6 @@ import numpy as np
 import yaml
 
 import run_video_pipeline.config as config
-from run_video_pipeline.classification import create_classifier
-from run_video_pipeline.data_capture import ReviewStore
-from run_video_pipeline.marker_localizer import TounesMarkerLocalizer
 from run_video_pipeline.ocr import PlateReader
 from run_video_pipeline.policies import compact_result
 from run_video_pipeline.plate_detector import (
@@ -34,9 +29,6 @@ from run_video_pipeline.schemas import UnifiedPlateResult
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_TRACKER = Path(__file__).resolve().parent / "trackers/bytetrack_plates.yaml"
-# Keep generated video artifacts together in the directory from which the
-# runner was launched. Individual CLI output options can still override this.
-DEFAULT_OUTPUT_ROOT = Path.cwd() / "debug"
 DEFAULT_ASSOCIATION_PADDING = 0.18
 
 
@@ -852,7 +844,7 @@ class VideoPrototypeRunner:
         if not capture.isOpened():
             capture.release()
             self.close()
-            raise SystemExit(f"Could not open video: {video}")
+            raise ValueError(f"Could not open video: {video}")
         fps = float(capture.get(cv2.CAP_PROP_FPS) or 25.0)
         width = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -1062,82 +1054,3 @@ def _build_tracker(path: Path, fps: float):
     with path.open(encoding="utf-8") as handle:
         arguments = SimpleNamespace(**yaml.safe_load(handle))
     return BYTETracker(arguments, frame_rate=max(1, int(round(fps))))
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("video", type=Path)
-    parser.add_argument("--output", type=Path)
-    parser.add_argument("--metrics-output", type=Path)
-    parser.add_argument("--capture-root", type=Path, default=config.CAPTURE_ROOT)
-    parser.add_argument("--selected-crops-dir", type=Path)
-    parser.add_argument("--track-summary-output", type=Path)
-    parser.add_argument("--tracker-config", type=Path, default=DEFAULT_TRACKER)
-    parser.add_argument("--conf", type=float, default=None)
-    parser.add_argument("--imgsz", type=int, choices=[640], default=None, help="Fixed ONNX input size; only 640 is supported")
-    parser.add_argument("--association-padding", type=float, default=DEFAULT_ASSOCIATION_PADDING)
-    parser.add_argument("--strong-quality", type=float, default=12000.0)
-    parser.add_argument("--strong-min-candidates", type=int, default=3)
-    parser.add_argument("--min-candidates", type=int, default=12)
-    parser.add_argument("--stable-observations", type=int, default=5)
-    parser.add_argument("--disappearance-frames", type=int, default=5)
-    parser.add_argument("--minimum-exit-candidates", type=int, default=8)
-    parser.add_argument("--retry-improvement", type=float, default=1.50)
-    parser.add_argument("--recheck-detail-improvement", type=float, default=1.25)
-    parser.add_argument("--replacement-confidence-gain", type=float, default=0.02)
-    parser.add_argument("--max-frames", type=int)
-    args = parser.parse_args()
-    from run_video_pipeline.onnx_detector import validate_options
-    validate_options(args.conf, args.imgsz)
-
-    capture = cv2.VideoCapture(str(args.video))
-    if not capture.isOpened():
-        raise SystemExit(f"Could not open video: {args.video}")
-    fps = float(capture.get(cv2.CAP_PROP_FPS) or 25.0)
-    capture.release()
-    mode = "local_only"
-    output = args.output or DEFAULT_OUTPUT_ROOT / f"{args.video.stem}_{mode}_annotated.mp4"
-    metrics_output = args.metrics_output or output.with_suffix(".metrics.json")
-
-    counting_reader = CountingReader()
-    pipeline = PrototypePlatePipeline(
-        counting_reader,
-        TounesMarkerLocalizer(config.WORD_DETECTOR_PATH),
-        ReviewStore(args.capture_root),
-        classifier_factory=create_classifier,
-    )
-    runner = VideoPrototypeRunner(
-        pipeline,
-        PlateDetector(config.PLATE_DETECTOR_PATH),
-        _build_tracker(args.tracker_config, fps),
-        counting_reader,
-        association_padding=args.association_padding,
-        strong_quality=args.strong_quality,
-        strong_min_candidates=args.strong_min_candidates,
-        min_candidates=args.min_candidates,
-        stable_observations=args.stable_observations,
-        disappearance_frames=args.disappearance_frames,
-        minimum_exit_candidates=args.minimum_exit_candidates,
-        retry_improvement=args.retry_improvement,
-        recheck_detail_improvement=args.recheck_detail_improvement,
-        replacement_confidence_gain=args.replacement_confidence_gain,
-    )
-    metrics = runner.run(
-        args.video, output, conf=args.conf, imgsz=args.imgsz, max_frames=args.max_frames,
-        selected_crops_dir=args.selected_crops_dir,
-    )
-    metrics_output.parent.mkdir(parents=True, exist_ok=True)
-    metrics_output.write_text(json.dumps(metrics, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    track_summary_output = args.track_summary_output or metrics_output.with_name(
-        f"{metrics_output.stem}.tracks.json"
-    )
-    track_summary_output.parent.mkdir(parents=True, exist_ok=True)
-    track_summary_output.write_text(
-        json.dumps(metrics["tracks"], ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
-    print(json.dumps(metrics, ensure_ascii=False, indent=2))
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

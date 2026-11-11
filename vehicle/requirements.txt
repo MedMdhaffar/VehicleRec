@@ -56,7 +56,7 @@ paddleocr==3.7.0
 # Pin the Linux/Python 3.11 CUDA 11.8 wheel: its cuDNN 8 / CUDA 11 packages
 # avoid the conflicting cuDNN 9 pins in Paddle cu126 and PyTorch cu128.
 paddlepaddle-gpu @ https://paddle-whl.cdn.bcebos.com/stable/cu118/paddlepaddle-gpu/paddlepaddle_gpu-3.3.1-cp311-cp311-linux_x86_64.whl
-transformers==4.57.0              # Review/experimental model utilities; native plate OCR uses Paddle
+-r vehicle_classification_manufacturer_service/requirements-manufacturer.txt
 
 
 
@@ -72,9 +72,20 @@ requests==2.33.1
 # are resolved automatically from the pins above. For a fully-reproducible lock, run
 # pip-compile on this file (follow-up).
 
-# Local plate-category classifier; official DINOv3's full hub import dependencies.
--r ../services/license_plate_service/requirements-classifier.txt
 
 # The plate ONNX adapter is provisioned separately with --no-deps via
 # scripts/setup_local_plate_runtime.sh and requirements-detector.txt, to reuse
 # this OpenCV provider instead of installing opencv-python-headless alongside it.
+
+
+transformers>=5.1,<6
+pillow>=10
+huggingface-hub>=1.0,<2
+numpy
+opencv-python
+pydantic>=2,<3
+
+
+# Approved MIT fork. Build with GGML_CUDA=ON and MTMD_BUILD=ON; see the migration
+# document for the verified native revision, isolated build and wheel SHA-256.
+llama-cpp-python @ git+https://github.com/JamePeng/llama-cpp-python.git@ec56af26d9c224e10983ef8b5f40ee34e941ec11

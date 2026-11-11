@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 import PlateLab from "./PlateLab";
+import VehicleLab from "./VehicleLab";
 
 const API = (import.meta.env.VITE_API_URL || "http://localhost:8000").replace(
   /\/$/,
@@ -104,18 +105,6 @@ function ResultsTable({ rows = [] }) {
 function App() {
   const [mode, setMode] = useState("lab");
   const [backend, setBackend] = useState("checking");
-  const [file, setFile] = useState(null);
-  const [dragging, setDragging] = useState(false);
-  const [maxFrames, setMaxFrames] = useState("");
-  const [videoBusy, setVideoBusy] = useState(false);
-  const [videoResult, setVideoResult] = useState(null);
-  const [videoPlaybackError, setVideoPlaybackError] = useState(false);
-  const [colorFile, setColorFile] = useState(null);
-  const [colorBusy, setColorBusy] = useState(false);
-  const [colorResult, setColorResult] = useState(null);
-  const [classFile, setClassFile] = useState(null);
-  const [classBusy, setClassBusy] = useState(false);
-  const [classResult, setClassResult] = useState(null);
   const [rtsp, setRtsp] = useState({ status: "idle", results: [] });
   const [rtspForm, setRtspForm] = useState({
     url: "",
@@ -124,7 +113,6 @@ function App() {
     record: true,
   });
   const [error, setError] = useState("");
-  const inputRef = useRef(null);
 
   useEffect(() => {
     axios
@@ -144,39 +132,6 @@ function App() {
     return () => clearInterval(id);
   }, [mode]);
 
-  const videoRows = useMemo(
-    () =>
-      Object.entries(videoResult?.tracks || {}).map(([track_id, row]) => ({
-        track_id,
-        ...row,
-      })),
-    [videoResult],
-  );
-  async function analyzeVideo(event) {
-    event.preventDefault();
-    if (!file) return setError("Choose a video before starting the analysis.");
-    setError("");
-    setVideoBusy(true);
-    setVideoResult(null);
-    setVideoPlaybackError(false);
-    const data = new FormData();
-    data.append("video", file);
-    if (maxFrames) data.append("max_frames", maxFrames);
-    try {
-      setVideoResult(
-        (await axios.post(apiUrl("/api/license-plate/analyze/"), data)).data,
-      );
-    } catch (requestError) {
-      setError(
-        requestError.response?.data?.error ||
-          (!requestError.response
-            ? `Could not reach the API at ${API}. Check that Django is running and VITE_API_URL matches its address.`
-            : `The video analysis failed (HTTP ${requestError.response.status}). Check the Django terminal for details.`),
-      );
-    } finally {
-      setVideoBusy(false);
-    }
-  }
   async function startRtsp(event) {
     event.preventDefault();
     setError("");
@@ -192,53 +147,6 @@ function App() {
   }
   async function stopRtsp() {
     setRtsp((await axios.post(apiUrl("/api/license-plate/rtsp/stop/"))).data);
-  }
-  async function analyzeColor(event) {
-    event.preventDefault();
-    if (!colorFile)
-      return setError("Choose a video before starting colour analysis.");
-    setError("");
-    setColorBusy(true);
-    setColorResult(null);
-    const data = new FormData();
-    data.append("video", colorFile);
-    try {
-      setColorResult(
-        (await axios.post(apiUrl("/api/color/analyze/"), data)).data,
-      );
-    } catch (requestError) {
-      setError(
-        requestError.response?.data?.error || "The colour analysis failed.",
-      );
-    } finally {
-      setColorBusy(false);
-    }
-  }
-  async function analyzeClassification(event) {
-    event.preventDefault();
-    if (!classFile)
-      return setError("Choose a video before starting classification.");
-    setError("");
-    setClassBusy(true);
-    setClassResult(null);
-    const data = new FormData();
-    data.append("video", classFile);
-    try {
-      setClassResult(
-        (
-          await axios.post(
-            apiUrl("/api/classification-manufacturer/analyze/"),
-            data,
-          )
-        ).data,
-      );
-    } catch (requestError) {
-      setError(
-        requestError.response?.data?.error || "The classification failed.",
-      );
-    } finally {
-      setClassBusy(false);
-    }
   }
   const preview =
     rtsp.running || rtsp.processed_frames
@@ -260,34 +168,28 @@ function App() {
             VEHICLE<b>AI</b>
           </span>
         </a>
-        <nav>
-          <button className="nav-active">
-            <span>⌁</span> License plates
-          </button>
-          <button disabled>
-            <span>◇</span> Classification
-          </button>
-          <button disabled>
-            <span>◐</span> Vehicle color
-          </button>
-        </nav>
         <div className="system">
           <p>System status</p>
           <div>
             <i className={backend}></i>
             <span>Backend {backend}</span>
           </div>
-          <small>License Plate Service</small>
+          <small>Vehicle vision services</small>
         </div>
       </aside>
-      <main id="top" className={mode === "lab" ? "lab-workspace" : undefined}>
+      <main id="top" className={mode !== "rtsp" ? "lab-workspace" : undefined}>
         <header>
           <div>
             <p className="eyebrow">Computer vision workspace</p>
-            <h1>License plate recognition</h1>
+            <h1>
+              {mode === "classification"
+                ? "Vehicle classification"
+                : "License plate recognition"}
+            </h1>
             <p>
-              Detect, track and recognize Tunisian plates from recorded video or
-              a live camera feed.
+              {mode === "classification"
+                ? "Recognize vehicle manufacturers, body types and colors. Tune the model and inspect the evidence."
+                : "Detect, track and recognize Tunisian plates from recorded video or a live camera feed."}
             </p>
           </div>
           <div className="status-pill">
@@ -299,25 +201,7 @@ function App() {
             className={mode === "lab" ? "active" : ""}
             onClick={() => setMode("lab")}
           >
-            Plate Lab <span>✦</span>
-          </button>
-          <button
-            className={mode === "video" ? "active" : ""}
-            onClick={() => {
-              setMode("video");
-              setError("");
-            }}
-          >
-            License plates
-          </button>
-          <button
-            className={mode === "color" ? "active" : ""}
-            onClick={() => {
-              setMode("color");
-              setError("");
-            }}
-          >
-            Vehicle colour
+            Plate Lab
           </button>
           <button
             className={mode === "classification" ? "active" : ""}
@@ -344,326 +228,13 @@ function App() {
             <button onClick={() => setError("")}>×</button>
           </div>
         )}
+        {/* Preserve in-flight analysis and results when switching tabs. */}
+        <div hidden={mode !== "classification"}>
+          <VehicleLab apiUrl={apiUrl} active={mode === "classification"} />
+        </div>
         {mode === "lab" ? (
           <PlateLab apiUrl={apiUrl} />
-        ) : mode === "video" ? (
-          <>
-            <section className="workspace-card">
-              <div className="card-head">
-                <div>
-                  <span className="step">01</span>
-                  <h2>Upload footage</h2>
-                </div>
-                <p>MP4, MOV, AVI, MKV or WebM</p>
-              </div>
-              <form onSubmit={analyzeVideo}>
-                <div
-                  className={`dropzone ${dragging ? "dragging" : ""} ${file ? "selected" : ""}`}
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    setDragging(true);
-                  }}
-                  onDragLeave={() => setDragging(false)}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    setDragging(false);
-                    setFile(e.dataTransfer.files[0]);
-                  }}
-                  onClick={() => inputRef.current?.click()}
-                >
-                  <input
-                    ref={inputRef}
-                    type="file"
-                    accept="video/*"
-                    hidden
-                    onChange={(e) => setFile(e.target.files[0])}
-                  />
-                  <div className="upload-icon">{file ? "✓" : "↑"}</div>
-                  <strong>{file ? file.name : "Drop your video here"}</strong>
-                  <span>
-                    {file
-                      ? `${(file.size / 1048576).toFixed(1)} MB · Ready to process`
-                      : "or click to browse from your computer"}
-                  </span>
-                </div>
-                <div className="controls">
-                  <label>
-                    <span>
-                      Frame limit <em>optional</em>
-                    </span>
-                    <input
-                      type="number"
-                      min="1"
-                      placeholder="Process entire video"
-                      value={maxFrames}
-                      onChange={(e) => setMaxFrames(e.target.value)}
-                    />
-                  </label>
-                  <button className="primary" disabled={!file || videoBusy}>
-                    {videoBusy ? (
-                      <>
-                        <b className="spinner"></b> Analyzing…
-                      </>
-                    ) : (
-                      "Run recognition →"
-                    )}
-                  </button>
-                </div>
-              </form>
-            </section>
-            {videoResult && (
-              <section className="results">
-                <div className="results-head">
-                  <div>
-                    <p className="eyebrow">Analysis complete</p>
-                    <h2>Recognition results</h2>
-                  </div>
-                  <a
-                    className="secondary"
-                    href={apiUrl(videoResult.output_video_url)}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Open in new tab ↗
-                  </a>
-                </div>
-                <div className="metrics">
-                  <Metric label="Frames processed" value={videoResult.frames} />
-                  <Metric
-                    label="Unique tracks"
-                    value={videoResult.unique_tracks}
-                  />
-                  <Metric
-                    label="Plates recognized"
-                    value={videoResult.recognized_tracks}
-                  />
-                  <Metric
-                    label="Processing FPS"
-                    value={videoResult.processing_fps}
-                  />
-                </div>
-                <div className="video-player">
-                  <video
-                    controls
-                    playsInline
-                    preload="metadata"
-                    src={apiUrl(videoResult.output_video_url)}
-                    onError={() => setVideoPlaybackError(true)}
-                  >
-                    <track kind="captions" />
-                    <p>
-                      Your browser cannot play this video.{" "}
-                      <a href={apiUrl(videoResult.output_video_url)}>
-                        Open the annotated video
-                      </a>
-                      .
-                    </p>
-                  </video>
-                </div>
-                {videoPlaybackError && (
-                  <p role="status">
-                    The annotated MP4 was created, but this browser could not
-                    play it. Open the output in a browser or player with H.264
-                    support.
-                  </p>
-                )}
-                <ResultsTable rows={videoRows} />
-              </section>
-            )}
-          </>
-        ) : mode === "color" ? (
-          <>
-            <section className="workspace-card">
-              <div className="card-head">
-                <div>
-                  <span className="step">01</span>
-                  <h2>Upload vehicle footage</h2>
-                </div>
-                <p>MP4, MOV, AVI, MKV or WebM</p>
-              </div>
-              <form onSubmit={analyzeColor}>
-                <div
-                  className={`dropzone ${colorFile ? "selected" : ""}`}
-                  onClick={() => document.getElementById("color-file")?.click()}
-                >
-                  <input
-                    id="color-file"
-                    type="file"
-                    accept="video/*"
-                    hidden
-                    onChange={(e) => setColorFile(e.target.files[0])}
-                  />
-                  <div className="upload-icon">{colorFile ? "✓" : "↑"}</div>
-                  <strong>
-                    {colorFile ? colorFile.name : "Drop your video here"}
-                  </strong>
-                  <span>
-                    {colorFile
-                      ? "Ready to estimate vehicle colours"
-                      : "or click to browse from your computer"}
-                  </span>
-                </div>
-                <div className="controls">
-                  <span className="helper">
-                    Tracks vehicles and estimates dominant exterior colour over
-                    time.
-                  </span>
-                  <button
-                    className="primary"
-                    disabled={!colorFile || colorBusy}
-                  >
-                    {colorBusy ? "Analyzing…" : "Estimate colours →"}
-                  </button>
-                </div>
-              </form>
-            </section>
-            {colorResult && (
-              <section className="results">
-                <div className="results-head">
-                  <div>
-                    <p className="eyebrow">Analysis complete</p>
-                    <h2>Vehicle colour results</h2>
-                  </div>
-                  <a
-                    className="secondary"
-                    href={apiUrl(colorResult.output_video_url)}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Open annotated video ↗
-                  </a>
-                </div>
-                <div className="metrics">
-                  <Metric label="Frames processed" value={colorResult.frames} />
-                  <Metric
-                    label="Vehicles tracked"
-                    value={colorResult.vehicles?.length || 0}
-                  />
-                  <Metric label="Pipeline" value="HSV + temporal" />
-                  <Metric label="Output" value="Ready" />
-                </div>
-                <div className="video-player">
-                  <video
-                    controls
-                    playsInline
-                    preload="metadata"
-                    src={apiUrl(colorResult.output_video_url)}
-                  />
-                </div>
-                <ResultsTable
-                  rows={(colorResult.vehicles || []).map((item) => ({
-                    ...item,
-                    plate_text: item.colour,
-                    plate_category: item.type,
-                    confidence: item.colour_confidence,
-                  }))}
-                />
-              </section>
-            )}
-          </>
-        ) : mode === "classification" ? (
-          <>
-            <section className="workspace-card">
-              <div className="card-head">
-                <div>
-                  <span className="step">01</span>
-                  <h2>Upload vehicle footage</h2>
-                </div>
-                <p>MP4, MOV, AVI, MKV or WebM</p>
-              </div>
-              <form onSubmit={analyzeClassification}>
-                <div
-                  className={`dropzone ${classFile ? "selected" : ""}`}
-                  onClick={() =>
-                    document.getElementById("classification-file")?.click()
-                  }
-                >
-                  <input
-                    id="classification-file"
-                    type="file"
-                    accept="video/*"
-                    hidden
-                    onChange={(e) => setClassFile(e.target.files[0])}
-                  />
-                  <div className="upload-icon">{classFile ? "✓" : "↑"}</div>
-                  <strong>
-                    {classFile ? classFile.name : "Drop your video here"}
-                  </strong>
-                  <span>
-                    {classFile
-                      ? "Ready to classify vehicle types"
-                      : "or click to browse from your computer"}
-                  </span>
-                </div>
-                <div className="controls">
-                  <span className="helper">
-                    Detects and tracks cars, vans, buses, trucks, motorcycles
-                    and bicycles.
-                  </span>
-                  <button
-                    className="primary"
-                    disabled={!classFile || classBusy}
-                  >
-                    {classBusy ? "Analyzing…" : "Classify vehicles →"}
-                  </button>
-                </div>
-              </form>
-            </section>
-            {classResult && (
-              <section className="results">
-                <div className="results-head">
-                  <div>
-                    <p className="eyebrow">Analysis complete</p>
-                    <h2>Vehicle classification results</h2>
-                  </div>
-                  <a
-                    className="secondary"
-                    href={apiUrl(classResult.output_video_url)}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Open annotated video ↗
-                  </a>
-                </div>
-                <div className="metrics">
-                  <Metric
-                    label="Frames processed"
-                    value={classResult.frames_processed}
-                  />
-                  <Metric
-                    label="Vehicles tracked"
-                    value={classResult.tracks_detected}
-                  />
-                  <Metric
-                    label="Events"
-                    value={classResult.events?.length || 0}
-                  />
-                  <Metric
-                    label="Processing time"
-                    value={`${classResult.processing_seconds || 0}s`}
-                  />
-                </div>
-                <div className="video-player">
-                  <video
-                    controls
-                    playsInline
-                    preload="metadata"
-                    src={apiUrl(classResult.output_video_url)}
-                  />
-                </div>
-                <ResultsTable
-                  rows={(classResult.vehicles || []).map((item) => ({
-                    ...item,
-                    plate_text: item.vehicle_type,
-                    plate_category: "vehicle",
-                    confidence: item.type_confidence,
-                    status: "final",
-                  }))}
-                />
-              </section>
-            )}
-          </>
-        ) : (
+        ) : mode === "classification" ? null : (
           <>
             <section className="rtsp-grid">
               <div className="workspace-card camera-config">

@@ -13,9 +13,11 @@ def draw_overlay(frame: np.ndarray, profiles, roi_config=None, roi_analytics=Non
     annotated = frame.copy()
     for profile in profiles:
         x1, y1, x2, y2 = profile.bbox
-        color = _TYPE_COLORS.get(profile.type, (80, 80, 200))
+        color = _TYPE_COLORS.get(profile.recognition.body_type, (80, 80, 200))
         cv2.rectangle(annotated, (x1, y1), (x2, y2), color, 2)
-        label = f"#{profile.track_id} {profile.type} {profile.type_conf:.0%}"
+        label = f"#{profile.track_id} recognition disabled"
+        if profile.recognition.status != "disabled":
+            label = f"#{profile.track_id} {profile.recognition.manufacturer} / {profile.recognition.body_type} / {profile.recognition.color} [{profile.recognition.status}]"
         cv2.putText(annotated, label, (x1, max(18, y1 - 5)), cv2.FONT_HERSHEY_SIMPLEX, .5, color, 2, cv2.LINE_AA)
     if roi_config is None:
         return annotated

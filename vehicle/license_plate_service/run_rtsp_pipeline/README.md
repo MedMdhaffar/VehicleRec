@@ -1,12 +1,10 @@
 # Local license-plate RTSP pipeline
 
-Use the persistent runtime provisioned by `scripts/setup_local_plate_runtime.sh`.
-From the repository root:
-
-```bash
-export REGISTRATION_OCR_MODEL_DIR=/absolute/path/to/PP-OCRv6_medium_rec
-bash scripts/run_local_plate.sh rtsp --url 'rtsp://camera-host/stream' --max-frames 60
-```
+Start and stop camera sessions from the frontend's Live RTSP camera tab.
+Django calls `run_rtsp()` through `license_plate_service.service.RTSPManager`;
+the pipeline modules expose functions and classes without standalone command-line
+entry points. Configure `REGISTRATION_OCR_MODEL_DIR` with the local
+PP-OCRv6_medium_rec model directory before starting Django.
 
 Recognition is fully local: detection, tracking, selected complete crop,
 classification, number policy and validation. No API key or external recognition
@@ -33,7 +31,7 @@ Missing assets fail; only explicit setup downloads them.
 `PLATE_CONF` defaults to 0.25 (initial compatibility setting, also the library
 default; not calibrated here). The graph embeds score floor 0.001 and NMS IoU
 0.45; application dedup remains `PLATE_DEDUP_IOU=0.8`. No new crop padding.
-`DETECT_IMGSZ`/`--imgsz` may only be 640; arbitrary Ultralytics spatial sizes
+`DETECT_IMGSZ` may only be 640; arbitrary Ultralytics spatial sizes
 are rejected. The library letterboxes BGR input and reverses coordinates once.
 
 Default `PLATE_DETECTOR_PROVIDERS=CPUExecutionProvider`. To explicitly request

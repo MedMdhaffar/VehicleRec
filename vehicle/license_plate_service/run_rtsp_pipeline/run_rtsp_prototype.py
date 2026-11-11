@@ -1,16 +1,13 @@
 """Run the validated track-based plate pipeline on one RTSP camera."""
 from __future__ import annotations
 
-import argparse
-import json
 import logging
-import os
-import signal
 import threading
 import time
 from collections import deque
 from dataclasses import dataclass, field
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Callable
 
 import cv2
@@ -283,13 +280,6 @@ class RTSPFrameReader:
         self._release_capture()
 
 
-def _stop_handler(stop_event: threading.Event):
-    def handle(_signum, _frame) -> None:
-        stop_event.set()
-
-    return handle
-
-
 def _open_writer(path: Path, frame, fps: float):
     path.parent.mkdir(parents=True, exist_ok=True)
     height, width = frame.shape[:2]
@@ -303,7 +293,7 @@ def _open_writer(path: Path, frame, fps: float):
 
 
 def _build_live_runner(
-    args: argparse.Namespace,
+    args: SimpleNamespace,
     pipeline: PrototypePlatePipeline,
     detector: PlateDetector,
     counting_reader: CountingReader,
@@ -365,50 +355,8 @@ def _rtsp_summary(
     }
 
 
-def _emit_summary(summary: dict, output: Path | None) -> None:
-    if output:
-        output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text(
-            json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-        )
-    print(json.dumps(summary, ensure_ascii=False, indent=2))
-
-
-def _parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--url", default=os.environ.get("RTSP_URL"))
-    parser.add_argument("--camera-id", default=os.environ.get("RTSP_CAMERA_ID", "cam-1"))
-    parser.add_argument("--max-frames", type=int)
-    parser.add_argument("--max-seconds", type=float)
-    parser.add_argument("--read-timeout", type=float, default=5.0, metavar="SECONDS")
-    parser.add_argument("--reconnect-delay", type=float, default=1.0, metavar="SECONDS")
-    parser.add_argument(
-        "--max-reconnects", type=int, default=-1,
-        help="reconnect attempts after the initial connection (-1: unlimited)",
-    )
-    parser.add_argument("--record-output", type=Path)
-    parser.add_argument("--summary-output", type=Path)
-    parser.add_argument("--capture-root", type=Path, default=config.CAPTURE_ROOT)
-    parser.add_argument("--selected-crops-dir", type=Path)
-    parser.add_argument("--tracker-config", type=Path, default=DEFAULT_TRACKER)
-    parser.add_argument("--conf", type=float)
-    parser.add_argument("--imgsz", type=int, choices=[640], help="Fixed ONNX input size")
-    args = parser.parse_args()
-    from run_video_pipeline.onnx_detector import validate_options
-    validate_options(args.conf, args.imgsz)
-    if not args.url:
-        parser.error("--url or RTSP_URL is required")
-    if args.max_frames is not None and args.max_frames < 1:
-        parser.error("--max-frames must be positive")
-    if args.max_seconds is not None and args.max_seconds <= 0:
-        parser.error("--max-seconds must be positive")
-    if args.max_reconnects < -1:
-        parser.error("--max-reconnects must be -1 or non-negative")
-    return args
-
-
 def run_rtsp(
-    args: argparse.Namespace,
+    args: SimpleNamespace,
     stop_event: threading.Event,
     *,
     on_frame: FrameCallback | None = None,
@@ -590,24 +538,3 @@ def run_rtsp(
         "results": live_track_results(runner),
     })
     return summary
-
-
-def main() -> int:
-    args = _parse_args()
-    stop_event = threading.Event()
-    handler = _stop_handler(stop_event)
-    previous_sigint = signal.signal(signal.SIGINT, handler)
-    previous_sigterm = signal.signal(signal.SIGTERM, handler)
-    try:
-        summary = run_rtsp(args, stop_event)
-    finally:
-        signal.signal(signal.SIGINT, previous_sigint)
-        signal.signal(signal.SIGTERM, previous_sigterm)
-    _emit_summary(summary, args.summary_output)
-    if summary["processed_frames"] or summary["stop_reason"] == "stop requested":
-        return 0
-    return 1
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
