@@ -70,7 +70,8 @@ an intentional change from the earlier detector-coarse API meaning requested for
 VLM-only classification. vehicle_type_source identifies local_lfm or none.
 The compatibility fields detector_vehicle_type and type_confidence are null.
 There is no calibrated VLM confidence. YOLO type disagreement diagnostics have
-been removed. ROI analytics also use the available VLM category.
+been removed. Region analytics and region overlays are no longer part of this
+classification pipeline. The compatibility field `events` remains an empty list.
 
 Body categories: sedan, hatchback, suv, wagon, coupe, convertible, van, pickup,
 bus, truck, motorcycle, bicycle, unknown. Minivans map to van, minibuses/coaches

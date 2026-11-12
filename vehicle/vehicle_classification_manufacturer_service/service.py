@@ -29,7 +29,7 @@ def run_classification(source: Path, *, job_id: str, max_frames: int | None = No
     with _pipeline_lock:
         log.info("Vehicle job %s: starting analysis; VLM recognition=%s", job_id, enabled)
         pipeline = VehicleAnalysisService(
-            device="auto", enable_roi=False, enable_manufacturer=enabled,
+            device="auto", enable_manufacturer=enabled,
             model_settings=model_settings,
         )
         try:

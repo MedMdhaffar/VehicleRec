@@ -341,7 +341,7 @@ if not sources:
     raise FileNotFoundError('No saved source.mp4; supply a local video path')
 output = Path('/tmp/vehicle-llamacpp-video-check')
 output.mkdir(exist_ok=True)
-pipeline = VehicleAnalysisService(enable_roi=False, enable_manufacturer=True)
+pipeline = VehicleAnalysisService(enable_manufacturer=True)
 try:
     result = pipeline.process_video(sources[0], output_path=output / 'annotated.mp4',
                                     json_output=output / 'results.json', max_frames=120)

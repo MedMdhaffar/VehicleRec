@@ -11,13 +11,6 @@ TRACKER_CONFIG = Path(os.environ.get("VEHICLE_PIPELINE_TRACKER", PACKAGE_DIR / "
 TRACK_CONF = float(os.environ.get("TRACK_CONF", "0.10"))
 LOST_FRAMES = 15
 
-IOU_MATCH = float(os.environ.get("IOU_MATCH", "0.5"))
-MIN_OCCUPY_FRAMES = int(os.environ.get("MIN_OCCUPY_FRAMES", "15"))
-FREE_FRAMES = int(os.environ.get("FREE_FRAMES", "15"))
-OVERSTAY_SEC = int(os.environ.get("OVERSTAY_SEC", "300"))
-RESTRICTED_MIN_SEC = int(os.environ.get("RESTRICTED_MIN_SEC", "5"))
-OCCUPANCY_MAX = int(os.environ.get("OCCUPANCY_MAX", "10"))
-
 SCENE_CUT_THRESHOLD = float(os.environ.get("VEHICLE_SCENE_CUT_THRESHOLD", "0.12"))
 
 # Proposal classes only: exclude people; attribute recognition belongs to the VLM.

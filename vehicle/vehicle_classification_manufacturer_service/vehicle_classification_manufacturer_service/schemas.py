@@ -20,7 +20,7 @@ class VehicleProfile:
 
     @property
     def type(self):
-        """ROI analytics use the same VLM-only body category as API results."""
+        """The VLM body category exposed in API results."""
         return self.recognition.body_type
 
     def recognition_reason(self):
@@ -57,7 +57,7 @@ class FrameUpdate:
     frame_index: int
     active: list[dict[str, Any]]
     finalized: list[dict[str, Any]]
-    events: list[dict[str, Any]]
+    events: list[dict[str, Any]] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

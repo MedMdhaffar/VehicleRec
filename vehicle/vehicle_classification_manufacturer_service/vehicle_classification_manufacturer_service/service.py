@@ -19,9 +19,7 @@ class VehicleAnalysisService:
     def __init__(
         self,
         device: str = "auto",
-        enable_roi: bool = True,
         enable_manufacturer: bool = False,
-        roi_path: str | Path | None = None,
         model_path: str | Path | None = None,
         tracker_path: str | Path | None = None,
         frame_rate: float = 15.0,
@@ -42,10 +40,8 @@ class VehicleAnalysisService:
                 recognizer = TrackRecognizer(self._manufacturer, config)
             from .detector import VehicleDetectorTracker
             from .pipeline import VehiclePipeline
-            from .roi import RoiConfig
-            roi_config = RoiConfig.load(roi_path) if enable_roi and roi_path else (RoiConfig() if enable_roi else None)
             detector_tracker = _detector_tracker or VehicleDetectorTracker(device, model_path, tracker_path, frame_rate)
-            self.pipeline = VehiclePipeline(detector_tracker, roi_config, recognizer)
+            self.pipeline = VehiclePipeline(detector_tracker, recognizer=recognizer)
         except BaseException:
             self.close()
             raise
@@ -75,7 +71,6 @@ class VehicleAnalysisService:
         video: str | Path,
         output_path: str | Path | None = None,
         json_output: str | Path | None = None,
-        events_output: str | Path | None = None,
         max_frames: int | None = None,
     ) -> dict[str, Any]:
         source = Path(video).expanduser().resolve()
@@ -93,26 +88,16 @@ class VehicleAnalysisService:
         writer = None
         frames_processed = 0
         started = time.monotonic()
-        events_stream = None
         total_frames = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
         total_frames = min(total_frames, max_frames) if max_frames and total_frames > 0 else total_frames
         log.info("Video opened: frames=%s fps=%.2f; starting detection/tracking", total_frames or "unknown", capture.get(cv2.CAP_PROP_FPS))
         last_progress = started
         try:
-            if events_output:
-                event_path = Path(events_output).expanduser().resolve()
-                event_path.parent.mkdir(parents=True, exist_ok=True)
-                events_stream = event_path.open("w", encoding="utf-8")
             while max_frames is None or frames_processed < max_frames:
                 ok, frame = capture.read()
                 if not ok:
                     break
-                update = self.process_frame(frame, frames_processed)
-                for event in update.events:
-                    print(f"[ROI] track={event.get('track_id', '-')} event={event['event']} roi={event.get('zone', '-')}")
-                    if events_stream:
-                        events_stream.write(json.dumps(event) + "\n")
-                        events_stream.flush()
+                self.process_frame(frame, frames_processed)
                 if render_records is not None:
                     render_records.write(json.dumps([
                         {"track_id": p.track_id, "first_frame": p.first_frame, "bbox": p.bbox}
@@ -131,8 +116,6 @@ class VehicleAnalysisService:
             capture.release()
             if writer is not None:
                 writer.release()
-            if events_stream is not None:
-                events_stream.close()
 
         log.info("Detection finished: %d frames; finalizing remaining tracks", frames_processed)
         vehicles = self.finish()
@@ -157,7 +140,7 @@ class VehicleAnalysisService:
                         raise RuntimeError("Video ended during final annotation pass")
                     profiles = [SimpleNamespace(**record, recognition=final[(record["track_id"], record["first_frame"])])
                                 for record in json.loads(line)]
-                    writer.write(draw_overlay(frame, profiles, self.pipeline.roi.config if self.pipeline.roi else None))
+                    writer.write(draw_overlay(frame, profiles))
                     if time.monotonic() - last_render_progress >= 5:
                         log.info("Rendering progress: %d/%d frames", rendered, frames_processed)
                         last_render_progress = time.monotonic()
@@ -176,7 +159,7 @@ class VehicleAnalysisService:
             "scene_cuts": list(self.pipeline.scene_cuts),
             "processing_seconds": round(elapsed, 3),
             "vehicles": vehicles,
-            "events": list(self.pipeline.events),
+            "events": [],
             "performance": self.pipeline.perf.report_dict(),
         }
         if json_output:

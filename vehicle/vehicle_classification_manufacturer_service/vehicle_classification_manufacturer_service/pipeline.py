@@ -7,21 +7,18 @@ import logging
 from .config import LOST_FRAMES, SCENE_CUT_THRESHOLD
 from .scene import SceneCutDetector
 from .perf import PerfMeter
-from .roi import RoiAnalytics, RoiConfig
 from .schemas import FrameUpdate, VehicleProfile
 
 
 log = logging.getLogger(__name__)
 
 class VehiclePipeline:
-    def __init__(self, detector_tracker, roi_config: RoiConfig | None = None, recognizer=None) -> None:
+    def __init__(self, detector_tracker, recognizer=None) -> None:
         self.recognizer = recognizer
         self.detector_tracker = detector_tracker
         self.active_profiles: dict[int, VehicleProfile] = {}
         self.finalized_profiles: list[VehicleProfile] = []
-        self.events: list[dict] = []
         self.perf = PerfMeter()
-        self.roi = RoiAnalytics(roi_config, time.monotonic()) if roi_config is not None else None
         self.scene_cuts = []
         self.scene_detector = SceneCutDetector(SCENE_CUT_THRESHOLD)
         self._finished = False
@@ -35,8 +32,6 @@ class VehiclePipeline:
             cut_finalized = self._finalize(list(self.active_profiles))
             self.detector_tracker.reset()
             self.scene_cuts.append(frame_index)
-            if self.roi is not None:
-                self.roi = RoiAnalytics(self.roi.config, time.monotonic())
         with self.perf.stage("track"):
             rows = self.detector_tracker.process(frame)
         now = time.monotonic()
@@ -71,12 +66,10 @@ class VehiclePipeline:
                 else:
                     profile.recognition.failure_reason = "crop_memory_budget_exceeded"
 
-        events = self.roi.process_frame(self.active_profiles, frame_index, now) if self.roi else []
-        self.events.extend(events)
         lost = [track_id for track_id, profile in self.active_profiles.items() if track_id not in seen and frame_index - profile.last_frame > LOST_FRAMES]
         finalized = cut_finalized + self._finalize(lost)
         self.perf.frame_done(len(self.active_profiles))
-        return FrameUpdate(frame_index, [p.to_dict() for p in self.active_profiles.values()], [p.to_dict() for p in finalized], events)
+        return FrameUpdate(frame_index, [p.to_dict() for p in self.active_profiles.values()], [p.to_dict() for p in finalized])
 
     def finish(self) -> list[VehicleProfile]:
         if not self._finished:
