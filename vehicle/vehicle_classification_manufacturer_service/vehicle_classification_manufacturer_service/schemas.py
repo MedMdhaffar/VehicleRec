@@ -1,8 +1,13 @@
 """Standalone profile and result schemas; intentionally contain no removed attributes."""
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
-from typing import Any
+from dataclasses import dataclass, field
+from typing import Any, TYPE_CHECKING
+from copy import deepcopy
+
+if TYPE_CHECKING:
+    from .observations import VehicleFrame
+    from vehicle.common.vehicle_observation import VehicleLifetime
 
 
 @dataclass
@@ -17,6 +22,7 @@ class VehicleProfile:
     last_frame: int = 0
     frames_seen: int = 0
     status: str = "active"
+    _lifetime: VehicleLifetime | None = field(default=None, repr=False)
     _type_confidence_sums: dict[str, float] = field(default_factory=dict, repr=False)
     _type_observation_counts: dict[str, int] = field(default_factory=dict, repr=False)
     _type_total_observations: int = field(default=0, repr=False)
@@ -41,5 +47,9 @@ class FrameUpdate:
     finalized: list[dict[str, Any]]
     events: list[dict[str, Any]]
 
+    observation: VehicleFrame | None = field(default=None, repr=False)
+
     def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        # Shared context/receipts are an in-process interface, never legacy JSON.
+        return deepcopy({"frame_index": self.frame_index, "active": self.active,
+                         "finalized": self.finalized, "events": self.events})

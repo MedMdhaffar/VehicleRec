@@ -5,6 +5,7 @@ import re
 import statistics
 from dataclasses import dataclass
 from typing import Iterable
+from pathlib import Path
 
 import numpy as np
 
@@ -13,20 +14,7 @@ import run_video_pipeline.config as config
 log = logging.getLogger(__name__)
 
 
-def normalize_plate_text(text: str) -> str:
-    """Canonical OCR comparison form while preserving the raw text separately."""
-    return re.sub(r"[^0-9A-Za-z]", "", text or "").upper()
-
-
-def digits_only(text: str) -> str:
-    return re.sub(r"\D", "", text or "")
-
-
-@dataclass(frozen=True)
-class OCRResult:
-    raw_text: str
-    normalized_text: str
-    confidence: float
+from run_video_pipeline.text_policy import OCRResult, normalize_plate_text, digits_only
 
 
 class PlateReader:
@@ -34,11 +22,19 @@ class PlateReader:
     read(crop) -> (digits_text, mean_confidence).
     """
 
-    def __init__(self, rec_model: str = config.OCR_REC_MODEL):
+    def __init__(self, rec_model: str = config.OCR_REC_MODEL, *, model_dir: str | None = None, device: str | None = None):
         self.rec_model = rec_model
         from paddleocr import TextRecognition
 
-        self.engine = TextRecognition(model_name=rec_model)
+        options = {}
+        if model_dir is not None:
+            local = Path(model_dir)
+            if not all((local / name).is_file() for name in ('inference.pdiparams', 'inference.json', 'inference.yml')):
+                raise FileNotFoundError('explicit OCR directory lacks required inference artifacts')
+            options['model_dir'] = str(local.resolve())
+        if device is not None:
+            options['device'] = device
+        self.engine = TextRecognition(model_name=rec_model, **options)
         log.info("Native PaddleOCR TextRecognition (%s) loaded.", rec_model)
 
     def _parse(self, out) -> OCRResult:

@@ -150,7 +150,8 @@ def deduplicate_detections(
 
 
 class PlateDetector:
-    def __init__(self, model_path: str = config.PLATE_DETECTOR_PATH):
+    def __init__(self, model_path: str = config.PLATE_DETECTOR_PATH, *, device: str | None = None):
+        self.device = device
         self.model_path = model_path
         self._model = None
         self._lock = threading.Lock()
@@ -181,7 +182,8 @@ class PlateDetector:
 
         with self._lock:
             results = self._model.predict(
-                image, conf=effective_conf, imgsz=effective_imgsz, verbose=False
+                image, conf=effective_conf, imgsz=effective_imgsz, verbose=False,
+                **({"device": self.device} if self.device is not None else {})
             )[0]
 
         out: list[Detection] = []

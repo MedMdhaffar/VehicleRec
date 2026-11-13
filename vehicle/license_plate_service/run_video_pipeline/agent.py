@@ -13,7 +13,7 @@ from typing import Callable, Literal
 
 import cv2
 import numpy as np
-from pydantic import BaseModel, ConfigDict, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, ValidationError
 
 import run_video_pipeline.config as config
 log = logging.getLogger(__name__)
@@ -29,6 +29,7 @@ class AgentPrediction(BaseModel):
     category: AgentCategory
     confidence: float = Field(ge=0.0, le=1.0)
     evidence_summary: str
+    text_complete: StrictBool = False
 
 
 @dataclass(frozen=True)
@@ -103,8 +104,12 @@ class OpenRouterPlateAgent:
             "uncertain, choose the best supported category, usually other. Preserve the text and symbols "
             "you can actually read without inventing characters. Return normalized_text, confidence "
             "from 0 to 1, and a short evidence_summary as strict structured JSON only."
+            " Set text_complete=true only when the entire plate inscription is readable;"
+            " partial or guessed characters require text_complete=false."
         )
         schema = AgentPrediction.model_json_schema()
+        # Require the claim in new structured replies; legacy parsing defaults false.
+        schema["required"] = list(schema["properties"])
         return {
             "model": self.model,
             "messages": [{"role": "user", "content": [
@@ -123,7 +128,7 @@ class OpenRouterPlateAgent:
         prediction = AgentPrediction.model_validate(json.loads(content))
         return prediction
 
-    def analyze(self, crop: np.ndarray) -> AgentOutcome:
+    def analyze(self, crop: np.ndarray, *, on_execution=None) -> AgentOutcome:
         total_started = time.perf_counter()
         if not self.enabled:
             return AgentOutcome("unavailable", None, "OpenRouter agent is disabled", 0.0, 0.0, 0.0, 0)
@@ -142,6 +147,8 @@ class OpenRouterPlateAgent:
             calls += 1
             started = time.perf_counter()
             try:
+                if on_execution is not None:
+                    on_execution()
                 response = self.transport(
                     config.OPENROUTER_URL,
                     {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"},

@@ -1,0 +1,14 @@
+{
+  "version": "v1-draft.1",
+  "status": "proposed_not_approved",
+  "vectors": [
+    {"input": "001T0007", "profile": "private_tn_v1", "output": "001 تونس 0007"},
+    {"input": "٠٠١ تونس ٠٠٠٧", "profile": "private_tn_v1", "output": "001 تونس 0007"},
+    {"input": " 001 tunis 0007 ", "profile": "private_tn_v1", "output": "001 تونس 0007"},
+    {"input": "1234567", "profile": "private_tn_v1", "output": "123 تونس 4567"},
+    {"input": "123456", "profile": "private_tn_v1", "output": null, "reason": "ambiguous_boundary"},
+    {"input": "1234T5678", "profile": "private_tn_v1", "output": null, "reason": "invalid_marker_fields"},
+    {"input": "ab-٠٠١", "profile": "opaque_complete_v1", "output": "AB-001"},
+    {"input": "001\u200f تونس 0007", "profile": "private_tn_v1", "output": null, "reason": "control_character"}
+  ]
+}

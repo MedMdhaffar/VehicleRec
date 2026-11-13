@@ -1,0 +1,984 @@
+{
+  "cases": [
+    {
+      "id": "vehicle_known_nullable_media",
+      "snapshot": {
+        "schema_version": "db1-row-snapshot-v0",
+        "row_kind": "fact_vehicle",
+        "delivery_payload": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_id": "fixture-run-a",
+          "camera_id": "fixture-camera-a",
+          "camera_timezone": "Africa/Tunis",
+          "ts": "2026-10-08T22:00:00Z",
+          "uid": "10000000-0000-4000-8000-000000000001",
+          "track_id": 1,
+          "first_ts": "2026-10-08T22:00:00+00:00",
+          "last_ts": "2026-10-08T23:30:00Z",
+          "class": {
+            "name": "car",
+            "class_group": "vehicle"
+          },
+          "class_conf": null,
+          "frames_observed": 40,
+          "best_media": null
+        },
+        "resolved_sql_row": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_key": 1101,
+          "camera_key": 2101,
+          "date_key": 20261008,
+          "ts": "2026-10-08T22:00:00.000000Z",
+          "uid": "10000000-0000-4000-8000-000000000001",
+          "track_id": 1,
+          "first_ts": "2026-10-08T22:00:00Z",
+          "last_ts": "2026-10-08T23:30:00Z",
+          "class_key": 3102,
+          "class_conf": null,
+          "frames_observed": 40,
+          "best_media_key": null
+        }
+      },
+      "synthetic_lookup": {
+        "synthetic": true,
+        "run": {
+          "run_id": "fixture-run-a",
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_id": "fixture-camera-a",
+          "camera_key": 2101,
+          "timezone": "Africa/Tunis",
+          "date_keys": [
+            20261008,
+            20261009
+          ]
+        },
+        "parent": null,
+        "class": {
+          "name": "car",
+          "class_group": "vehicle",
+          "class_key": 3102
+        },
+        "model": null,
+        "catalogue": null,
+        "manufacturer": null,
+        "vehicle_model": null,
+        "media": null
+      }
+    },
+    {
+      "id": "vehicle_with_owned_best_media",
+      "snapshot": {
+        "schema_version": "db1-row-snapshot-v0",
+        "row_kind": "fact_vehicle",
+        "delivery_payload": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_id": "fixture-run-a",
+          "camera_id": "fixture-camera-a",
+          "camera_timezone": "Africa/Tunis",
+          "ts": "2026-10-08T22:10:00Z",
+          "uid": "10000000-0000-4000-8000-000000000002",
+          "track_id": 2,
+          "first_ts": "2026-10-08T22:10:00Z",
+          "last_ts": "2026-10-08T22:10:04Z",
+          "class": {
+            "name": "truck",
+            "class_group": "vehicle"
+          },
+          "class_conf": 0.91,
+          "frames_observed": 22,
+          "best_media": {
+            "org_id": "11111111-1111-4111-8111-111111111111",
+            "run_id": "fixture-run-a",
+            "camera_id": "fixture-camera-a",
+            "ts": "2026-10-08T22:10:03Z",
+            "kind": "vehicle_crop",
+            "bucket": "fixture-bucket",
+            "object_key": "fixture/run-a/vehicle-2.jpg",
+            "content_type": "image/jpeg",
+            "bytes": 12345,
+            "width": 320,
+            "height": 180,
+            "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        },
+        "resolved_sql_row": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_key": 1101,
+          "camera_key": 2101,
+          "date_key": 20261008,
+          "ts": "2026-10-08T22:10:00Z",
+          "uid": "10000000-0000-4000-8000-000000000002",
+          "track_id": 2,
+          "first_ts": "2026-10-08T22:10:00Z",
+          "last_ts": "2026-10-08T22:10:04Z",
+          "class_key": 3105,
+          "class_conf": 0.91,
+          "frames_observed": 22,
+          "best_media_key": 6101
+        }
+      },
+      "synthetic_lookup": {
+        "synthetic": true,
+        "run": {
+          "run_id": "fixture-run-a",
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_id": "fixture-camera-a",
+          "camera_key": 2101,
+          "timezone": "Africa/Tunis",
+          "date_keys": [
+            20261008,
+            20261009
+          ]
+        },
+        "parent": null,
+        "class": {
+          "name": "truck",
+          "class_group": "vehicle",
+          "class_key": 3105
+        },
+        "model": null,
+        "catalogue": null,
+        "manufacturer": null,
+        "vehicle_model": null,
+        "media": {
+          "media_key": 6101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_id": "fixture-run-a",
+          "camera_id": "fixture-camera-a",
+          "kind": "vehicle_crop",
+          "bucket": "fixture-bucket",
+          "object_key": "fixture/run-a/vehicle-2.jpg",
+          "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    },
+    {
+      "id": "plate_read_local_selected_attempt",
+      "snapshot": {
+        "schema_version": "db1-row-snapshot-v0",
+        "row_kind": "fact_plate_read",
+        "delivery_payload": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_id": "fixture-run-a",
+          "camera_id": "fixture-camera-a",
+          "camera_timezone": "Africa/Tunis",
+          "ts": "2026-10-08T23:30:00Z",
+          "uid": "20000000-0000-4000-8000-000000000001",
+          "track_id": 1,
+          "outcome": "read",
+          "attempts": 2,
+          "selected_attempt": {
+            "attempt_uid": "21000000-0000-4000-8000-000000000001",
+            "submission_ordinal": 2,
+            "ts": "2026-10-08T23:30:00+00:00",
+            "route": "local_private",
+            "model": {
+              "model_name": "plate_ocr",
+              "version": 1,
+              "task": "ocr"
+            },
+            "text_complete": true,
+            "structural_valid": true,
+            "plate_text": "001 \u062a\u0648\u0646\u0633 0007",
+            "plate_category": null,
+            "conf": 0.93,
+            "crop_score": 1250.5,
+            "crop_media": {
+              "org_id": "11111111-1111-4111-8111-111111111111",
+              "run_id": "fixture-run-a",
+              "camera_id": "fixture-camera-a",
+              "ts": "2026-10-08T23:30:00Z",
+              "kind": "plate_crop",
+              "bucket": "fixture-bucket",
+              "object_key": "fixture/run-a/plate-1.jpg",
+              "content_type": "image/jpeg",
+              "bytes": 4567,
+              "width": 180,
+              "height": 60,
+              "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            }
+          }
+        },
+        "resolved_sql_row": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_key": 1101,
+          "camera_key": 2101,
+          "date_key": 20261009,
+          "ts": "2026-10-08T23:30:00.000000Z",
+          "uid": "20000000-0000-4000-8000-000000000001",
+          "track_id": 1,
+          "model_key": 5102,
+          "outcome": "read",
+          "plate_text": "001 \u062a\u0648\u0646\u0633 0007",
+          "plate_category_key": null,
+          "conf": 0.93,
+          "attempts": 2,
+          "crop_media_key": 6201,
+          "crop_score": 1250.5
+        }
+      },
+      "synthetic_lookup": {
+        "synthetic": true,
+        "run": {
+          "run_id": "fixture-run-a",
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_id": "fixture-camera-a",
+          "camera_key": 2101,
+          "timezone": "Africa/Tunis",
+          "date_keys": [
+            20261008,
+            20261009
+          ]
+        },
+        "parent": {
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_key": 2101,
+          "track_id": 1
+        },
+        "class": null,
+        "model": {
+          "model_name": "plate_ocr",
+          "version": 1,
+          "task": "ocr",
+          "model_key": 5102
+        },
+        "catalogue": null,
+        "manufacturer": null,
+        "vehicle_model": null,
+        "media": {
+          "media_key": 6201,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_id": "fixture-run-a",
+          "camera_id": "fixture-camera-a",
+          "kind": "plate_crop",
+          "bucket": "fixture-bucket",
+          "object_key": "fixture/run-a/plate-1.jpg",
+          "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      }
+    },
+    {
+      "id": "plate_read_agent_complete_assertion",
+      "snapshot": {
+        "schema_version": "db1-row-snapshot-v0",
+        "row_kind": "fact_plate_read",
+        "delivery_payload": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_id": "fixture-run-a",
+          "camera_id": "fixture-camera-a",
+          "camera_timezone": "Africa/Tunis",
+          "ts": "2026-10-08T22:20:00Z",
+          "uid": "20000000-0000-4000-8000-000000000002",
+          "track_id": 2,
+          "outcome": "read",
+          "attempts": 1,
+          "selected_attempt": {
+            "attempt_uid": "21000000-0000-4000-8000-000000000002",
+            "submission_ordinal": 1,
+            "ts": "2026-10-08T22:20:00Z",
+            "route": "agent",
+            "model": {
+              "model_name": "plate_agent_reference",
+              "version": 1,
+              "task": "vlm"
+            },
+            "text_complete": true,
+            "structural_valid": null,
+            "plate_text": "AB-001",
+            "plate_category": null,
+            "conf": 0.82,
+            "crop_score": 800,
+            "crop_media": null
+          }
+        },
+        "resolved_sql_row": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_key": 1101,
+          "camera_key": 2101,
+          "date_key": 20261008,
+          "ts": "2026-10-08T22:20:00Z",
+          "uid": "20000000-0000-4000-8000-000000000002",
+          "track_id": 2,
+          "model_key": 5103,
+          "outcome": "read",
+          "plate_text": "AB-001",
+          "plate_category_key": null,
+          "conf": 0.82,
+          "attempts": 1,
+          "crop_media_key": null,
+          "crop_score": 800
+        }
+      },
+      "synthetic_lookup": {
+        "synthetic": true,
+        "run": {
+          "run_id": "fixture-run-a",
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_id": "fixture-camera-a",
+          "camera_key": 2101,
+          "timezone": "Africa/Tunis",
+          "date_keys": [
+            20261008,
+            20261009
+          ]
+        },
+        "parent": {
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_key": 2101,
+          "track_id": 2
+        },
+        "class": null,
+        "model": {
+          "model_name": "plate_agent_reference",
+          "version": 1,
+          "task": "vlm",
+          "model_key": 5103
+        },
+        "catalogue": null,
+        "manufacturer": null,
+        "vehicle_model": null,
+        "media": null
+      }
+    },
+    {
+      "id": "plate_unreadable_truthful_selected_model",
+      "snapshot": {
+        "schema_version": "db1-row-snapshot-v0",
+        "row_kind": "fact_plate_read",
+        "delivery_payload": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_id": "fixture-run-a",
+          "camera_id": "fixture-camera-a",
+          "camera_timezone": "Africa/Tunis",
+          "ts": "2026-10-08T22:21:00Z",
+          "uid": "20000000-0000-4000-8000-000000000003",
+          "track_id": 2,
+          "outcome": "unreadable",
+          "attempts": 2,
+          "selected_attempt": {
+            "attempt_uid": "21000000-0000-4000-8000-000000000003",
+            "submission_ordinal": 1,
+            "ts": "2026-10-08T22:21:00Z",
+            "route": "local_ocr",
+            "model": {
+              "model_name": "plate_ocr",
+              "version": 1,
+              "task": "ocr"
+            },
+            "text_complete": false,
+            "structural_valid": false,
+            "plate_text": null,
+            "plate_category": null,
+            "conf": null,
+            "crop_score": 700,
+            "crop_media": null
+          }
+        },
+        "resolved_sql_row": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_key": 1101,
+          "camera_key": 2101,
+          "date_key": 20261008,
+          "ts": "2026-10-08T22:21:00Z",
+          "uid": "20000000-0000-4000-8000-000000000003",
+          "track_id": 2,
+          "model_key": 5102,
+          "outcome": "unreadable",
+          "plate_text": null,
+          "plate_category_key": null,
+          "conf": null,
+          "attempts": 2,
+          "crop_media_key": null,
+          "crop_score": 700
+        }
+      },
+      "synthetic_lookup": {
+        "synthetic": true,
+        "run": {
+          "run_id": "fixture-run-a",
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_id": "fixture-camera-a",
+          "camera_key": 2101,
+          "timezone": "Africa/Tunis",
+          "date_keys": [
+            20261008,
+            20261009
+          ]
+        },
+        "parent": {
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_key": 2101,
+          "track_id": 2
+        },
+        "class": null,
+        "model": {
+          "model_name": "plate_ocr",
+          "version": 1,
+          "task": "ocr",
+          "model_key": 5102
+        },
+        "catalogue": null,
+        "manufacturer": null,
+        "vehicle_model": null,
+        "media": null
+      }
+    },
+    {
+      "id": "colour_grouped_local_decided",
+      "snapshot": {
+        "schema_version": "db1-row-snapshot-v0",
+        "row_kind": "fact_vehicle_colour",
+        "delivery_payload": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_id": "fixture-run-a",
+          "camera_id": "fixture-camera-a",
+          "camera_timezone": "Africa/Tunis",
+          "ts": "2026-10-08T23:35:00Z",
+          "uid": "30000000-0000-4000-8000-000000000001",
+          "track_id": 1,
+          "model": {
+            "model_name": "vehicle_colour_hsv_temporal",
+            "version": 1,
+            "task": "classify"
+          },
+          "colour": "silver/gray",
+          "conf": 0.71,
+          "state": "decided",
+          "samples": 7,
+          "support": {
+            "ts": "2026-10-08T23:35:00+00:00",
+            "source": "local_temporal"
+          }
+        },
+        "resolved_sql_row": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_key": 1101,
+          "camera_key": 2101,
+          "date_key": 20261009,
+          "ts": "2026-10-08T23:35:00Z",
+          "uid": "30000000-0000-4000-8000-000000000001",
+          "track_id": 1,
+          "model_key": 5104,
+          "colour_key": 4107,
+          "conf": 0.71,
+          "state": "decided",
+          "samples": 7
+        }
+      },
+      "synthetic_lookup": {
+        "synthetic": true,
+        "run": {
+          "run_id": "fixture-run-a",
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_id": "fixture-camera-a",
+          "camera_key": 2101,
+          "timezone": "Africa/Tunis",
+          "date_keys": [
+            20261008,
+            20261009
+          ]
+        },
+        "parent": {
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_key": 2101,
+          "track_id": 1
+        },
+        "class": null,
+        "model": {
+          "model_name": "vehicle_colour_hsv_temporal",
+          "version": 1,
+          "task": "classify",
+          "model_key": 5104
+        },
+        "catalogue": {
+          "name": "silver/gray",
+          "key": 4107,
+          "approved": true
+        },
+        "manufacturer": null,
+        "vehicle_model": null,
+        "media": null
+      }
+    },
+    {
+      "id": "colour_attempted_undecided",
+      "snapshot": {
+        "schema_version": "db1-row-snapshot-v0",
+        "row_kind": "fact_vehicle_colour",
+        "delivery_payload": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_id": "fixture-run-a",
+          "camera_id": "fixture-camera-a",
+          "camera_timezone": "Africa/Tunis",
+          "ts": "2026-10-08T22:25:00Z",
+          "uid": "30000000-0000-4000-8000-000000000002",
+          "track_id": 2,
+          "model": {
+            "model_name": "vehicle_colour_hsv_temporal",
+            "version": 1,
+            "task": "classify"
+          },
+          "colour": null,
+          "conf": null,
+          "state": "undecided",
+          "samples": 0,
+          "support": {
+            "ts": "2026-10-08T22:25:00Z",
+            "source": "local_temporal"
+          }
+        },
+        "resolved_sql_row": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_key": 1101,
+          "camera_key": 2101,
+          "date_key": 20261008,
+          "ts": "2026-10-08T22:25:00Z",
+          "uid": "30000000-0000-4000-8000-000000000002",
+          "track_id": 2,
+          "model_key": 5104,
+          "colour_key": null,
+          "conf": null,
+          "state": "undecided",
+          "samples": 0
+        }
+      },
+      "synthetic_lookup": {
+        "synthetic": true,
+        "run": {
+          "run_id": "fixture-run-a",
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_id": "fixture-camera-a",
+          "camera_key": 2101,
+          "timezone": "Africa/Tunis",
+          "date_keys": [
+            20261008,
+            20261009
+          ]
+        },
+        "parent": {
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_key": 2101,
+          "track_id": 2
+        },
+        "class": null,
+        "model": {
+          "model_name": "vehicle_colour_hsv_temporal",
+          "version": 1,
+          "task": "classify",
+          "model_key": 5104
+        },
+        "catalogue": null,
+        "manufacturer": null,
+        "vehicle_model": null,
+        "media": null
+      }
+    },
+    {
+      "id": "colour_grouped_agent_override",
+      "snapshot": {
+        "schema_version": "db1-row-snapshot-v0",
+        "row_kind": "fact_vehicle_colour",
+        "delivery_payload": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_id": "fixture-run-a",
+          "camera_id": "fixture-camera-a",
+          "camera_timezone": "Africa/Tunis",
+          "ts": "2026-10-08T22:26:00Z",
+          "uid": "30000000-0000-4000-8000-000000000003",
+          "track_id": 2,
+          "model": {
+            "model_name": "vehicle_colour_agent_reference",
+            "version": 1,
+            "task": "vlm"
+          },
+          "colour": "brown/beige",
+          "conf": 0.88,
+          "state": "decided",
+          "samples": 4,
+          "support": {
+            "ts": "2026-10-08T22:26:00Z",
+            "source": "agent_override"
+          }
+        },
+        "resolved_sql_row": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_key": 1101,
+          "camera_key": 2101,
+          "date_key": 20261008,
+          "ts": "2026-10-08T22:26:00Z",
+          "uid": "30000000-0000-4000-8000-000000000003",
+          "track_id": 2,
+          "model_key": 5105,
+          "colour_key": 4108,
+          "conf": 0.88,
+          "state": "decided",
+          "samples": 4
+        }
+      },
+      "synthetic_lookup": {
+        "synthetic": true,
+        "run": {
+          "run_id": "fixture-run-a",
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_id": "fixture-camera-a",
+          "camera_key": 2101,
+          "timezone": "Africa/Tunis",
+          "date_keys": [
+            20261008,
+            20261009
+          ]
+        },
+        "parent": {
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_key": 2101,
+          "track_id": 2
+        },
+        "class": null,
+        "model": {
+          "model_name": "vehicle_colour_agent_reference",
+          "version": 1,
+          "task": "vlm",
+          "model_key": 5105
+        },
+        "catalogue": {
+          "name": "brown/beige",
+          "key": 4108,
+          "approved": true
+        },
+        "manufacturer": null,
+        "vehicle_model": null,
+        "media": null
+      }
+    },
+    {
+      "id": "colour_attempt_failure",
+      "snapshot": {
+        "schema_version": "db1-row-snapshot-v0",
+        "row_kind": "fact_vehicle_colour",
+        "delivery_payload": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_id": "fixture-run-a",
+          "camera_id": "fixture-camera-a",
+          "camera_timezone": "Africa/Tunis",
+          "ts": "2026-10-08T22:27:00Z",
+          "uid": "30000000-0000-4000-8000-000000000004",
+          "track_id": 2,
+          "model": {
+            "model_name": "vehicle_colour_hsv_temporal",
+            "version": 1,
+            "task": "classify"
+          },
+          "colour": null,
+          "conf": null,
+          "state": "error",
+          "samples": 0,
+          "support": {
+            "ts": "2026-10-08T22:27:00Z",
+            "source": "local_temporal"
+          }
+        },
+        "resolved_sql_row": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_key": 1101,
+          "camera_key": 2101,
+          "date_key": 20261008,
+          "ts": "2026-10-08T22:27:00Z",
+          "uid": "30000000-0000-4000-8000-000000000004",
+          "track_id": 2,
+          "model_key": 5104,
+          "colour_key": null,
+          "conf": null,
+          "state": "error",
+          "samples": 0
+        }
+      },
+      "synthetic_lookup": {
+        "synthetic": true,
+        "run": {
+          "run_id": "fixture-run-a",
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_id": "fixture-camera-a",
+          "camera_key": 2101,
+          "timezone": "Africa/Tunis",
+          "date_keys": [
+            20261008,
+            20261009
+          ]
+        },
+        "parent": {
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_key": 2101,
+          "track_id": 2
+        },
+        "class": null,
+        "model": {
+          "model_name": "vehicle_colour_hsv_temporal",
+          "version": 1,
+          "task": "classify",
+          "model_key": 5104
+        },
+        "catalogue": null,
+        "manufacturer": null,
+        "vehicle_model": null,
+        "media": null
+      }
+    },
+    {
+      "id": "future_make_known_manufacturer_only",
+      "snapshot": {
+        "schema_version": "db1-row-snapshot-v0",
+        "row_kind": "fact_vehicle_make",
+        "delivery_payload": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_id": "fixture-run-a",
+          "camera_id": "fixture-camera-a",
+          "camera_timezone": "Africa/Tunis",
+          "ts": "2026-10-08T22:30:00Z",
+          "uid": "40000000-0000-4000-8000-000000000001",
+          "track_id": 2,
+          "model": {
+            "model_name": "vehicle_make_reference",
+            "version": 1,
+            "task": "classify"
+          },
+          "manufacturer": "Fixture Motors",
+          "vehicle_model": null,
+          "manufacturer_conf": 0.75,
+          "vehicle_model_conf": null,
+          "observations": 3
+        },
+        "resolved_sql_row": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_key": 1101,
+          "camera_key": 2101,
+          "date_key": 20261008,
+          "ts": "2026-10-08T22:30:00Z",
+          "uid": "40000000-0000-4000-8000-000000000001",
+          "track_id": 2,
+          "model_key": 5106,
+          "manufacturer_key": 7101,
+          "vehicle_model_key": null,
+          "manufacturer_conf": 0.75,
+          "vehicle_model_conf": null,
+          "observations": 3
+        }
+      },
+      "synthetic_lookup": {
+        "synthetic": true,
+        "run": {
+          "run_id": "fixture-run-a",
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_id": "fixture-camera-a",
+          "camera_key": 2101,
+          "timezone": "Africa/Tunis",
+          "date_keys": [
+            20261008,
+            20261009
+          ]
+        },
+        "parent": {
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_key": 2101,
+          "track_id": 2
+        },
+        "class": null,
+        "model": {
+          "model_name": "vehicle_make_reference",
+          "version": 1,
+          "task": "classify",
+          "model_key": 5106
+        },
+        "catalogue": null,
+        "manufacturer": {
+          "name": "Fixture Motors",
+          "manufacturer_key": 7101
+        },
+        "vehicle_model": null,
+        "media": null
+      }
+    },
+    {
+      "id": "future_make_known_model",
+      "snapshot": {
+        "schema_version": "db1-row-snapshot-v0",
+        "row_kind": "fact_vehicle_make",
+        "delivery_payload": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_id": "fixture-run-a",
+          "camera_id": "fixture-camera-a",
+          "camera_timezone": "Africa/Tunis",
+          "ts": "2026-10-08T22:31:00Z",
+          "uid": "40000000-0000-4000-8000-000000000002",
+          "track_id": 2,
+          "model": {
+            "model_name": "vehicle_make_reference",
+            "version": 1,
+            "task": "classify"
+          },
+          "manufacturer": "Fixture Motors",
+          "vehicle_model": "Fixture One",
+          "manufacturer_conf": 0.8,
+          "vehicle_model_conf": 0.7,
+          "observations": 4
+        },
+        "resolved_sql_row": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_key": 1101,
+          "camera_key": 2101,
+          "date_key": 20261008,
+          "ts": "2026-10-08T22:31:00Z",
+          "uid": "40000000-0000-4000-8000-000000000002",
+          "track_id": 2,
+          "model_key": 5106,
+          "manufacturer_key": 7101,
+          "vehicle_model_key": 7201,
+          "manufacturer_conf": 0.8,
+          "vehicle_model_conf": 0.7,
+          "observations": 4
+        }
+      },
+      "synthetic_lookup": {
+        "synthetic": true,
+        "run": {
+          "run_id": "fixture-run-a",
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_id": "fixture-camera-a",
+          "camera_key": 2101,
+          "timezone": "Africa/Tunis",
+          "date_keys": [
+            20261008,
+            20261009
+          ]
+        },
+        "parent": {
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_key": 2101,
+          "track_id": 2
+        },
+        "class": null,
+        "model": {
+          "model_name": "vehicle_make_reference",
+          "version": 1,
+          "task": "classify",
+          "model_key": 5106
+        },
+        "catalogue": null,
+        "manufacturer": {
+          "name": "Fixture Motors",
+          "manufacturer_key": 7101
+        },
+        "vehicle_model": {
+          "name": "Fixture One",
+          "vehicle_model_key": 7201,
+          "manufacturer_key": 7101
+        },
+        "media": null
+      }
+    },
+    {
+      "id": "plate_unreadable_unmeasured_quality",
+      "snapshot": {
+        "schema_version": "db1-row-snapshot-v0",
+        "row_kind": "fact_plate_read",
+        "delivery_payload": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_id": "fixture-run-a",
+          "camera_id": "fixture-camera-a",
+          "camera_timezone": "Africa/Tunis",
+          "ts": "2026-10-08T22:21:00Z",
+          "uid": "20000000-0000-4000-8000-000000000003",
+          "track_id": 2,
+          "outcome": "unreadable",
+          "attempts": 2,
+          "selected_attempt": {
+            "attempt_uid": "21000000-0000-4000-8000-000000000003",
+            "submission_ordinal": 1,
+            "ts": "2026-10-08T22:21:00Z",
+            "route": "local_ocr",
+            "model": {
+              "model_name": "plate_ocr",
+              "version": 1,
+              "task": "ocr"
+            },
+            "text_complete": false,
+            "structural_valid": false,
+            "plate_text": null,
+            "plate_category": null,
+            "conf": null,
+            "crop_score": null,
+            "crop_media": null
+          }
+        },
+        "resolved_sql_row": {
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "run_key": 1101,
+          "camera_key": 2101,
+          "date_key": 20261008,
+          "ts": "2026-10-08T22:21:00Z",
+          "uid": "20000000-0000-4000-8000-000000000003",
+          "track_id": 2,
+          "model_key": 5102,
+          "outcome": "unreadable",
+          "plate_text": null,
+          "plate_category_key": null,
+          "conf": null,
+          "attempts": 2,
+          "crop_media_key": null,
+          "crop_score": null
+        }
+      },
+      "synthetic_lookup": {
+        "synthetic": true,
+        "run": {
+          "run_id": "fixture-run-a",
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_id": "fixture-camera-a",
+          "camera_key": 2101,
+          "timezone": "Africa/Tunis",
+          "date_keys": [
+            20261008,
+            20261009
+          ]
+        },
+        "parent": {
+          "run_key": 1101,
+          "org_id": "11111111-1111-4111-8111-111111111111",
+          "camera_key": 2101,
+          "track_id": 2
+        },
+        "class": null,
+        "model": {
+          "model_name": "plate_ocr",
+          "version": 1,
+          "task": "ocr",
+          "model_key": 5102
+        },
+        "catalogue": null,
+        "manufacturer": null,
+        "vehicle_model": null,
+        "media": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "version": "v1-draft.1",
+  "status": "working_proposal_not_approved_seed",
+  "unknown_member": "unknown",
+  "numeric_keys": "resolved by canonical label; never fixed constants",
+  "vehicle_types": {
+    "values": [
+      "car",
+      "van",
+      "bus",
+      "truck",
+      "motorcycle",
+      "bicycle",
+      "unknown"
+    ],
+    "source": "runtime classification.PUBLIC_VEHICLE_TYPES and colour config.TAXONOMY",
+    "aliases": {
+      "camper": "van",
+      "tractor": "truck",
+      "cyclist": "bicycle"
+    },
+    "raw_class_ids": {
+      "0": "bus",
+      "1": "van",
+      "2": "car",
+      "3": "bicycle",
+      "4": "motorcycle",
+      "5": "excluded_person",
+      "6": "truck",
+      "7": "truck",
+      "8": "van"
+    },
+    "uncertainty": "Excluding person must be applied by the future unified vehicle producer; colour tracking currently maps person to unknown."
+  },
+  "colours": {
+    "values": [
+      "white",
+      "black",
+      "silver/gray",
+      "red",
+      "orange",
+      "yellow",
+      "green",
+      "blue",
+      "purple",
+      "brown/beige",
+      "unknown"
+    ],
+    "source": "runtime temporal.SUPPORTED_COLOURS",
+    "aliases": {},
+    "unsplittable_groups": [
+      "silver/gray",
+      "brown/beige"
+    ]
+  },
+  "plate_categories": {
+    "values": [
+      "private",
+      "temporary",
+      "diplomatic",
+      "military",
+      "foreign",
+      "other",
+      "unknown"
+    ],
+    "source": "runtime schemas.PlateCategory / agent.AgentCategory",
+    "entries": [
+      {
+        "label": "private",
+        "meaning": "standard Tunisian private/civilian",
+        "status": "proposed; private rule exists, no inspected accuracy validation"
+      },
+      {
+        "label": "temporary",
+        "meaning": "Tunisian temporary/transit",
+        "status": "uncertain format rules"
+      },
+      {
+        "label": "diplomatic",
+        "meaning": "diplomatic/consular",
+        "status": "uncertain format and jurisdiction rules"
+      },
+      {
+        "label": "military",
+        "meaning": "agent prompt groups military, police and security",
+        "status": "uncertain grouping; requires review"
+      },
+      {
+        "label": "foreign",
+        "meaning": "plate from another country",
+        "status": "uncertain jurisdiction-specific formats"
+      },
+      {
+        "label": "other",
+        "meaning": "recognizable plate outside preceding categories",
+        "status": "uncertain boundary; never equivalent to marker absence"
+      },
+      {
+        "label": "unknown",
+        "meaning": "reserved unresolved member; state conveys reason",
+        "status": "reserved"
+      }
+    ]
+  },
+  "manufacturers": {
+    "values": [
+      "unknown"
+    ],
+    "status": "no live/runtime inference; non-unknown catalogue unresolved"
+  },
+  "vehicle_models": {
+    "entries": [],
+    "status": "no inferred or verified models; do not invent catalogue entries"
+  },
+  "date_locale": {
+    "month_names": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "weekday": "ISO Monday=1"
+  },
+  "camera_stream_types": [
+    "rtsp",
+    "rtsps",
+    "uploaded_video"
+  ],
+  "error_codes": {
+    "pattern": "^[A-Z][A-Z0-9_]{0,63}$",
+    "max_length": 64,
+    "proposed_values": [
+      "OCR_RUNTIME_FAILURE",
+      "CATEGORY_RUNTIME_FAILURE",
+      "AGENT_TIMEOUT",
+      "AGENT_RESPONSE_INVALID",
+      "COLOUR_RUNTIME_FAILURE",
+      "MANUFACTURER_RUNTIME_FAILURE",
+      "MODEL_RUNTIME_FAILURE"
+    ],
+    "rule": "attribute-specific final inference_error only; no exception dumps; additions require versioned registry review"
+  }
+}

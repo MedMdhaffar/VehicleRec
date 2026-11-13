@@ -116,11 +116,13 @@ class ColourPipeline:
     """Self-contained detection, tracking and temporal colour pipeline."""
 
     def __init__(self, model_path: str = config.VEHICLE_MODEL_PATH,
-                 device: str | None = None, conf: float = config.TRACK_CONF):
-        from ultralytics import YOLO
+                 device: str | None = None, conf: float = config.TRACK_CONF, *, _model=None):
         self.device = resolve_device(device)
         self.conf = conf
-        self.model = YOLO(model_path, task="detect")
+        if _model is None:
+            from ultralytics import YOLO
+            _model = YOLO(model_path, task="detect")
+        self.model = _model
         self.profiles: dict[int, VehicleProfile] = {}
         self.frame_index = 0
         self._agent = None
@@ -197,14 +199,15 @@ class ColourPipeline:
 
     def _observe(self, profile: VehicleProfile, crop: np.ndarray,
                  frame_shape: tuple[int, ...]) -> None:
-        estimate = estimate_colour_detailed(
+        profile._colour_attempts += 1  # Count submitted crop operations, including failures.
+        estimate = getattr(self, "_estimate_colour", estimate_colour_detailed)(
             crop,
             roi_mode=config.COLOR_ROI_MODE,
             normalization=config.COLOR_NORMALIZATION,
             neutral_mode=config.COLOR_NEUTRAL_MODE,
             feature_mode=config.COLOR_FEATURE_MODE,
         )
-        quality = compute_colour_crop_quality_details(
+        quality = getattr(self, "_crop_quality", compute_colour_crop_quality_details)(
             crop, frame_shape, profile.bbox, mode=config.COLOR_QUALITY_MODE
         )
         diagnostics = estimate.diagnostics()
@@ -212,7 +215,6 @@ class ColourPipeline:
         observation = make_colour_observation(
             estimate.label, estimate.confidence, quality.combined, diagnostics
         )
-        profile._colour_attempts += 1
         profile._last_colour_attempt = observation
         if observation.valid:
             profile._colour_samples.append(observation)

@@ -1,0 +1,328 @@
+{
+  "cases": [
+    {
+      "id": "schema_unknown_sql_column",
+      "base_case": "vehicle_known_nullable_media",
+      "layer": "schema",
+      "operation": "set",
+      "path": "snapshot.resolved_sql_row.first_frame",
+      "value": 0,
+      "contains": "Additional properties"
+    },
+    {
+      "id": "schema_bad_uid",
+      "base_case": "vehicle_known_nullable_media",
+      "layer": "schema",
+      "operation": "set",
+      "path": "snapshot.delivery_payload.uid",
+      "value": "not-a-uuid",
+      "contains": "uuid"
+    },
+    {
+      "id": "schema_missing_plate_attempts",
+      "base_case": "plate_read_local_selected_attempt",
+      "layer": "schema",
+      "operation": "remove",
+      "path": "snapshot.resolved_sql_row.attempts",
+      "contains": "required"
+    },
+    {
+      "id": "schema_plate_zero_attempts",
+      "base_case": "plate_unreadable_truthful_selected_model",
+      "layer": "schema",
+      "operation": "set",
+      "path": "snapshot.resolved_sql_row.attempts",
+      "value": 0,
+      "contains": "minimum"
+    },
+    {
+      "id": "semantic_no_plate_not_emittable_v0",
+      "base_case": "plate_unreadable_truthful_selected_model",
+      "layer": "semantic",
+      "operations": [
+        {
+          "operation": "set",
+          "path": "snapshot.delivery_payload.outcome",
+          "value": "no_plate"
+        },
+        {
+          "operation": "set",
+          "path": "snapshot.resolved_sql_row.outcome",
+          "value": "no_plate"
+        }
+      ],
+      "contains": "no_plate is omitted"
+    },
+    {
+      "id": "semantic_parent_camera_mismatch",
+      "base_case": "plate_read_local_selected_attempt",
+      "layer": "semantic",
+      "operation": "set",
+      "path": "synthetic_lookup.parent.camera_key",
+      "value": 2999,
+      "contains": "parent context"
+    },
+    {
+      "id": "semantic_wrong_local_date",
+      "base_case": "plate_read_local_selected_attempt",
+      "layer": "semantic",
+      "operation": "set",
+      "path": "snapshot.resolved_sql_row.date_key",
+      "value": 20261008,
+      "contains": "date_key"
+    },
+    {
+      "id": "semantic_wrong_model_task",
+      "base_case": "plate_read_agent_complete_assertion",
+      "layer": "semantic",
+      "operations": [
+        {
+          "operation": "set",
+          "path": "snapshot.delivery_payload.selected_attempt.model.task",
+          "value": "detect"
+        },
+        {
+          "operation": "set",
+          "path": "synthetic_lookup.model.task",
+          "value": "detect"
+        }
+      ],
+      "contains": "model task"
+    },
+    {
+      "id": "semantic_selected_model_key_mismatch",
+      "base_case": "plate_read_local_selected_attempt",
+      "layer": "semantic",
+      "operation": "set",
+      "path": "snapshot.resolved_sql_row.model_key",
+      "value": 5999,
+      "contains": "model resolution"
+    },
+    {
+      "id": "semantic_selected_timestamp_mismatch",
+      "base_case": "plate_read_local_selected_attempt",
+      "layer": "semantic",
+      "operation": "set",
+      "path": "snapshot.resolved_sql_row.ts",
+      "value": "2026-10-08T23:30:01Z",
+      "contains": "SQL timestamp"
+    },
+    {
+      "id": "semantic_selected_score_mismatch",
+      "base_case": "plate_read_local_selected_attempt",
+      "layer": "semantic",
+      "operation": "set",
+      "path": "snapshot.resolved_sql_row.crop_score",
+      "value": 999,
+      "contains": "selected attempt crop_score"
+    },
+    {
+      "id": "semantic_agent_completeness_not_asserted",
+      "base_case": "plate_read_agent_complete_assertion",
+      "layer": "semantic",
+      "operation": "set",
+      "path": "snapshot.delivery_payload.selected_attempt.text_complete",
+      "value": false,
+      "contains": "text_complete"
+    },
+    {
+      "id": "semantic_local_private_structure_invalid",
+      "base_case": "plate_read_local_selected_attempt",
+      "layer": "semantic",
+      "operation": "set",
+      "path": "snapshot.delivery_payload.selected_attempt.structural_valid",
+      "value": false,
+      "contains": "structural_valid"
+    },
+    {
+      "id": "semantic_unreadable_retains_score",
+      "base_case": "plate_unreadable_truthful_selected_model",
+      "layer": "semantic",
+      "operations": [
+        {
+          "operation": "set",
+          "path": "snapshot.delivery_payload.selected_attempt.conf",
+          "value": 0.2
+        },
+        {
+          "operation": "set",
+          "path": "snapshot.resolved_sql_row.conf",
+          "value": 0.2
+        }
+      ],
+      "contains": "unreadable result fields"
+    },
+    {
+      "id": "semantic_grouped_colour_collapsed",
+      "base_case": "colour_grouped_local_decided",
+      "layer": "semantic",
+      "operations": [
+        {
+          "operation": "set",
+          "path": "synthetic_lookup.catalogue.name",
+          "value": "silver"
+        },
+        {
+          "operation": "set",
+          "path": "snapshot.resolved_sql_row.colour_key",
+          "value": 4999
+        },
+        {
+          "operation": "set",
+          "path": "synthetic_lookup.catalogue.key",
+          "value": 4999
+        }
+      ],
+      "contains": "catalogue resolution"
+    },
+    {
+      "id": "semantic_colour_undecided_has_value",
+      "base_case": "colour_attempted_undecided",
+      "layer": "semantic",
+      "operations": [
+        {
+          "operation": "set",
+          "path": "snapshot.delivery_payload.colour",
+          "value": "red"
+        },
+        {
+          "operation": "set",
+          "path": "snapshot.delivery_payload.conf",
+          "value": 0.4
+        }
+      ],
+      "contains": "undecided/error colour"
+    },
+    {
+      "id": "semantic_media_wrong_org",
+      "base_case": "plate_read_local_selected_attempt",
+      "layer": "semantic",
+      "operation": "set",
+      "path": "snapshot.delivery_payload.selected_attempt.crop_media.org_id",
+      "value": "22222222-2222-4222-8222-222222222222",
+      "contains": "media context"
+    },
+    {
+      "id": "semantic_media_wrong_kind",
+      "base_case": "vehicle_with_owned_best_media",
+      "layer": "semantic",
+      "operations": [
+        {
+          "operation": "set",
+          "path": "snapshot.delivery_payload.best_media.kind",
+          "value": "plate_crop"
+        },
+        {
+          "operation": "set",
+          "path": "synthetic_lookup.media.kind",
+          "value": "plate_crop"
+        }
+      ],
+      "contains": "media kind"
+    },
+    {
+      "id": "semantic_vehicle_person_class",
+      "base_case": "vehicle_known_nullable_media",
+      "layer": "semantic",
+      "operations": [
+        {
+          "operation": "set",
+          "path": "snapshot.delivery_payload.class.class_group",
+          "value": "person"
+        },
+        {
+          "operation": "set",
+          "path": "synthetic_lookup.class.class_group",
+          "value": "person"
+        }
+      ],
+      "contains": "class_group"
+    },
+    {
+      "id": "semantic_vehicle_ts_not_first",
+      "base_case": "vehicle_known_nullable_media",
+      "layer": "semantic",
+      "operation": "set",
+      "path": "snapshot.resolved_sql_row.ts",
+      "value": "2026-10-08T22:00:01Z",
+      "contains": "SQL timestamp"
+    },
+    {
+      "id": "semantic_vehicle_last_before_first",
+      "base_case": "vehicle_known_nullable_media",
+      "layer": "semantic",
+      "operations": [
+        {
+          "operation": "set",
+          "path": "snapshot.delivery_payload.last_ts",
+          "value": "2026-10-08T21:59:59Z"
+        },
+        {
+          "operation": "set",
+          "path": "snapshot.resolved_sql_row.last_ts",
+          "value": "2026-10-08T21:59:59Z"
+        }
+      ],
+      "contains": "last_ts precedes"
+    },
+    {
+      "id": "semantic_make_model_wrong_maker",
+      "base_case": "future_make_known_model",
+      "layer": "semantic",
+      "operation": "set",
+      "path": "synthetic_lookup.vehicle_model.manufacturer_key",
+      "value": 7999,
+      "contains": "vehicle model manufacturer"
+    },
+    {
+      "id": "schema_make_model_without_manufacturer",
+      "base_case": "future_make_known_model",
+      "layer": "schema",
+      "operations": [
+        {
+          "operation": "set",
+          "path": "snapshot.delivery_payload.manufacturer",
+          "value": null
+        },
+        {
+          "operation": "set",
+          "path": "snapshot.delivery_payload.manufacturer_conf",
+          "value": null
+        },
+        {
+          "operation": "set",
+          "path": "snapshot.resolved_sql_row.manufacturer_key",
+          "value": null
+        }
+      ],
+      "contains": "integer"
+    },
+    {
+      "id": "semantic_fixture_keys_not_marked_synthetic",
+      "base_case": "vehicle_known_nullable_media",
+      "layer": "semantic",
+      "operation": "set",
+      "path": "synthetic_lookup.synthetic",
+      "value": false,
+      "contains": "synthetic"
+    },
+    {
+      "id": "unreadable_sql_no_plate_null_text",
+      "base_case": "plate_unreadable_truthful_selected_model",
+      "layer": "semantic",
+      "operation": "set",
+      "path": "snapshot.resolved_sql_row.outcome",
+      "value": "no_plate",
+      "contains": "plate outcome"
+    },
+    {
+      "id": "timestamp_precision_schema_reject",
+      "base_case": "vehicle_known_nullable_media",
+      "layer": "schema",
+      "operation": "set",
+      "path": "snapshot.delivery_payload.ts",
+      "value": "2026-10-08T22:00:00.0000001Z",
+      "contains": "date-time"
+    }
+  ]
+}

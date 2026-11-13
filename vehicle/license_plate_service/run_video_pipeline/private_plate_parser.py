@@ -5,7 +5,7 @@ import re
 from dataclasses import dataclass
 from typing import Literal
 
-from run_video_pipeline.ocr import OCRResult, normalize_plate_text
+from .text_policy import OCRResult, normalize_plate_text
 
 ParserStatus = Literal["valid", "ambiguous", "invalid"]
 

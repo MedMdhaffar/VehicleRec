@@ -1,0 +1,2979 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "message_id",
+    "observation_id",
+    "run_id",
+    "camera_id",
+    "track_id",
+    "track_generation",
+    "event_at",
+    "vocabulary_version",
+    "normalization_version",
+    "metrics_version",
+    "run_context",
+    "capabilities",
+    "event",
+    "plate",
+    "colour",
+    "manufacturer"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "message_id": {
+      "$ref": "#/$defs/uuid"
+    },
+    "observation_id": {
+      "$ref": "#/$defs/uuid"
+    },
+    "run_id": {
+      "$ref": "#/$defs/uuid"
+    },
+    "camera_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$"
+    },
+    "track_id": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9223372036854775807
+    },
+    "track_generation": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2147483647
+    },
+    "event_at": {
+      "$ref": "#/$defs/utc"
+    },
+    "vocabulary_version": {
+      "const": "v1-draft.1"
+    },
+    "normalization_version": {
+      "const": "v1-draft.1"
+    },
+    "metrics_version": {
+      "const": "v1-draft.1"
+    },
+    "run_context": {
+      "$ref": "#/$defs/run_context"
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "plate_text",
+        "plate_category",
+        "colour",
+        "manufacturer",
+        "model"
+      ],
+      "properties": {
+        "plate_text": {
+          "$ref": "#/$defs/capability"
+        },
+        "plate_category": {
+          "$ref": "#/$defs/capability"
+        },
+        "colour": {
+          "$ref": "#/$defs/capability"
+        },
+        "manufacturer": {
+          "$ref": "#/$defs/capability"
+        },
+        "model": {
+          "$ref": "#/$defs/capability"
+        }
+      }
+    },
+    "event": {
+      "$ref": "#/$defs/event"
+    },
+    "plate": {
+      "$ref": "#/$defs/plate"
+    },
+    "colour": {
+      "$ref": "#/$defs/colour"
+    },
+    "manufacturer": {
+      "$ref": "#/$defs/manufacturer"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:waycon:vehicle-event:v1:draft:1",
+  "title": "WAYCON finalized vehicle observation — working draft, not frozen",
+  "$defs": {
+    "utc": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,6})?Z$"
+    },
+    "uuid": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "available",
+        "enabled",
+        "ready"
+      ],
+      "properties": {
+        "available": {
+          "type": "boolean"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "ready": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "available": {
+                "const": false
+              }
+            },
+            "required": [
+              "available"
+            ]
+          },
+          "then": {
+            "properties": {
+              "enabled": {
+                "const": false
+              },
+              "ready": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "plate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "plate_text",
+        "recognition_state",
+        "error_code",
+        "plate_category",
+        "plate_category_state",
+        "plate_category_error_code",
+        "selected_crop_frame",
+        "recognition_attempts",
+        "agent_api_calls",
+        "agent_retries",
+        "local_latency_ms",
+        "total_recognition_latency_ms",
+        "text_source",
+        "category_source",
+        "normalization_profile",
+        "confidence",
+        "confidence_metric",
+        "category_confidence",
+        "category_confidence_metric",
+        "selected_crop_score",
+        "selected_crop_score_metric"
+      ],
+      "properties": {
+        "plate_text": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "\\S"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "recognition_state": {
+          "enum": [
+            "known",
+            "inferred_unknown",
+            "not_attempted",
+            "unsupported",
+            "inference_error"
+          ]
+        },
+        "error_code": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "plate_category": {
+          "enum": [
+            "private",
+            "temporary",
+            "diplomatic",
+            "military",
+            "foreign",
+            "other",
+            "unknown"
+          ]
+        },
+        "plate_category_state": {
+          "enum": [
+            "known",
+            "inferred_unknown",
+            "not_attempted",
+            "unsupported",
+            "inference_error"
+          ]
+        },
+        "plate_category_error_code": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "selected_crop_frame": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9223372036854775807
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "recognition_attempts": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2147483647
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "agent_api_calls": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2147483647
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "agent_retries": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2147483647
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "local_latency_ms": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "total_recognition_latency_ms": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "text_source": {
+          "enum": [
+            "none",
+            "local_ocr",
+            "agent"
+          ]
+        },
+        "category_source": {
+          "enum": [
+            "none",
+            "private_rule",
+            "agent"
+          ]
+        },
+        "normalization_profile": {
+          "anyOf": [
+            {
+              "enum": [
+                "private_tn_v1",
+                "opaque_complete_v1"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "confidence_metric": {
+          "anyOf": [
+            {
+              "enum": [
+                "ocr_mean_recognition_score_v1",
+                "plate_agent_joint_self_report_v1"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "category_confidence": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "category_confidence_metric": {
+          "anyOf": [
+            {
+              "enum": [
+                "private_rule_evidence_min_v1",
+                "plate_agent_joint_self_report_v1"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "selected_crop_score": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "selected_crop_score_metric": {
+          "anyOf": [
+            {
+              "enum": [
+                "plate_crop_weighted_area_v1"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "confidence": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "confidence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confidence_metric": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "confidence": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "confidence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confidence_metric": {
+                "enum": [
+                  "ocr_mean_recognition_score_v1",
+                  "plate_agent_joint_self_report_v1"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "category_confidence": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "category_confidence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "category_confidence_metric": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "category_confidence": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "category_confidence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "category_confidence_metric": {
+                "enum": [
+                  "private_rule_evidence_min_v1",
+                  "plate_agent_joint_self_report_v1"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "selected_crop_score": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "selected_crop_score"
+            ]
+          },
+          "then": {
+            "properties": {
+              "selected_crop_score_metric": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "selected_crop_score": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "selected_crop_score"
+            ]
+          },
+          "then": {
+            "properties": {
+              "selected_crop_score_metric": {
+                "enum": [
+                  "plate_crop_weighted_area_v1"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "recognition_state": {
+                "const": "known"
+              }
+            },
+            "required": [
+              "recognition_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "plate_text": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "error_code": {
+                "type": "null"
+              },
+              "selected_crop_frame": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "recognition_state": {
+                "not": {
+                  "const": "known"
+                }
+              }
+            },
+            "required": [
+              "recognition_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "plate_text": {
+                "type": "null"
+              },
+              "confidence": {
+                "type": "null"
+              },
+              "confidence_metric": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "recognition_state": {
+                "const": "inference_error"
+              }
+            },
+            "required": [
+              "recognition_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "error_code": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "recognition_state": {
+                "not": {
+                  "const": "inference_error"
+                }
+              }
+            },
+            "required": [
+              "recognition_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "error_code": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "plate_category_state": {
+                "const": "known"
+              }
+            },
+            "required": [
+              "plate_category_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "plate_category": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S",
+                "not": {
+                  "const": "unknown"
+                }
+              },
+              "plate_category_error_code": {
+                "type": "null"
+              },
+              "selected_crop_frame": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "plate_category_state": {
+                "not": {
+                  "const": "known"
+                }
+              }
+            },
+            "required": [
+              "plate_category_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "plate_category": {
+                "const": "unknown"
+              },
+              "category_confidence": {
+                "type": "null"
+              },
+              "category_confidence_metric": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "plate_category_state": {
+                "const": "inference_error"
+              }
+            },
+            "required": [
+              "plate_category_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "plate_category_error_code": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "plate_category_state": {
+                "not": {
+                  "const": "inference_error"
+                }
+              }
+            },
+            "required": [
+              "plate_category_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "plate_category_error_code": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "recognition_state": {
+                "const": "known"
+              }
+            },
+            "required": [
+              "recognition_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "text_source": {
+                "not": {
+                  "const": "none"
+                }
+              },
+              "normalization_profile": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "recognition_state": {
+                "not": {
+                  "const": "known"
+                }
+              }
+            },
+            "required": [
+              "recognition_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "normalization_profile": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "plate_category_state": {
+                "const": "known"
+              }
+            },
+            "required": [
+              "plate_category_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "category_source": {
+                "not": {
+                  "const": "none"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "text_source": {
+                "const": "local_ocr"
+              }
+            },
+            "required": [
+              "text_source"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confidence_metric": {
+                "anyOf": [
+                  {
+                    "const": "ocr_mean_recognition_score_v1"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "text_source": {
+                "const": "agent"
+              }
+            },
+            "required": [
+              "text_source"
+            ]
+          },
+          "then": {
+            "properties": {
+              "confidence_metric": {
+                "anyOf": [
+                  {
+                    "const": "plate_agent_joint_self_report_v1"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "category_source": {
+                "const": "private_rule"
+              }
+            },
+            "required": [
+              "category_source"
+            ]
+          },
+          "then": {
+            "properties": {
+              "plate_category": {
+                "const": "private"
+              },
+              "plate_category_state": {
+                "const": "known"
+              },
+              "category_confidence_metric": {
+                "anyOf": [
+                  {
+                    "const": "private_rule_evidence_min_v1"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "category_source": {
+                "const": "agent"
+              }
+            },
+            "required": [
+              "category_source"
+            ]
+          },
+          "then": {
+            "properties": {
+              "category_confidence_metric": {
+                "anyOf": [
+                  {
+                    "const": "plate_agent_joint_self_report_v1"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "selected_crop_frame": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "selected_crop_frame"
+            ]
+          },
+          "then": {
+            "properties": {
+              "selected_crop_score": {
+                "type": "null"
+              },
+              "selected_crop_score_metric": {
+                "type": "null"
+              },
+              "local_latency_ms": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "recognition_attempts": {
+                "const": 0
+              }
+            },
+            "required": [
+              "recognition_attempts"
+            ]
+          },
+          "then": {
+            "properties": {
+              "selected_crop_frame": {
+                "type": "null"
+              },
+              "total_recognition_latency_ms": {
+                "type": "null"
+              },
+              "text_source": {
+                "const": "none"
+              },
+              "category_source": {
+                "const": "none"
+              },
+              "recognition_state": {
+                "enum": [
+                  "not_attempted",
+                  "unsupported"
+                ]
+              },
+              "plate_category_state": {
+                "enum": [
+                  "not_attempted",
+                  "unsupported"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "recognition_state": {
+                "enum": [
+                  "not_attempted",
+                  "unsupported"
+                ]
+              }
+            },
+            "required": [
+              "recognition_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "text_source": {
+                "const": "none"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "plate_category_state": {
+                "enum": [
+                  "not_attempted",
+                  "unsupported"
+                ]
+              }
+            },
+            "required": [
+              "plate_category_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "category_source": {
+                "const": "none"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "recognition_state": {
+                "const": "known"
+              },
+              "normalization_profile": {
+                "const": "private_tn_v1"
+              }
+            },
+            "required": [
+              "recognition_state",
+              "normalization_profile"
+            ]
+          },
+          "then": {
+            "properties": {
+              "plate_text": {
+                "pattern": "^[0-9]{1,3} تونس [0-9]{1,4}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "recognition_state": {
+                "const": "known"
+              },
+              "plate_category_state": {
+                "const": "known"
+              },
+              "plate_category": {
+                "const": "private"
+              }
+            },
+            "required": [
+              "recognition_state",
+              "plate_category_state",
+              "plate_category"
+            ]
+          },
+          "then": {
+            "properties": {
+              "normalization_profile": {
+                "const": "private_tn_v1"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "recognition_state": {
+                "const": "known"
+              },
+              "text_source": {
+                "const": "agent"
+              }
+            },
+            "required": [
+              "recognition_state",
+              "text_source"
+            ]
+          },
+          "then": {
+            "properties": {
+              "agent_api_calls": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "plate_category_state": {
+                "const": "known"
+              },
+              "category_source": {
+                "const": "agent"
+              }
+            },
+            "required": [
+              "plate_category_state",
+              "category_source"
+            ]
+          },
+          "then": {
+            "properties": {
+              "agent_api_calls": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "colour": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "colour",
+        "colour_state",
+        "error_code",
+        "colour_samples",
+        "selected_result_source",
+        "colour_confidence",
+        "colour_confidence_metric",
+        "type_confidence",
+        "type_confidence_metric"
+      ],
+      "properties": {
+        "colour": {
+          "enum": [
+            "white",
+            "black",
+            "silver/gray",
+            "red",
+            "orange",
+            "yellow",
+            "green",
+            "blue",
+            "purple",
+            "brown/beige",
+            "unknown"
+          ]
+        },
+        "colour_state": {
+          "enum": [
+            "known",
+            "inferred_unknown",
+            "not_attempted",
+            "unsupported",
+            "inference_error"
+          ]
+        },
+        "error_code": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "colour_samples": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2147483647
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "selected_result_source": {
+          "enum": [
+            "none",
+            "local_temporal",
+            "agent"
+          ]
+        },
+        "colour_confidence": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "colour_confidence_metric": {
+          "anyOf": [
+            {
+              "enum": [
+                "temporal_winner_weight_share_v1",
+                "colour_agent_self_report_v1"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "type_confidence": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "type_confidence_metric": {
+          "anyOf": [
+            {
+              "enum": [
+                "vehicle_type_consensus_v1",
+                "vehicle_detector_latest_score_v1"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "colour_confidence": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "colour_confidence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "colour_confidence_metric": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "colour_confidence": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "colour_confidence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "colour_confidence_metric": {
+                "enum": [
+                  "temporal_winner_weight_share_v1",
+                  "colour_agent_self_report_v1"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type_confidence": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "type_confidence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "type_confidence_metric": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type_confidence": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "type_confidence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "type_confidence_metric": {
+                "enum": [
+                  "vehicle_type_consensus_v1",
+                  "vehicle_detector_latest_score_v1"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "colour_state": {
+                "const": "known"
+              }
+            },
+            "required": [
+              "colour_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "colour": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S",
+                "not": {
+                  "const": "unknown"
+                }
+              },
+              "error_code": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "colour_state": {
+                "not": {
+                  "const": "known"
+                }
+              }
+            },
+            "required": [
+              "colour_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "colour": {
+                "const": "unknown"
+              },
+              "colour_confidence": {
+                "type": "null"
+              },
+              "colour_confidence_metric": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "colour_state": {
+                "const": "inference_error"
+              }
+            },
+            "required": [
+              "colour_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "error_code": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "colour_state": {
+                "not": {
+                  "const": "inference_error"
+                }
+              }
+            },
+            "required": [
+              "colour_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "error_code": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "colour_state": {
+                "const": "known"
+              }
+            },
+            "required": [
+              "colour_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "selected_result_source": {
+                "not": {
+                  "const": "none"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "selected_result_source": {
+                "const": "local_temporal"
+              }
+            },
+            "required": [
+              "selected_result_source"
+            ]
+          },
+          "then": {
+            "properties": {
+              "colour_confidence_metric": {
+                "anyOf": [
+                  {
+                    "const": "temporal_winner_weight_share_v1"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "selected_result_source": {
+                "const": "agent"
+              }
+            },
+            "required": [
+              "selected_result_source"
+            ]
+          },
+          "then": {
+            "properties": {
+              "colour_confidence_metric": {
+                "anyOf": [
+                  {
+                    "const": "colour_agent_self_report_v1"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "colour_state": {
+                "enum": [
+                  "not_attempted",
+                  "unsupported"
+                ]
+              }
+            },
+            "required": [
+              "colour_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "selected_result_source": {
+                "const": "none"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "manufacturer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manufacturer",
+        "manufacturer_state",
+        "manufacturer_error_code",
+        "model",
+        "model_state",
+        "model_error_code",
+        "observations_count",
+        "manufacturer_confidence",
+        "manufacturer_confidence_metric",
+        "model_confidence",
+        "model_confidence_metric"
+      ],
+      "properties": {
+        "manufacturer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "\\S"
+        },
+        "manufacturer_state": {
+          "enum": [
+            "known",
+            "inferred_unknown",
+            "not_attempted",
+            "unsupported",
+            "inference_error"
+          ]
+        },
+        "manufacturer_error_code": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "model": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "\\S"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "model_state": {
+          "enum": [
+            "known",
+            "inferred_unknown",
+            "not_attempted",
+            "unsupported",
+            "inference_error"
+          ]
+        },
+        "model_error_code": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observations_count": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2147483647
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "manufacturer_confidence": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "manufacturer_confidence_metric": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[a-z][a-z0-9_]{0,63}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "model_confidence": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "model_confidence_metric": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[a-z][a-z0-9_]{0,63}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "manufacturer_confidence": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "manufacturer_confidence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "manufacturer_confidence_metric": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "manufacturer_confidence": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "manufacturer_confidence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "manufacturer_confidence_metric": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64,
+                "pattern": "^[a-z][a-z0-9_]{0,63}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "model_confidence": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "model_confidence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "model_confidence_metric": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "model_confidence": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "model_confidence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "model_confidence_metric": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64,
+                "pattern": "^[a-z][a-z0-9_]{0,63}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "manufacturer_state": {
+                "const": "known"
+              }
+            },
+            "required": [
+              "manufacturer_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "manufacturer": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S",
+                "not": {
+                  "const": "unknown"
+                }
+              },
+              "manufacturer_error_code": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "manufacturer_state": {
+                "not": {
+                  "const": "known"
+                }
+              }
+            },
+            "required": [
+              "manufacturer_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "manufacturer": {
+                "const": "unknown"
+              },
+              "manufacturer_confidence": {
+                "type": "null"
+              },
+              "manufacturer_confidence_metric": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "manufacturer_state": {
+                "const": "inference_error"
+              }
+            },
+            "required": [
+              "manufacturer_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "manufacturer_error_code": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "manufacturer_state": {
+                "not": {
+                  "const": "inference_error"
+                }
+              }
+            },
+            "required": [
+              "manufacturer_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "manufacturer_error_code": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "model_state": {
+                "const": "known"
+              }
+            },
+            "required": [
+              "model_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "model": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              "model_error_code": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "model_state": {
+                "not": {
+                  "const": "known"
+                }
+              }
+            },
+            "required": [
+              "model_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "model": {
+                "type": "null"
+              },
+              "model_confidence": {
+                "type": "null"
+              },
+              "model_confidence_metric": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "model_state": {
+                "const": "inference_error"
+              }
+            },
+            "required": [
+              "model_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "model_error_code": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "model_state": {
+                "not": {
+                  "const": "inference_error"
+                }
+              }
+            },
+            "required": [
+              "model_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "model_error_code": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "model_state": {
+                "const": "known"
+              }
+            },
+            "required": [
+              "model_state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "manufacturer_state": {
+                "const": "known"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vehicle_type",
+        "vehicle_type_authority",
+        "first_frame",
+        "last_frame",
+        "first_seen",
+        "last_seen",
+        "sighting_time_basis",
+        "track_duration_seconds",
+        "frames_observed",
+        "final_reason",
+        "finalized_at"
+      ],
+      "properties": {
+        "vehicle_type": {
+          "enum": [
+            "car",
+            "van",
+            "bus",
+            "truck",
+            "motorcycle",
+            "bicycle",
+            "unknown"
+          ]
+        },
+        "vehicle_type_authority": {
+          "enum": [
+            "classification_consensus_v1",
+            "colour_latest_detector_v1",
+            "unavailable"
+          ]
+        },
+        "first_frame": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "last_frame": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "first_seen": {
+          "$ref": "#/$defs/utc"
+        },
+        "last_seen": {
+          "$ref": "#/$defs/utc"
+        },
+        "sighting_time_basis": {
+          "const": "host_frame_receipt"
+        },
+        "track_duration_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "frames_observed": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "final_reason": {
+          "enum": [
+            "track_lost",
+            "end_of_input",
+            "service_stop",
+            "camera_outage",
+            "tracker_reset"
+          ]
+        },
+        "finalized_at": {
+          "$ref": "#/$defs/utc"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "vehicle_type_authority": {
+                "const": "unavailable"
+              }
+            },
+            "required": [
+              "vehicle_type_authority"
+            ]
+          },
+          "then": {
+            "properties": {
+              "vehicle_type": {
+                "const": "unknown"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "model_artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "component",
+        "artifact_ref",
+        "sha256"
+      ],
+      "properties": {
+        "component": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "\\S"
+        },
+        "artifact_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "\\S"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "run_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "service_name",
+        "input_source",
+        "input_kind",
+        "started_at",
+        "code_commit",
+        "configuration_sha256",
+        "model_artifacts"
+      ],
+      "properties": {
+        "service_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "\\S"
+        },
+        "input_source": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "\\S"
+        },
+        "input_kind": {
+          "enum": [
+            "live_camera",
+            "uploaded_video"
+          ]
+        },
+        "started_at": {
+          "$ref": "#/$defs/utc"
+        },
+        "code_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "configuration_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "model_artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/model_artifact"
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "plate_text": {
+                "properties": {
+                  "available": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "available"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "plate": {
+            "properties": {
+              "recognition_state": {
+                "const": "unsupported"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "plate_text": {
+                "properties": {
+                  "available": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "available"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "plate": {
+            "properties": {
+              "recognition_state": {
+                "not": {
+                  "const": "unsupported"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "plate_text": {
+                "properties": {
+                  "available": {
+                    "const": true
+                  },
+                  "enabled": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "available",
+                  "enabled"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "plate": {
+            "properties": {
+              "recognition_state": {
+                "const": "not_attempted"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "plate_text": {
+                "properties": {
+                  "available": {
+                    "const": true
+                  },
+                  "ready": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "available",
+                  "ready"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "plate": {
+            "properties": {
+              "recognition_state": {
+                "const": "not_attempted"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "plate_category": {
+                "properties": {
+                  "available": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "available"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "plate": {
+            "properties": {
+              "plate_category_state": {
+                "const": "unsupported"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "plate_category": {
+                "properties": {
+                  "available": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "available"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "plate": {
+            "properties": {
+              "plate_category_state": {
+                "not": {
+                  "const": "unsupported"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "plate_category": {
+                "properties": {
+                  "available": {
+                    "const": true
+                  },
+                  "enabled": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "available",
+                  "enabled"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "plate": {
+            "properties": {
+              "plate_category_state": {
+                "const": "not_attempted"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "plate_category": {
+                "properties": {
+                  "available": {
+                    "const": true
+                  },
+                  "ready": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "available",
+                  "ready"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "plate": {
+            "properties": {
+              "plate_category_state": {
+                "const": "not_attempted"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "colour": {
+                "properties": {
+                  "available": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "available"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "colour": {
+            "properties": {
+              "colour_state": {
+                "const": "unsupported"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "colour": {
+                "properties": {
+                  "available": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "available"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "colour": {
+            "properties": {
+              "colour_state": {
+                "not": {
+                  "const": "unsupported"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "colour": {
+                "properties": {
+                  "available": {
+                    "const": true
+                  },
+                  "enabled": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "available",
+                  "enabled"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "colour": {
+            "properties": {
+              "colour_state": {
+                "const": "not_attempted"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "colour": {
+                "properties": {
+                  "available": {
+                    "const": true
+                  },
+                  "ready": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "available",
+                  "ready"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "colour": {
+            "properties": {
+              "colour_state": {
+                "const": "not_attempted"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "manufacturer": {
+                "properties": {
+                  "available": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "available"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "manufacturer": {
+            "properties": {
+              "manufacturer_state": {
+                "const": "unsupported"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "manufacturer": {
+                "properties": {
+                  "available": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "available"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "manufacturer": {
+            "properties": {
+              "manufacturer_state": {
+                "not": {
+                  "const": "unsupported"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "manufacturer": {
+                "properties": {
+                  "available": {
+                    "const": true
+                  },
+                  "enabled": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "available",
+                  "enabled"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "manufacturer": {
+            "properties": {
+              "manufacturer_state": {
+                "const": "not_attempted"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "manufacturer": {
+                "properties": {
+                  "available": {
+                    "const": true
+                  },
+                  "ready": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "available",
+                  "ready"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "manufacturer": {
+            "properties": {
+              "manufacturer_state": {
+                "const": "not_attempted"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "model": {
+                "properties": {
+                  "available": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "available"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "manufacturer": {
+            "properties": {
+              "model_state": {
+                "const": "unsupported"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "model": {
+                "properties": {
+                  "available": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "available"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "manufacturer": {
+            "properties": {
+              "model_state": {
+                "not": {
+                  "const": "unsupported"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "model": {
+                "properties": {
+                  "available": {
+                    "const": true
+                  },
+                  "enabled": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "available",
+                  "enabled"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "manufacturer": {
+            "properties": {
+              "model_state": {
+                "const": "not_attempted"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "model": {
+                "properties": {
+                  "available": {
+                    "const": true
+                  },
+                  "ready": {
+                    "const": false
+                  }
+                },
+                "required": [
+                  "available",
+                  "ready"
+                ]
+              }
+            }
+          }
+        },
+        "required": [
+          "capabilities"
+        ]
+      },
+      "then": {
+        "properties": {
+          "manufacturer": {
+            "properties": {
+              "model_state": {
+                "const": "not_attempted"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "properties": {
+              "vehicle_type_authority": {
+                "const": "classification_consensus_v1"
+              }
+            }
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "colour": {
+            "properties": {
+              "type_confidence_metric": {
+                "anyOf": [
+                  {
+                    "const": "vehicle_type_consensus_v1"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "properties": {
+              "vehicle_type_authority": {
+                "const": "colour_latest_detector_v1"
+              }
+            }
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "colour": {
+            "properties": {
+              "type_confidence_metric": {
+                "anyOf": [
+                  {
+                    "const": "vehicle_detector_latest_score_v1"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event": {
+            "properties": {
+              "vehicle_type": {
+                "const": "unknown"
+              }
+            }
+          }
+        },
+        "required": [
+          "event"
+        ]
+      },
+      "then": {
+        "properties": {
+          "colour": {
+            "properties": {
+              "type_confidence": {
+                "type": "null"
+              },
+              "type_confidence_metric": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

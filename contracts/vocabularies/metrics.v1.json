@@ -1,0 +1,68 @@
+{
+  "version": "v1-draft.1",
+  "status": "proposed_not_accuracy_validated",
+  "metrics": {
+    "ocr_mean_recognition_score_v1": {
+      "range": [
+        0,
+        1
+      ],
+      "source": "PlateReader._parse; mean rec_scores, rounded to 4 decimals; split fusion keeps whole-crop score",
+      "probability": false
+    },
+    "private_rule_evidence_min_v1": {
+      "range": [
+        0,
+        1
+      ],
+      "source": "route_plate; min(whole OCR score, reliable marker score), rounded to 4 decimals",
+      "probability": false
+    },
+    "plate_agent_joint_self_report_v1": {
+      "range": [
+        0,
+        1
+      ],
+      "source": "AgentPrediction.confidence; one self-report copied to text and category, not independent marginals",
+      "probability": false
+    },
+    "temporal_winner_weight_share_v1": {
+      "range": [
+        0,
+        1
+      ],
+      "source": "aggregate_colour_observations; winning sum(confidence*quality)/total valid weight",
+      "probability": false
+    },
+    "colour_agent_self_report_v1": {
+      "range": [
+        0,
+        1
+      ],
+      "source": "ColourPipeline._agent_colour; declared structured confidence",
+      "probability": false
+    },
+    "vehicle_type_consensus_v1": {
+      "range": [
+        0,
+        1
+      ],
+      "source": "aggregate_vehicle_type; winner mean detector score * (confidence share + observation share + winner margin)/3, rounded 4 decimals",
+      "probability": false
+    },
+    "vehicle_detector_latest_score_v1": {
+      "range": [
+        0,
+        1
+      ],
+      "source": "ColourPipeline.process_frame; latest box.conf for the same latest normalized label",
+      "probability": false
+    },
+    "plate_crop_weighted_area_v1": {
+      "range": "finite >= 0; unbounded above",
+      "source": "crop_quality_evidence; area*(0.5+clamp(detector_score,0,1))*(1+0.25*min(laplacian_variance/400,1))*(0.9+0.1*min(gray_std/64,1))*(0.9+0.1*max(0,1-abs(gray_mean-127.5)/127.5))*(0.60 if border else 1)",
+      "probability": false
+    }
+  },
+  "manufacturer_model_scores": "No metric registered until a real capability and catalogue are reviewed; known results may have null scores."
+}

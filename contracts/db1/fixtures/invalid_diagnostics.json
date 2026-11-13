@@ -1,0 +1,75 @@
+{
+  "cases": [
+    {
+      "id": "diagnostic_rejects_plate_text",
+      "base_case": "row_finalized",
+      "operation": "set",
+      "path": "diagnostic.plate_text",
+      "value": "001 \u062a\u0648\u0646\u0633 0007",
+      "contains": "Additional properties"
+    },
+    {
+      "id": "omission_rejects_row_uid",
+      "base_case": "omit_no_detection",
+      "operation": "set",
+      "path": "diagnostic.row_uid",
+      "value": "20000000-0000-4000-8000-000000000009",
+      "contains": "null"
+    },
+    {
+      "id": "row_requires_payload_hash",
+      "base_case": "row_finalized",
+      "operation": "set",
+      "path": "diagnostic.payload_sha256",
+      "value": null,
+      "contains": "string"
+    },
+    {
+      "id": "rejects_unbounded_error_text",
+      "base_case": "omit_failure_before_model",
+      "operation": "set",
+      "path": "diagnostic.error_code",
+      "value": "TimeoutError: https://user:password@example.test/secret",
+      "contains": "does not match"
+    },
+    {
+      "id": "unsettled_not_failure_before_model",
+      "base_case": "omit_unsettled_operation",
+      "operation": "set",
+      "path": "diagnostic.reason",
+      "value": "failure_before_model",
+      "contains": "unsettled_operation"
+    },
+    {
+      "id": "unsettled_requires_positive_operations",
+      "base_case": "omit_unsettled_operation",
+      "operation": "set",
+      "path": "diagnostic.settlement.attempts",
+      "value": 0,
+      "contains": "minimum"
+    },
+    {
+      "id": "unsettled_requires_unknown_operation",
+      "base_case": "omit_unsettled_operation",
+      "operation": "set",
+      "path": "diagnostic.settlement.unresolved_attempts",
+      "value": 0,
+      "contains": "minimum"
+    },
+    {
+      "id": "unsettled_has_no_selected_attempt",
+      "base_case": "omit_unsettled_operation",
+      "operation": "set",
+      "path": "diagnostic.selected",
+      "value": {
+        "attempt_uid": null,
+        "route": null,
+        "model_name": null,
+        "model_version": null,
+        "attempts": 2,
+        "samples": null
+      },
+      "contains": "null"
+    }
+  ]
+}

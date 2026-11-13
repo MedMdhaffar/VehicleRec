@@ -1,0 +1,11 @@
+# Synthetic finalized-message examples
+
+> **DB1 reconciliation required (2026-10-08).** DB1 development contract v0 (2026-10-08) is the target database interface. This earlier draft is retained for producer evidence and proposal history; its tables, columns, vocabularies, cardinality and retry rules are not a DB1 specification. See [DB1 alignment](../../docs/t1/db1_alignment.md). No acceptance of unresolved semantics is claimed.
+
+All data and artifact hashes are synthetic. No current producer/tracking integration is claimed. v1-draft.1 is reviewable, not approved/frozen.
+
+`valid/` has eighteen standalone runs covering known results, no usable plate, unavailable capabilities, failed inference, independent text/category outcomes, disabled inference, agent colour override and unmeasured scores/counts. Correction fixtures additionally cover multiple crops with retries, crops that skip the agent, each independently null plate counter, agent results with null confidence and measured/unmeasured calls, equivalent single-frame UTC instants and failed inference without a selected crop. The existing agent colour override remains valid with zero plate-agent calls. The no-plate example still represents a vehicle event with colour/type results. Every message contains all three result blocks and all five states.
+
+`invalid/` has twenty-four schema rejection fixtures and sixteen application-only rejection fixtures. The fifteen added negative fixtures isolate initial-call arithmetic, known agent text/category with measured zero calls, known text/category without crop evidence, all three single-frame invariants, exact event_at equality and whitespace-only source/artifact/service/component fields. New semantic fixtures also declare the specific required error in expectations.json. Some intentionally invalid messages have structurally valid JSON; expectations.json identifies their required rejection layer. Do not submit these fixtures to an operational writer.
+
+Run `/home/intern/.venv/bin/python contracts/validate_examples.py`. The existing environment includes jsonschema 4.26.0. No external schema download is required. See [validation notes](../../docs/t1/validation.md) for actual results and unexecuted operational checks.

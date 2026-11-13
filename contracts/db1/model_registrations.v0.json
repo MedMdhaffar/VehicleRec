@@ -1,0 +1,69 @@
+{
+  "version": "db1-model-registrations-v0",
+  "status": "review_candidate_not_provisioned",
+  "fixture_keys_are_synthetic": true,
+  "registrations": [
+    {
+      "role": "run_vehicle_detector",
+      "model_name": "vehicle_detector",
+      "version": 1,
+      "task": "detect",
+      "selected_routes": ["shared_vehicle_detector"],
+      "fingerprint_requirement": "exact loaded weights sha256 plus preprocessing/config sha256",
+      "synthetic_fixture_key": 5101
+    },
+    {
+      "role": "plate_local_ocr",
+      "model_name": "plate_ocr",
+      "version": 1,
+      "task": "ocr",
+      "selected_routes": ["local_private", "local_ocr"],
+      "fingerprint_requirement": "exact OCR artifacts plus parser/preprocessing config",
+      "synthetic_fixture_key": 5102
+    },
+    {
+      "role": "plate_agent",
+      "model_name": "plate_agent_reference",
+      "version": 1,
+      "task": "vlm",
+      "selected_routes": ["agent"],
+      "fingerprint_requirement": "provider model identifier plus prompt/schema/config sha256",
+      "synthetic_fixture_key": 5103
+    },
+    {
+      "role": "colour_local",
+      "model_name": "vehicle_colour_hsv_temporal",
+      "version": 1,
+      "task": "classify",
+      "selected_routes": ["local_temporal"],
+      "fingerprint_requirement": "algorithm, thresholds and preprocessing config sha256; weights_path null",
+      "synthetic_fixture_key": 5104
+    },
+    {
+      "role": "colour_agent",
+      "model_name": "vehicle_colour_agent_reference",
+      "version": 1,
+      "task": "vlm",
+      "selected_routes": ["agent_override"],
+      "fingerprint_requirement": "provider model identifier plus prompt/schema/config sha256",
+      "synthetic_fixture_key": 5105
+    },
+    {
+      "role": "future_vehicle_make",
+      "model_name": "vehicle_make_reference",
+      "version": 1,
+      "task": "classify",
+      "selected_routes": ["future_make_classifier"],
+      "fingerprint_requirement": "future exact artifact and preprocessing fingerprint",
+      "synthetic_fixture_key": 5106,
+      "capability_status": "structural_fixture_only_current_runtime_unavailable"
+    }
+  ],
+  "rules": [
+    "dim_run.model_key resolves the actual vehicle detector.",
+    "Each recognition model_key resolves the model or versioned algorithm that produced its selected result.",
+    "A model from another attempt is never borrowed to satisfy a required model_key.",
+    "Seed names establish neither loaded artifact identity nor current capability.",
+    "dim_model.model_key is unrelated to dim_vehicle_model.vehicle_model_key."
+  ]
+}

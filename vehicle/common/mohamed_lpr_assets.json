@@ -1,0 +1,249 @@
+{
+  "version": "mohamed-lpr-engine-assets-v1",
+  "source_head": "f64ac4cc61db4a3531e041cc2d7a6a877b4a4f16",
+  "files": {
+    "plate": {
+      "base": "source",
+      "path": "vehicle/license_plate_service/run_video_pipeline/models/plate_detector.onnx",
+      "sha256": "c3c1026ca7d0585dd88084d68182dd897113712fa734ae1557ca70174440c076",
+      "bytes": 7835770
+    },
+    "marker-source": {
+      "base": "source",
+      "path": "vehicle/license_plate_service/run_video_pipeline/models/tounes_word_detector.pt",
+      "sha256": "f8956bd78992661bf5a88905f355b48168c0e5d643c3f7635795cfc266d11293",
+      "bytes": 5371461
+    },
+    "dino": {
+      "base": "source",
+      "path": "vehicle/license_plate_service/run_video_pipeline/license_plate_plugin/assets/models/dinov3/dinov3_vits16_pretrain_lvd1689m-08c60483.pth",
+      "sha256": "08c60483bc63c04f533611e34bf70b120eedb7240f469bc16e9e20bf344b941d",
+      "bytes": 86531063
+    },
+    "index": {
+      "base": "source",
+      "path": "vehicle/license_plate_service/run_video_pipeline/license_plate_plugin/assets/reference_index/reference_r2.npz",
+      "sha256": "aed2f0c0add768992716dd1e2457310ebd5edac4c5efc8117f457574ef9d5686",
+      "bytes": 45936
+    },
+    "index-metadata": {
+      "base": "source",
+      "path": "vehicle/license_plate_service/run_video_pipeline/license_plate_plugin/assets/reference_index/reference_r2.json",
+      "sha256": "1b11a15ab2fd4d6f93258741ecf868d9d2f2aa8183138d26470339561796a154",
+      "bytes": 56252
+    },
+    "reference-manifest": {
+      "base": "source",
+      "path": "vehicle/license_plate_service/run_video_pipeline/license_plate_plugin/assets/references/manifest.json",
+      "sha256": "3c6f9515dc38dbd65263a74ccf391d5560660ff583a1eba34aa6b1dad2a2ea11",
+      "bytes": 3470
+    },
+    "plugin-config": {
+      "base": "source",
+      "path": "vehicle/license_plate_service/run_video_pipeline/license_plate_plugin/configuration/local_reproduction.json",
+      "sha256": "44646a613fe55eda53ca2b128fbaace92ccb2b52fc1d99f447af37fe1d8f6a8b",
+      "bytes": 704
+    },
+    "arabic-inference.json": {
+      "base": "source",
+      "path": "vehicle/license_plate_service/run_video_pipeline/license_plate_plugin/assets/models/arabic_PP-OCRv5_mobile_rec/inference.json",
+      "sha256": "d43832804d89c0e18d59f8446a3babd0ef60c44bc335efddac3176caf71d50af",
+      "bytes": 217712
+    },
+    "registration-inference.json": {
+      "base": "cache",
+      "path": "PP-OCRv6_medium_rec/inference.json",
+      "sha256": "0b2e25e990bd072f1bf77d59d67d508bce6c4bd44af6624e0fb27d6da2cd00e8",
+      "bytes": 221814
+    },
+    "arabic-inference.pdiparams": {
+      "base": "source",
+      "path": "vehicle/license_plate_service/run_video_pipeline/license_plate_plugin/assets/models/arabic_PP-OCRv5_mobile_rec/inference.pdiparams",
+      "sha256": "4b4271fd1dd89a40b2056e1a42e58de7c0df2fdcf1a97ca9a8916d7ec45f9143",
+      "bytes": 7922839
+    },
+    "registration-inference.pdiparams": {
+      "base": "cache",
+      "path": "PP-OCRv6_medium_rec/inference.pdiparams",
+      "sha256": "1b01c79a914587933f615569e75de54f2e638ebb5d3f3b3c1b38c24ede8c7319",
+      "bytes": 76465087
+    },
+    "arabic-inference.yml": {
+      "base": "source",
+      "path": "vehicle/license_plate_service/run_video_pipeline/license_plate_plugin/assets/models/arabic_PP-OCRv5_mobile_rec/inference.yml",
+      "sha256": "21368419e6c016c31db55d316d59e11c128e1913e6e6fe10287084710043d3a6",
+      "bytes": 6165
+    },
+    "registration-inference.yml": {
+      "base": "cache",
+      "path": "PP-OCRv6_medium_rec/inference.yml",
+      "sha256": "991b700facf5b50a7de193468207d5f4255b538dde0d312ae3b7c7a9b6873129",
+      "bytes": 150580
+    },
+    "marker": {
+      "base": "target",
+      "path": "vehicle/license_plate_service/run_video_pipeline/models/tounes_word_detector.pt",
+      "sha256": "f8956bd78992661bf5a88905f355b48168c0e5d643c3f7635795cfc266d11293",
+      "bytes": 5371461
+    },
+    "vehicle": {
+      "base": "target",
+      "path": "vehicle/vehicle_classification_manufacturer_service/vehicle_classification_manufacturer_service/models/vehicle_yolo26.pt",
+      "sha256": "f0574db3428cf12af8c07c40aaa6e042f9cf830f1b22d2ee9ea4dcd370acfc29",
+      "bytes": 44056921
+    },
+    "vehicle-tracker": {
+      "base": "target",
+      "path": "vehicle/vehicle_classification_manufacturer_service/vehicle_classification_manufacturer_service/trackers/bytetrack_vehicles.yaml",
+      "sha256": "0629767f781ccae6a81f23c6df04df325912f6d31fd28bc226b5e4f82d41103d",
+      "bytes": 147
+    },
+    "plate-tracker": {
+      "base": "target",
+      "path": "vehicle/license_plate_service/run_video_pipeline/trackers/bytetrack_plates.yaml",
+      "sha256": "2cf1cb6791ed4b60eb380ee4ac589d990bc816e2af8025488f33cadbc4020ea3",
+      "bytes": 439
+    }
+  },
+  "references": [
+    {
+      "reference_id": "1",
+      "category": "idara",
+      "sha256": "4bc69f7b6e0fb6a200109bfa45cd48ed30e971395a27c20fc76e406cd252cc38",
+      "path": "experiments/paddleocr_plate_recognition/runs/20261030T021933_620008Z/input_1.png"
+    },
+    {
+      "reference_id": "2",
+      "category": "idara",
+      "sha256": "53cccd1ddcc6f0c70c90bf66ea4019e65ba2f79633439c3812ef8701a959c6f1",
+      "path": "experiments/paddleocr_plate_recognition/runs/20261030T021933_620008Z/input_2.png"
+    },
+    {
+      "reference_id": "3",
+      "category": "idara",
+      "sha256": "3598db2a3b98103ece19c78cdd066c35b5b6d8f36d0a345d34465a88f7290999",
+      "path": "experiments/paddleocr_plate_recognition/runs/20261030T021933_620008Z/input_3.png"
+    },
+    {
+      "reference_id": "8",
+      "category": "shorta",
+      "sha256": "2bdf3980effb34ba2b539be56511a7af64975eae0b3508fdd2028752e8209d32",
+      "path": "experiments/paddleocr_plate_recognition/runs/20261030T021933_620008Z/input_8.png"
+    },
+    {
+      "reference_id": "9",
+      "category": "shorta",
+      "sha256": "7f479012a8417a028939461b4d82d1f86113a78c1ccd4e8d52eb70686a97d5ba",
+      "path": "experiments/paddleocr_plate_recognition/runs/20261030T021933_620008Z/input_9.png"
+    },
+    {
+      "reference_id": "10",
+      "category": "tunis",
+      "sha256": "2c9d1965d542093d681a40fc48c0bebe0e7f754a5d0a936720808e4734231be8",
+      "path": "experiments/paddleocr_plate_recognition/runs/20261030T021933_620008Z/input_10.png"
+    },
+    {
+      "reference_id": "11",
+      "category": "tunis",
+      "sha256": "1d5a13afcc92d955fd0df87734267b9e17d4f52c869cb8a2db295f714f062925",
+      "path": "experiments/paddleocr_plate_recognition/runs/20261030T021933_620008Z/input_11.png"
+    },
+    {
+      "reference_id": "12",
+      "category": "tunis",
+      "sha256": "6577a657626fbe46c242cd33bc1adbce0f7f23d20c1711d26247275177a50c28",
+      "path": "experiments/paddleocr_plate_recognition/runs/20261030T021933_620008Z/input_12.png"
+    }
+  ],
+  "source_code": {
+    "config.py": "49226fc2a4f2f73f64c6a36528d377fb12672bba2af662fe4f000eaa4fbd2c66",
+    "prototype_pipeline.py": "cc82c4d03396db0a8381f2f4568655c68862c77468c34b2942ffe0e717764f0e",
+    "policies.py": "b346534876f01920c27b7cda68b6b009c8c7a1b491e22730c486dd1190f09db6",
+    "run_video_prototype.py": "15de04a94e0be9399498a8ffeda4883cc7f5fb6638affef4a9587217391bb985",
+    "private_plate_parser.py": "ae5be9de596c9542d71181460031e22bdbba501e9527da0a5abf4ecd74adf54b",
+    "plate_detector.py": "8975c80d10138da7ebb34b1f85379ea21a1b3ee9f22a971b0a1a4637963d012a",
+    "pipeline.py": "995b66c8f4efcae71ca40c437beb4cc9b48ab0e4cad0ce283b1ea59c2d44f43b",
+    "ocr.py": "abf902c0b595a37133083db0b94c8aad07a49ac354502c315aba5a7c2be579ed",
+    "onnx_detector.py": "8ddda3a82b8545b7189fd39cf3dc4c820ac316f6da25b7c4d6527bd6eed8c3e6",
+    "data_capture.py": "f6ebb3f7291cf1a6c2866f85d42faa15edc54452e8e04137191cf448adff7529",
+    "marker_localizer.py": "9357ba3a079d067d6c47e667fe91b85877e708781564d25bdf74ca2c662ffff2",
+    "routing.py": "150e43d5bd34d8eac2b5f0ebc344d35d013ff15a4c6e40ea8d9090f8ebc4d67a",
+    "classification.py": "e7623b7a3fe75044f44fdb134b970ce7b427570ded6f2f6b0512c5898cfb8004",
+    "__init__.py": "d831ada2940ff4194b255b80638429961d455acae4c4048e69369f38ccbde5c6",
+    "schemas.py": "c6d4b4dc9fe1c1a7fade49616332d8870762663484b9dc4edda7bda690496ac5",
+    "whole_plate_numbers.py": "de7a29f4513fda3f8b008cbf7e7f1a55e68c1d833081a31b4979a2049356914a",
+    "license_plate_plugin/dinov3.py": "e4bf3b99be03e9693722f06ddf3502dffb3401acd8ba428a96c26a5a0fecbd7c",
+    "license_plate_plugin/utils.py": "c08d319dbaaa1c1670e1d47096ea34ebd8a9b29a34cf94c705a2a654a84d3ad7",
+    "license_plate_plugin/preprocessing.py": "818231df24efd7fd3db18cd2217576ca287be7f9bab6be1ef42d0b861ed30444",
+    "license_plate_plugin/config.py": "6fb7ce5defc3d2214712d09a18f179c4ade12a71effebc1a133513bc408db4fc",
+    "license_plate_plugin/representations.py": "7e4c71579908dd7f906cf33b934c1ad46dd5a3d81db317903ae4b6f72d35fae7",
+    "license_plate_plugin/ocr.py": "b9db737a7f9e9b4f4651a02c646ff57e8c7191707724e3668d769aba440decbd",
+    "license_plate_plugin/parser.py": "957a0e8e99e12b64259e992168c1b4ecdb940bfa2e5ee086760397851fdd61dd",
+    "license_plate_plugin/classifier.py": "96c5b9688f81cfd8171717806d079b2d8cda2bbe1b838c9fa577501ecf51368f",
+    "license_plate_plugin/manifest.py": "db90ef42b531f64b1ce207579c7c9eb07cbc43bba5dc429dd524ae8d6054a041",
+    "license_plate_plugin/__init__.py": "7fee85774206f1cf0250a01b9ee003cd01baf154366c19ec56c0b24e1a0af378",
+    "license_plate_plugin/reference_index.py": "f4c42076c06a8e67b902c190dcf1d712c5e1ff39aeec8a9650844ac00a203bbf",
+    "license_plate_plugin/errors.py": "46c4c4254c7a7182efbe6d12e5c88105ec9e5b6ffcfbed42524241187cb40727"
+  },
+  "vendor_revision": "6876159a11b4df116f30f667f8c9888617df0751",
+  "vendor_python_sha256": "3ba0f062ef551bfec7a2c9b78b3f1e3caaf786e39e2eee793c0fd5d65e2e9b82",
+  "index_compatibility": {
+    "schema_version": 1,
+    "model_identifier": "dinov3_vits16",
+    "checkpoint_filename": "dinov3_vits16_pretrain_lvd1689m-08c60483.pth",
+    "checkpoint_sha256": "08c60483bc63c04f533611e34bf70b120eedb7240f469bc16e9e20bf344b941d",
+    "official_repository_revision": "6876159a11b4df116f30f667f8c9888617df0751",
+    "patch_size_hw": [
+      16,
+      16
+    ],
+    "component_dimension": 384,
+    "combined_dimension": 1536,
+    "view_order": [
+      "whole",
+      "left",
+      "centre",
+      "right"
+    ],
+    "view_weights": {
+      "whole": 0.25,
+      "left": 0.25,
+      "centre": 0.25,
+      "right": 0.25
+    },
+    "regions": {
+      "left": "floor(0) to ceil(0.5W)",
+      "centre": "floor(0.25W) to ceil(0.75W)",
+      "right": "floor(0.5W) to ceil(W)"
+    },
+    "resolution_policy": {
+      "target_area": 50176,
+      "max_long_edge": 1008,
+      "max_patch_count": 512,
+      "padding_rgb": [
+        124,
+        116,
+        104
+      ],
+      "interpolation": "bicubic",
+      "rounding": "round-half-up",
+      "odd_padding": "extra right or bottom"
+    },
+    "normalization": {
+      "rgb": true,
+      "rescale_factor": 0.00392156862745098,
+      "mean": [
+        0.485,
+        0.456,
+        0.406
+      ],
+      "std": [
+        0.229,
+        0.224,
+        0.225
+      ]
+    }
+  },
+  "index_compatibility_fingerprint": "ff5483e3633f97e7601da3386023b140c729c9bea201ab33b35e3774a7c6f8ec",
+  "clip_sha256": "36067a473c1afd4d4f35d63224a5f0f110213be7bc1c8f75f80adbe23caaffa2"
+}

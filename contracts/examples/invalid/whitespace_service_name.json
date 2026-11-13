@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "message_id": "00000000-0000-4000-8000-000000000313",
+  "observation_id": "00000000-0000-4000-8000-000000001313",
+  "run_id": "00000000-0000-4000-8000-000000002313",
+  "camera_id": "synthetic-camera-1",
+  "track_id": 7,
+  "track_generation": 1,
+  "event_at": "2026-10-04T10:00:03Z",
+  "vocabulary_version": "v1-draft.1",
+  "normalization_version": "v1-draft.1",
+  "metrics_version": "v1-draft.1",
+  "run_context": {
+    "service_name": " \t\r\n ",
+    "input_source": "artifact:synthetic-video-1",
+    "input_kind": "uploaded_video",
+    "started_at": "2026-10-04T10:00:00Z",
+    "code_commit": "a8950aa9f974bf8e46178e2973b3a2d632a86fce",
+    "configuration_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "model_artifacts": [
+      {
+        "component": "synthetic-vehicle-detector",
+        "artifact_ref": "artifact:synthetic-model",
+        "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    ]
+  },
+  "capabilities": {
+    "plate_text": {
+      "available": true,
+      "enabled": true,
+      "ready": true
+    },
+    "plate_category": {
+      "available": true,
+      "enabled": true,
+      "ready": true
+    },
+    "colour": {
+      "available": true,
+      "enabled": true,
+      "ready": true
+    },
+    "manufacturer": {
+      "available": false,
+      "enabled": false,
+      "ready": false
+    },
+    "model": {
+      "available": false,
+      "enabled": false,
+      "ready": false
+    }
+  },
+  "event": {
+    "vehicle_type": "car",
+    "vehicle_type_authority": "classification_consensus_v1",
+    "first_frame": 10,
+    "last_frame": 20,
+    "first_seen": "2026-10-04T10:00:01Z",
+    "last_seen": "2026-10-04T10:00:02Z",
+    "sighting_time_basis": "host_frame_receipt",
+    "track_duration_seconds": 1.0,
+    "frames_observed": 8,
+    "final_reason": "end_of_input",
+    "finalized_at": "2026-10-04T10:00:03Z"
+  },
+  "plate": {
+    "plate_text": "001 تونس 0007",
+    "recognition_state": "known",
+    "error_code": null,
+    "plate_category": "private",
+    "plate_category_state": "known",
+    "plate_category_error_code": null,
+    "confidence": 0.96,
+    "confidence_metric": "ocr_mean_recognition_score_v1",
+    "category_confidence": 0.9,
+    "category_confidence_metric": "private_rule_evidence_min_v1",
+    "selected_crop_frame": 15,
+    "selected_crop_score": 13250.0,
+    "selected_crop_score_metric": "plate_crop_weighted_area_v1",
+    "recognition_attempts": 1,
+    "agent_api_calls": 0,
+    "agent_retries": 0,
+    "local_latency_ms": 40.0,
+    "total_recognition_latency_ms": 100.0,
+    "text_source": "local_ocr",
+    "category_source": "private_rule",
+    "normalization_profile": "private_tn_v1"
+  },
+  "colour": {
+    "colour": "silver/gray",
+    "colour_state": "known",
+    "error_code": null,
+    "colour_confidence": 0.84,
+    "colour_confidence_metric": "temporal_winner_weight_share_v1",
+    "colour_samples": 6,
+    "selected_result_source": "local_temporal",
+    "type_confidence": 0.76,
+    "type_confidence_metric": "vehicle_type_consensus_v1"
+  },
+  "manufacturer": {
+    "manufacturer": "unknown",
+    "manufacturer_state": "unsupported",
+    "manufacturer_error_code": null,
+    "model": null,
+    "model_state": "unsupported",
+    "model_error_code": null,
+    "manufacturer_confidence": null,
+    "manufacturer_confidence_metric": null,
+    "model_confidence": null,
+    "model_confidence_metric": null,
+    "observations_count": 0
+  }
+}

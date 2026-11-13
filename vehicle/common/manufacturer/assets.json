@@ -1,0 +1,91 @@
+{
+  "binding_revision": "ec56af26d9c224e10983ef8b5f40ee34e941ec11",
+  "native_revision": "18ab62a8ec5144ae5d2f65e78374ba69652d75dd",
+  "runtime": "../../../.venv-manufacturer",
+  "artifacts": {
+    "model": {
+      "path": "../../../models/manufacturer/LFM2.5-VL-450M-BF16.gguf",
+      "bytes": 711486496,
+      "sha256": "f780a432c7ed103ae35d3f20e76c35acd65777f6cc04fbe646f83efa42989b22"
+    },
+    "projector": {
+      "path": "../../../models/manufacturer/mmproj-LFM2.5-VL-450m-BF16.gguf",
+      "bytes": 190305664,
+      "sha256": "899e337967b74c825afeb2f8b441fadd9b3078ec1ec680fc3b3cadbee2af231d"
+    },
+    "python": {
+      "path": "../../../.venv-manufacturer/bin/python3.11",
+      "bytes": 25909944,
+      "sha256": "ed1b616cddfebe35e9e64a9558c730faaae9080c279f59e0d5a4b78c953c8034"
+    },
+    "lib/python3.11/site-packages/llama_cpp/lib/libggml-base.so": {
+      "path": "../../../.venv-manufacturer/lib/python3.11/site-packages/llama_cpp/lib/libggml-base.so",
+      "bytes": 882992,
+      "sha256": "4e84ea5c93ddc0e48d7428f111cce25e803bf0e54309cd28aba3b95047ac70a5"
+    },
+    "lib/python3.11/site-packages/llama_cpp/lib/libggml-cpu.so": {
+      "path": "../../../.venv-manufacturer/lib/python3.11/site-packages/llama_cpp/lib/libggml-cpu.so",
+      "bytes": 1509864,
+      "sha256": "9b47e7469c6c4fdff33296b20c498cab92ee43d86dfa57a2ecfdc53efa6ce3c1"
+    },
+    "lib/python3.11/site-packages/llama_cpp/lib/libggml-cuda.so": {
+      "path": "../../../.venv-manufacturer/lib/python3.11/site-packages/llama_cpp/lib/libggml-cuda.so",
+      "bytes": 64546904,
+      "sha256": "5d577260675eb7fab3a7d2bdc65e16c68c89731541b2ede745ee27eaa623973f"
+    },
+    "lib/python3.11/site-packages/llama_cpp/lib/libggml.so": {
+      "path": "../../../.venv-manufacturer/lib/python3.11/site-packages/llama_cpp/lib/libggml.so",
+      "bytes": 47048,
+      "sha256": "a57bf690e646b8c3ba37f2b61894b4d6e6c08fd0199bf34bc3ded24f3023bcba"
+    },
+    "lib/python3.11/site-packages/llama_cpp/lib/libllama-common.so": {
+      "path": "../../../.venv-manufacturer/lib/python3.11/site-packages/llama_cpp/lib/libllama-common.so",
+      "bytes": 5049976,
+      "sha256": "6ada2e51b99031ac2fbad911dd4b6bba3935ece91d12fce42b772fe651d59fe8"
+    },
+    "lib/python3.11/site-packages/llama_cpp/lib/libllama.so": {
+      "path": "../../../.venv-manufacturer/lib/python3.11/site-packages/llama_cpp/lib/libllama.so",
+      "bytes": 4696240,
+      "sha256": "57b1f422b540c95a9cd81e6bc022a5e71b111d0a770bd8f6f4a913af400ecb00"
+    },
+    "lib/python3.11/site-packages/llama_cpp/lib/libmtmd.so": {
+      "path": "../../../.venv-manufacturer/lib/python3.11/site-packages/llama_cpp/lib/libmtmd.so",
+      "bytes": 2038568,
+      "sha256": "b306996d7fb3769c1b7793ce9be2c232ba743c394b9b262fce90f8d4bb6fefb4"
+    },
+    "lib/python3.11/site-packages/llama_cpp/llama.py": {
+      "path": "../../../.venv-manufacturer/lib/python3.11/site-packages/llama_cpp/llama.py",
+      "bytes": 244341,
+      "sha256": "eb3b7c7a7c3fd1ae3c2177ae8558d4285807536a8629ad1991a8aa142af2c805"
+    },
+    "lib/python3.11/site-packages/llama_cpp/llama_multimodal.py": {
+      "path": "../../../.venv-manufacturer/lib/python3.11/site-packages/llama_cpp/llama_multimodal.py",
+      "bytes": 244299,
+      "sha256": "7cb3d4cabfdef8d7031bcea14a1b310c5c712b60f6a58ca44ecd0a3adadf6401"
+    }
+  },
+  "source": {
+    "llama_backend.py": "580ecda83fd7278db27defc3d27b6cbb4705a8558c88a64e3d8a73e5771b1932",
+    "prompts.py": "7deda9dabbb6bf723d1f4acddd9f9542c497a5feeb9c3833ccab3cfce30997d7",
+    "taxonomy.py": "abfb7c2337a0e93ea4b7d3dc4c687178654bea87a611609c76f1666c53ca55fc",
+    "brands.py": "022441162e91796b54cac709df03c51e707ad243f41ddece521918b3d6dc5956",
+    "service.py": "1546c1f28a644a5cd8930eb8f41ec43dbd09cdd3c2090c76abb76ee4c19b7474",
+    "schemas.py": "453e4cf05ed71e3c2836205c3b298aec0b1ff2c9fc007b4fb57d91d162fa133c",
+    "config.py": "51b19aaa755689b76f2192b86be851a68e1d1bef7883f07185ee4bc9f8cc7132"
+  },
+  "settings": {
+    "context_size": 4096,
+    "n_batch": 512,
+    "n_ubatch": 128,
+    "n_seq_max": 1,
+    "ctx_checkpoints": 0,
+    "max_tokens": 128,
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 1,
+    "n_gpu_layers": "all",
+    "threads": 1,
+    "max_crop_bytes": 8388608
+  },
+  "cuda_runtime_library": "libcudart.so.12"
+}

@@ -50,76 +50,21 @@ def _locate_safely(
         return MarkerLocalization(detected=False)
 
 
-def needs_region_ocr(ocr_result: OCRResult, marker: MarkerLocalization) -> bool:
-    """Whether existing conservative fusion can use marker-split OCR evidence."""
-    return (
-        parse_private_ocr(ocr_result).status == "ambiguous"
-        and marker.detected
-        and marker.confidence >= config.MARKER_RELIABLE_CONF
-        and marker.bbox is not None
-    )
+def _scalar_policy():
+    from .scalar_policy import LocalPlatePolicy
+    return LocalPlatePolicy(config.MARKER_RELIABLE_CONF, config.MARKER_REGION_OCR_CONF,
+        config.PRIVATE_ROUTE_MIN_OCR_CONF, config.PRIVATE_ROUTE_MIN_MARKER_CONF)
 
 
-def assemble_plate_detection(
-    detection: PlateCrop,
-    ocr_result: OCRResult,
-    marker: MarkerLocalization,
-    left_result: OCRResult | None = None,
-    right_result: OCRResult | None = None,
-) -> PlateDetection:
-    """Apply the production parser/fusion policy to already-computed evidence."""
-    parsed = parse_private_ocr(ocr_result)
-    marker_reliable = marker.detected and marker.confidence >= config.MARKER_RELIABLE_CONF
-    left_result = left_result or OCRResult("", "", 0.0)
-    right_result = right_result or OCRResult("", "", 0.0)
-    resolution_source = "whole_ocr"
+def needs_region_ocr(ocr_result, marker):
+    from .scalar_policy import needs_region_ocr as scalar_needs_region
+    return scalar_needs_region(ocr_result, marker, policy=_scalar_policy())
 
-    if parsed.status == "ambiguous" and marker_reliable:
-        left_digits = digits_only(left_result.normalized_text)
-        right_digits = digits_only(right_result.normalized_text)
-        whole_digits = digits_only(ocr_result.normalized_text)
-        side_fields_valid = (
-            left_result.normalized_text.isascii()
-            and left_result.normalized_text.isdigit()
-            and right_result.normalized_text.isascii()
-            and right_result.normalized_text.isdigit()
-            and 1 <= len(left_digits) <= 3
-            and 1 <= len(right_digits) <= 4
-            and left_result.confidence >= config.MARKER_REGION_OCR_CONF
-            and right_result.confidence >= config.MARKER_REGION_OCR_CONF
-        )
-        if side_fields_valid and left_digits + right_digits == whole_digits:
-            resolved = parse_private_plate(f"{left_digits}T{right_digits}")
-            if resolved.status == "valid":
-                parsed = resolved
-                resolution_source = "marker_left_right_ocr"
 
-    return PlateDetection(
-        bbox=list(detection.bbox),
-        detector_confidence=(
-            round(detection.confidence, 4)
-            if detection.confidence is not None
-            else None
-        ),
-        raw_ocr=ocr_result.raw_text,
-        normalized_ocr=ocr_result.normalized_text,
-        ocr_confidence=round(ocr_result.confidence, 4),
-        parser_status=parsed.status,
-        series=parsed.series,
-        registration_number=parsed.registration_number,
-        normalized_plate=parsed.normalized_plate,
-        parser_reason=parsed.reason,
-        marker_detected=marker.detected,
-        marker_reliable=marker_reliable,
-        marker_confidence=round(marker.confidence, 4),
-        marker_bbox=list(marker.bbox) if marker.bbox is not None else None,
-        marker_center_x=round(marker.center_x, 2) if marker.center_x is not None else None,
-        left_ocr=left_result.normalized_text,
-        left_ocr_confidence=round(left_result.confidence, 4),
-        right_ocr=right_result.normalized_text,
-        right_ocr_confidence=round(right_result.confidence, 4),
-        resolution_source=resolution_source,
-    )
+def assemble_plate_detection(detection, ocr_result, marker, left_result=None, right_result=None):
+    from .scalar_policy import assemble_plate_fields
+    return PlateDetection(**assemble_plate_fields(detection.bbox, detection.confidence,
+        ocr_result, marker, left_result, right_result, policy=_scalar_policy()))
 
 
 def analyze_plate_crop(

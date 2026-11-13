@@ -1,0 +1,55 @@
+{
+  "note": "Synthetic P3a additions; historical fixtures unchanged.",
+  "cases": [
+    {
+      "id": "construction_blocked_quarantine",
+      "valid": true,
+      "diagnostic": {
+        "schema_version": "db1-diagnostics-v1",
+        "record_type": "quarantine",
+        "row_kind": "fact_plate_read",
+        "row_uid": null,
+        "run_id": "synthetic-construction-test",
+        "track_id": 1,
+        "reason": "construction_blocked",
+        "time_basis": "host_replay_receipt",
+        "frame_index": 0,
+        "media_pts": null,
+        "raw_tracker": {
+          "raw_id": 7,
+          "epoch": 1
+        },
+        "association": null,
+        "selected": null,
+        "error_code": "SELECTED_ATTEMPT_MISMATCH",
+        "media_status": "not_requested",
+        "payload_sha256": null
+      }
+    },
+    {
+      "id": "construction_blocked_not_omission",
+      "valid": false,
+      "diagnostic": {
+        "schema_version": "db1-diagnostics-v1",
+        "record_type": "omission",
+        "row_kind": "fact_plate_read",
+        "row_uid": null,
+        "run_id": "synthetic-construction-test",
+        "track_id": 1,
+        "reason": "construction_blocked",
+        "time_basis": "host_replay_receipt",
+        "frame_index": 0,
+        "media_pts": null,
+        "raw_tracker": {
+          "raw_id": 7,
+          "epoch": 1
+        },
+        "association": null,
+        "selected": null,
+        "error_code": "SELECTED_ATTEMPT_MISMATCH",
+        "media_status": "not_requested",
+        "payload_sha256": null
+      }
+    }
+  ]
+}

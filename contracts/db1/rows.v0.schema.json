@@ -1,0 +1,248 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://waycon.local/contracts/db1/rows.v0.schema.json",
+  "title": "WAYCON DB1 vehicle row snapshot v0",
+  "oneOf": [
+    {"$ref": "#/$defs/vehicle_snapshot"},
+    {"$ref": "#/$defs/plate_snapshot"},
+    {"$ref": "#/$defs/colour_snapshot"},
+    {"$ref": "#/$defs/make_snapshot"}
+  ],
+  "$defs": {
+    "uuid": {"type": "string", "format": "uuid"},
+    "timestamp": {"type": "string", "format": "date-time"},
+    "nonblank": {"type": "string", "minLength": 1, "pattern": ".*\\S.*"},
+    "bigint": {"type": "integer", "minimum": -9223372036854775808, "maximum": 9223372036854775807},
+    "positive_bigint": {"type": "integer", "minimum": 1, "maximum": 9223372036854775807},
+    "positive_smallint": {"type": "integer", "minimum": 1, "maximum": 32767},
+    "positive_int": {"type": "integer", "minimum": 1, "maximum": 2147483647},
+    "nonnegative_int": {"type": "integer", "minimum": 0, "maximum": 2147483647},
+    "score": {"type": "number", "minimum": 0, "maximum": 1},
+    "nullable_score": {"oneOf": [{"$ref": "#/$defs/score"}, {"type": "null"}]},
+    "nullable_positive_bigint": {"oneOf": [{"$ref": "#/$defs/positive_bigint"}, {"type": "null"}]},
+    "nullable_positive_smallint": {"oneOf": [{"$ref": "#/$defs/positive_smallint"}, {"type": "null"}]},
+    "nullable_positive_int": {"oneOf": [{"$ref": "#/$defs/positive_int"}, {"type": "null"}]},
+    "model_natural": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model_name", "version", "task"],
+      "properties": {
+        "model_name": {"$ref": "#/$defs/nonblank"},
+        "version": {"type": "integer", "minimum": 1, "maximum": 2147483647},
+        "task": {"$ref": "#/$defs/nonblank"}
+      }
+    },
+    "media_natural": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["org_id", "run_id", "camera_id", "ts", "kind", "bucket", "object_key", "content_type", "bytes", "width", "height", "sha256"],
+      "properties": {
+        "org_id": {"$ref": "#/$defs/uuid"},
+        "run_id": {"$ref": "#/$defs/nonblank"},
+        "camera_id": {"$ref": "#/$defs/nonblank"},
+        "ts": {"$ref": "#/$defs/timestamp"},
+        "kind": {"enum": ["vehicle_crop", "plate_crop", "clip"]},
+        "bucket": {"$ref": "#/$defs/nonblank"},
+        "object_key": {"$ref": "#/$defs/nonblank"},
+        "content_type": {"$ref": "#/$defs/nonblank"},
+        "bytes": {"type": "integer", "minimum": 0, "maximum": 9223372036854775807},
+        "width": {"oneOf": [{"type": "integer", "minimum": 1, "maximum": 2147483647}, {"type": "null"}]},
+        "height": {"oneOf": [{"type": "integer", "minimum": 1, "maximum": 2147483647}, {"type": "null"}]},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "common_natural_properties": {
+      "type": "object",
+      "properties": {
+        "org_id": {"$ref": "#/$defs/uuid"},
+        "run_id": {"$ref": "#/$defs/nonblank"},
+        "camera_id": {"$ref": "#/$defs/nonblank"},
+        "camera_timezone": {"$ref": "#/$defs/nonblank"},
+        "ts": {"$ref": "#/$defs/timestamp"},
+        "uid": {"$ref": "#/$defs/uuid"},
+        "track_id": {"$ref": "#/$defs/positive_bigint"}
+      }
+    },
+    "vehicle_delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["org_id", "run_id", "camera_id", "camera_timezone", "ts", "uid", "track_id", "first_ts", "last_ts", "class", "class_conf", "frames_observed", "best_media"],
+      "properties": {
+        "org_id": {"$ref": "#/$defs/uuid"},
+        "run_id": {"$ref": "#/$defs/nonblank"},
+        "camera_id": {"$ref": "#/$defs/nonblank"},
+        "camera_timezone": {"$ref": "#/$defs/nonblank"},
+        "ts": {"$ref": "#/$defs/timestamp"},
+        "uid": {"$ref": "#/$defs/uuid"},
+        "track_id": {"$ref": "#/$defs/positive_bigint"},
+        "first_ts": {"$ref": "#/$defs/timestamp"},
+        "last_ts": {"$ref": "#/$defs/timestamp"},
+        "class": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "class_group"],
+          "properties": {"name": {"$ref": "#/$defs/nonblank"}, "class_group": {"$ref": "#/$defs/nonblank"}}
+        },
+        "class_conf": {"$ref": "#/$defs/nullable_score"},
+        "frames_observed": {"$ref": "#/$defs/positive_int"},
+        "best_media": {"oneOf": [{"$ref": "#/$defs/media_natural"}, {"type": "null"}]}
+      }
+    },
+    "plate_attempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["attempt_uid", "submission_ordinal", "ts", "route", "model", "text_complete", "structural_valid", "plate_text", "plate_category", "conf", "crop_score", "crop_media"],
+      "properties": {
+        "attempt_uid": {"$ref": "#/$defs/uuid"},
+        "submission_ordinal": {"$ref": "#/$defs/positive_int"},
+        "ts": {"$ref": "#/$defs/timestamp"},
+        "route": {"enum": ["local_private", "local_ocr", "agent"]},
+        "model": {"$ref": "#/$defs/model_natural"},
+        "text_complete": {"type": "boolean"},
+        "structural_valid": {"oneOf": [{"type": "boolean"}, {"type": "null"}]},
+        "plate_text": {"oneOf": [{"$ref": "#/$defs/nonblank"}, {"type": "null"}]},
+        "plate_category": {"oneOf": [{"$ref": "#/$defs/nonblank"}, {"type": "null"}]},
+        "conf": {"$ref": "#/$defs/nullable_score"},
+        "crop_score": {"oneOf": [{"type": "number", "minimum": 0}, {"type": "null"}]},
+        "crop_media": {"oneOf": [{"$ref": "#/$defs/media_natural"}, {"type": "null"}]}
+      }
+    },
+    "plate_delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["org_id", "run_id", "camera_id", "camera_timezone", "ts", "uid", "track_id", "outcome", "attempts", "selected_attempt"],
+      "properties": {
+        "org_id": {"$ref": "#/$defs/uuid"},
+        "run_id": {"$ref": "#/$defs/nonblank"},
+        "camera_id": {"$ref": "#/$defs/nonblank"},
+        "camera_timezone": {"$ref": "#/$defs/nonblank"},
+        "ts": {"$ref": "#/$defs/timestamp"},
+        "uid": {"$ref": "#/$defs/uuid"},
+        "track_id": {"$ref": "#/$defs/positive_bigint"},
+        "outcome": {"enum": ["read", "unreadable", "no_plate"]},
+        "attempts": {"$ref": "#/$defs/positive_int"},
+        "selected_attempt": {"oneOf": [{"$ref": "#/$defs/plate_attempt"}, {"type": "null"}]}
+      }
+    },
+    "colour_support": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ts", "source"],
+      "properties": {
+        "ts": {"$ref": "#/$defs/timestamp"},
+        "source": {"enum": ["local_temporal", "agent_override"]}
+      }
+    },
+    "colour_delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["org_id", "run_id", "camera_id", "camera_timezone", "ts", "uid", "track_id", "model", "colour", "conf", "state", "samples", "support"],
+      "properties": {
+        "org_id": {"$ref": "#/$defs/uuid"},
+        "run_id": {"$ref": "#/$defs/nonblank"},
+        "camera_id": {"$ref": "#/$defs/nonblank"},
+        "camera_timezone": {"$ref": "#/$defs/nonblank"},
+        "ts": {"$ref": "#/$defs/timestamp"},
+        "uid": {"$ref": "#/$defs/uuid"},
+        "track_id": {"$ref": "#/$defs/positive_bigint"},
+        "model": {"$ref": "#/$defs/model_natural"},
+        "colour": {"oneOf": [{"$ref": "#/$defs/nonblank"}, {"type": "null"}]},
+        "conf": {"$ref": "#/$defs/nullable_score"},
+        "state": {"enum": ["decided", "undecided", "error"]},
+        "samples": {"$ref": "#/$defs/nonnegative_int"},
+        "support": {"$ref": "#/$defs/colour_support"}
+      }
+    },
+    "make_delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["org_id", "run_id", "camera_id", "camera_timezone", "ts", "uid", "track_id", "model", "manufacturer", "vehicle_model", "manufacturer_conf", "vehicle_model_conf", "observations"],
+      "properties": {
+        "org_id": {"$ref": "#/$defs/uuid"},
+        "run_id": {"$ref": "#/$defs/nonblank"},
+        "camera_id": {"$ref": "#/$defs/nonblank"},
+        "camera_timezone": {"$ref": "#/$defs/nonblank"},
+        "ts": {"$ref": "#/$defs/timestamp"},
+        "uid": {"$ref": "#/$defs/uuid"},
+        "track_id": {"$ref": "#/$defs/positive_bigint"},
+        "model": {"$ref": "#/$defs/model_natural"},
+        "manufacturer": {"oneOf": [{"$ref": "#/$defs/nonblank"}, {"type": "null"}]},
+        "vehicle_model": {"oneOf": [{"$ref": "#/$defs/nonblank"}, {"type": "null"}]},
+        "manufacturer_conf": {"$ref": "#/$defs/nullable_score"},
+        "vehicle_model_conf": {"$ref": "#/$defs/nullable_score"},
+        "observations": {"$ref": "#/$defs/nonnegative_int"}
+      }
+    },
+    "vehicle_sql": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["org_id", "run_key", "camera_key", "date_key", "ts", "uid", "track_id", "first_ts", "last_ts", "class_key", "class_conf", "frames_observed", "best_media_key"],
+      "properties": {
+        "org_id": {"$ref": "#/$defs/uuid"}, "run_key": {"$ref": "#/$defs/positive_bigint"}, "camera_key": {"$ref": "#/$defs/positive_bigint"},
+        "date_key": {"type": "integer", "minimum": 10101, "maximum": 99991231}, "ts": {"$ref": "#/$defs/timestamp"}, "uid": {"$ref": "#/$defs/uuid"},
+        "track_id": {"$ref": "#/$defs/bigint"}, "first_ts": {"$ref": "#/$defs/timestamp"}, "last_ts": {"$ref": "#/$defs/timestamp"},
+        "class_key": {"$ref": "#/$defs/positive_smallint"}, "class_conf": {"$ref": "#/$defs/nullable_score"}, "frames_observed": {"$ref": "#/$defs/positive_int"},
+        "best_media_key": {"$ref": "#/$defs/nullable_positive_bigint"}
+      }
+    },
+    "plate_sql": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["org_id", "run_key", "camera_key", "date_key", "ts", "uid", "track_id", "model_key", "outcome", "plate_text", "plate_category_key", "conf", "attempts", "crop_media_key", "crop_score"],
+      "properties": {
+        "org_id": {"$ref": "#/$defs/uuid"}, "run_key": {"$ref": "#/$defs/positive_bigint"}, "camera_key": {"$ref": "#/$defs/positive_bigint"},
+        "date_key": {"type": "integer", "minimum": 10101, "maximum": 99991231}, "ts": {"$ref": "#/$defs/timestamp"}, "uid": {"$ref": "#/$defs/uuid"},
+        "track_id": {"$ref": "#/$defs/bigint"}, "model_key": {"$ref": "#/$defs/positive_bigint"}, "outcome": {"enum": ["read", "unreadable", "no_plate"]},
+        "plate_text": {"oneOf": [{"type": "string"}, {"type": "null"}]}, "plate_category_key": {"$ref": "#/$defs/nullable_positive_smallint"},
+        "conf": {"$ref": "#/$defs/nullable_score"}, "attempts": {"$ref": "#/$defs/positive_int"}, "crop_media_key": {"$ref": "#/$defs/nullable_positive_bigint"},
+        "crop_score": {"oneOf": [{"type": "number"}, {"type": "null"}]}
+      },
+      "allOf": [
+        {"if": {"properties": {"outcome": {"const": "read"}}}, "then": {"properties": {"plate_text": {"type": "string"}}}},
+        {"if": {"properties": {"outcome": {"enum": ["unreadable", "no_plate"]}}}, "then": {"properties": {"plate_text": {"type": "null"}}}}
+      ]
+    },
+    "colour_sql": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["org_id", "run_key", "camera_key", "date_key", "ts", "uid", "track_id", "model_key", "colour_key", "conf", "state", "samples"],
+      "properties": {
+        "org_id": {"$ref": "#/$defs/uuid"}, "run_key": {"$ref": "#/$defs/positive_bigint"}, "camera_key": {"$ref": "#/$defs/positive_bigint"},
+        "date_key": {"type": "integer", "minimum": 10101, "maximum": 99991231}, "ts": {"$ref": "#/$defs/timestamp"}, "uid": {"$ref": "#/$defs/uuid"},
+        "track_id": {"$ref": "#/$defs/bigint"}, "model_key": {"$ref": "#/$defs/positive_bigint"}, "colour_key": {"$ref": "#/$defs/nullable_positive_smallint"},
+        "conf": {"$ref": "#/$defs/nullable_score"}, "state": {"type": "string"}, "samples": {"$ref": "#/$defs/nonnegative_int"}
+      }
+    },
+    "make_sql": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["org_id", "run_key", "camera_key", "date_key", "ts", "uid", "track_id", "model_key", "manufacturer_key", "vehicle_model_key", "manufacturer_conf", "vehicle_model_conf", "observations"],
+      "properties": {
+        "org_id": {"$ref": "#/$defs/uuid"}, "run_key": {"$ref": "#/$defs/positive_bigint"}, "camera_key": {"$ref": "#/$defs/positive_bigint"},
+        "date_key": {"type": "integer", "minimum": 10101, "maximum": 99991231}, "ts": {"$ref": "#/$defs/timestamp"}, "uid": {"$ref": "#/$defs/uuid"},
+        "track_id": {"$ref": "#/$defs/bigint"}, "model_key": {"$ref": "#/$defs/positive_bigint"}, "manufacturer_key": {"$ref": "#/$defs/nullable_positive_int"},
+        "vehicle_model_key": {"$ref": "#/$defs/nullable_positive_int"}, "manufacturer_conf": {"$ref": "#/$defs/nullable_score"},
+        "vehicle_model_conf": {"$ref": "#/$defs/nullable_score"}, "observations": {"$ref": "#/$defs/nonnegative_int"}
+      },
+      "allOf": [
+        {"if": {"properties": {"vehicle_model_key": {"type": "integer"}}, "required": ["vehicle_model_key"]}, "then": {"properties": {"manufacturer_key": {"type": "integer"}}}}
+      ]
+    },
+    "vehicle_snapshot": {
+      "type": "object", "additionalProperties": false, "required": ["schema_version", "row_kind", "delivery_payload", "resolved_sql_row"],
+      "properties": {"schema_version": {"const": "db1-row-snapshot-v0"}, "row_kind": {"const": "fact_vehicle"}, "delivery_payload": {"$ref": "#/$defs/vehicle_delivery"}, "resolved_sql_row": {"$ref": "#/$defs/vehicle_sql"}}
+    },
+    "plate_snapshot": {
+      "type": "object", "additionalProperties": false, "required": ["schema_version", "row_kind", "delivery_payload", "resolved_sql_row"],
+      "properties": {"schema_version": {"const": "db1-row-snapshot-v0"}, "row_kind": {"const": "fact_plate_read"}, "delivery_payload": {"$ref": "#/$defs/plate_delivery"}, "resolved_sql_row": {"$ref": "#/$defs/plate_sql"}}
+    },
+    "colour_snapshot": {
+      "type": "object", "additionalProperties": false, "required": ["schema_version", "row_kind", "delivery_payload", "resolved_sql_row"],
+      "properties": {"schema_version": {"const": "db1-row-snapshot-v0"}, "row_kind": {"const": "fact_vehicle_colour"}, "delivery_payload": {"$ref": "#/$defs/colour_delivery"}, "resolved_sql_row": {"$ref": "#/$defs/colour_sql"}}
+    },
+    "make_snapshot": {
+      "type": "object", "additionalProperties": false, "required": ["schema_version", "row_kind", "delivery_payload", "resolved_sql_row"],
+      "properties": {"schema_version": {"const": "db1-row-snapshot-v0"}, "row_kind": {"const": "fact_vehicle_make"}, "delivery_payload": {"$ref": "#/$defs/make_delivery"}, "resolved_sql_row": {"$ref": "#/$defs/make_sql"}}
+    }
+  }
+}

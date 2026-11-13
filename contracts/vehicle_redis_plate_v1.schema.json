@@ -1,0 +1,1509 @@
+{
+  "title": "Vehicle Redis Plate metadata v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "receipt": {
+      "type": "object",
+      "properties": {
+        "frame_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "ts": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 40
+        },
+        "monotonic": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1000000000000.0
+        },
+        "media_pts": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": -1000000000000.0,
+              "maximum": 1000000000000.0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "frame_index",
+        "ts",
+        "monotonic",
+        "media_pts"
+      ],
+      "additionalProperties": false
+    },
+    "model": {
+      "type": "object",
+      "properties": {
+        "model_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "task": {
+          "enum": [
+            "classify"
+          ]
+        }
+      },
+      "required": [
+        "model_name",
+        "version",
+        "task"
+      ],
+      "additionalProperties": false
+    },
+    "detector": {
+      "type": "object",
+      "properties": {
+        "model_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "task": {
+          "enum": [
+            "detect"
+          ]
+        }
+      },
+      "required": [
+        "model_name",
+        "version",
+        "task"
+      ],
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "org_id": {
+          "type": "string",
+          "format": "uuid",
+          "maxLength": 36
+        },
+        "camera_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "camera_timezone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "valid_from": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 40
+        },
+        "valid_to": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "maxLength": 40
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "source_kind": {
+          "enum": [
+            "file",
+            "rtsp"
+          ]
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 40
+        },
+        "service_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "detector": {
+          "$ref": "#/$defs/detector"
+        },
+        "resolution_provenance": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      },
+      "required": [
+        "org_id",
+        "camera_id",
+        "camera_timezone",
+        "valid_from",
+        "valid_to",
+        "run_id",
+        "source_kind",
+        "started_at",
+        "service_version",
+        "detector",
+        "resolution_provenance"
+      ],
+      "additionalProperties": false
+    },
+    "life": {
+      "type": "object",
+      "properties": {
+        "context": {
+          "$ref": "#/$defs/context"
+        },
+        "service_track_id": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9223372036854775807
+        },
+        "tracker_epoch": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775806
+        },
+        "raw_track_id": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "lifetime_sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9223372036854775807
+        },
+        "first": {
+          "$ref": "#/$defs/receipt"
+        },
+        "last": {
+          "$ref": "#/$defs/receipt"
+        },
+        "frames_observed": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "closure": {
+          "enum": [
+            "track_loss",
+            "tracker_reset",
+            "camera_outage",
+            "end_of_input",
+            "service_stop",
+            "clock_discontinuity",
+            "process_error"
+          ]
+        },
+        "quarantined": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "context",
+        "service_track_id",
+        "tracker_epoch",
+        "raw_track_id",
+        "lifetime_sequence",
+        "first",
+        "last",
+        "frames_observed",
+        "closure",
+        "quarantined"
+      ],
+      "additionalProperties": false
+    },
+    "attempt": {
+      "type": "object",
+      "properties": {
+        "attempt_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "frame_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "ts": {
+          "type": "string",
+          "format": "date-time",
+          "maxLength": 40
+        },
+        "monotonic": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1000000000000.0
+        },
+        "media_pts": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": -1000000000000.0,
+              "maximum": 1000000000000.0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "algorithm": {
+          "$ref": "#/$defs/model"
+        },
+        "quality_algorithm": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "quality": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "attempt_id",
+        "frame_index",
+        "ts",
+        "monotonic",
+        "media_pts",
+        "algorithm",
+        "quality_algorithm",
+        "label",
+        "confidence",
+        "quality"
+      ],
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "attempts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/attempt"
+          },
+          "maxItems": 128
+        },
+        "reason": {
+          "enum": [
+            "short_unknown",
+            "short_lock",
+            "final_unknown",
+            "final_lock"
+          ]
+        }
+      },
+      "required": [
+        "attempts",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "claims": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "decided",
+            "undecided"
+          ]
+        },
+        "label": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "support": {
+          "$ref": "#/$defs/receipt"
+        },
+        "model": {
+          "$ref": "#/$defs/model"
+        },
+        "samples": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        }
+      },
+      "required": [
+        "state",
+        "label",
+        "confidence",
+        "support",
+        "model",
+        "samples"
+      ],
+      "additionalProperties": false
+    },
+    "colour_result": {
+      "type": "object",
+      "properties": {
+        "claims": {
+          "$ref": "#/$defs/claims"
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        }
+      },
+      "required": [
+        "claims",
+        "provenance"
+      ],
+      "additionalProperties": false
+    },
+    "colour.batch": {
+      "type": "object",
+      "properties": {
+        "life": {
+          "$ref": "#/$defs/life"
+        },
+        "complete": {
+          "const": true
+        },
+        "expected_attempt_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "maxItems": 128
+        },
+        "measurements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/attempt"
+          },
+          "maxItems": 128
+        }
+      },
+      "required": [
+        "life",
+        "complete",
+        "expected_attempt_ids",
+        "measurements"
+      ],
+      "additionalProperties": false
+    },
+    "vehicle.closed": {
+      "type": "object",
+      "properties": {
+        "life": {
+          "$ref": "#/$defs/life"
+        },
+        "colour_batch_id": {
+          "type": "string",
+          "format": "uuid",
+          "maxLength": 36
+        },
+        "classes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "receipt": {
+                "$ref": "#/$defs/receipt"
+              },
+              "label": {
+                "enum": [
+                  "car",
+                  "van",
+                  "bus",
+                  "truck",
+                  "motorcycle",
+                  "bicycle",
+                  "unknown"
+                ]
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "receipt",
+              "label",
+              "confidence"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 128
+        },
+        "plate": {
+          "enum": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        "manufacturer": {
+          "enum": [
+            "unsupported"
+          ]
+        }
+      },
+      "required": [
+        "life",
+        "colour_batch_id",
+        "classes",
+        "plate",
+        "manufacturer"
+      ],
+      "additionalProperties": false
+    },
+    "colour.terminal": {
+      "type": "object",
+      "properties": {
+        "life": {
+          "$ref": "#/$defs/life"
+        },
+        "batch_id": {
+          "type": "string",
+          "format": "uuid",
+          "maxLength": 36
+        },
+        "result": {
+          "$ref": "#/$defs/colour_result"
+        }
+      },
+      "required": [
+        "life",
+        "batch_id",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    "db1.delivery": {
+      "type": "object",
+      "properties": {
+        "life": {
+          "$ref": "#/$defs/life"
+        },
+        "bundle": {
+          "type": "object"
+        },
+        "bundle_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "life",
+        "bundle",
+        "bundle_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "parent": {
+      "type": "object",
+      "properties": {
+        "org_id": {
+          "type": "string",
+          "format": "uuid",
+          "maxLength": 36
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "camera_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "service_track_id": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9223372036854775807
+        },
+        "raw_track_id": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "tracker_epoch": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775806
+        },
+        "lifetime_sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9223372036854775807
+        }
+      },
+      "required": [
+        "org_id",
+        "run_id",
+        "camera_id",
+        "service_track_id",
+        "raw_track_id",
+        "tracker_epoch",
+        "lifetime_sequence"
+      ],
+      "additionalProperties": false
+    },
+    "plate_model": {
+      "type": "object",
+      "properties": {
+        "model_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "task": {
+          "enum": [
+            "ocr",
+            "detect"
+          ]
+        }
+      },
+      "required": [
+        "model_name",
+        "version",
+        "task"
+      ],
+      "additionalProperties": false
+    },
+    "marker": {
+      "type": "object",
+      "properties": {
+        "detected": {
+          "type": "boolean"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "bbox": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2147483647
+              },
+              "minItems": 4,
+              "maxItems": 4
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "center_x": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 65536
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "detected",
+        "confidence",
+        "bbox",
+        "center_x"
+      ],
+      "additionalProperties": false
+    },
+    "candidate": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "$ref": "#/$defs/parent"
+        },
+        "candidate_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "segment_id": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9223372036854775807
+        },
+        "raw_plate_id": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "receipt": {
+          "$ref": "#/$defs/receipt"
+        },
+        "association": {
+          "enum": [
+            "associated",
+            "ambiguous",
+            "unassociated"
+          ]
+        },
+        "crop_accepted": {
+          "type": "boolean"
+        },
+        "crop_ref": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "crop_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bbox": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2147483647
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "crop_size": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65536
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "quality": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 3.4028234663852886e+38
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "detector_confidence": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "quality_algorithm": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      },
+      "required": [
+        "parent",
+        "candidate_id",
+        "segment_id",
+        "raw_plate_id",
+        "receipt",
+        "association",
+        "crop_accepted",
+        "crop_ref",
+        "crop_sha256",
+        "bbox",
+        "crop_size",
+        "quality",
+        "detector_confidence",
+        "quality_algorithm"
+      ],
+      "additionalProperties": false
+    },
+    "operation": {
+      "type": "object",
+      "properties": {
+        "operation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "maxItems": 128
+        },
+        "kind": {
+          "enum": [
+            "whole_ocr",
+            "marker",
+            "left_ocr",
+            "right_ocr"
+          ]
+        },
+        "outcome": {
+          "enum": [
+            "pending",
+            "not_started",
+            "succeeded",
+            "failed",
+            "unknown"
+          ]
+        },
+        "model": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/plate_model"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "raw_text": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 4096
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "marker": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/marker"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "route": {
+          "const": "private_local"
+        }
+      },
+      "required": [
+        "operation_id",
+        "sequence",
+        "dependencies",
+        "kind",
+        "outcome",
+        "model",
+        "raw_text",
+        "confidence",
+        "marker",
+        "route"
+      ],
+      "additionalProperties": false
+    },
+    "crop_attempt": {
+      "type": "object",
+      "properties": {
+        "attempt_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "submission_ordinal": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9223372036854775807
+        },
+        "candidate_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "expected_operation_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "maxItems": 16
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/operation"
+          },
+          "maxItems": 16
+        }
+      },
+      "required": [
+        "attempt_id",
+        "submission_ordinal",
+        "candidate_id",
+        "expected_operation_ids",
+        "operations"
+      ],
+      "additionalProperties": false
+    },
+    "plate_policy": {
+      "type": "object",
+      "properties": {
+        "marker_reliable": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "region_confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "route_ocr": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "route_marker": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "marker_reliable",
+        "region_confidence",
+        "route_ocr",
+        "route_marker"
+      ],
+      "additionalProperties": false
+    },
+    "transcript": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "$ref": "#/$defs/parent"
+        },
+        "capability": {
+          "enum": [
+            "enabled",
+            "disabled",
+            "unsupported"
+          ]
+        },
+        "candidates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/candidate"
+          },
+          "maxItems": 128
+        },
+        "expected_attempt_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "maxItems": 128
+        },
+        "attempts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/crop_attempt"
+          },
+          "maxItems": 128
+        },
+        "detection_complete": {
+          "type": "boolean"
+        },
+        "admission_complete": {
+          "type": "boolean"
+        },
+        "settlement": {
+          "enum": [
+            "open",
+            "settled",
+            "uncertain"
+          ]
+        },
+        "policy": {
+          "$ref": "#/$defs/plate_policy"
+        }
+      },
+      "required": [
+        "parent",
+        "capability",
+        "candidates",
+        "expected_attempt_ids",
+        "attempts",
+        "detection_complete",
+        "admission_complete",
+        "settlement",
+        "policy"
+      ],
+      "additionalProperties": false
+    },
+    "selection": {
+      "type": "object",
+      "properties": {
+        "attempt_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "segment_id": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9223372036854775807
+        },
+        "receipt": {
+          "$ref": "#/$defs/receipt"
+        },
+        "crop_score": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 3.4028234663852886e+38
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "operation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "model": {
+          "$ref": "#/$defs/plate_model"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 4096
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "category": {
+          "enum": [
+            "private",
+            null
+          ]
+        }
+      },
+      "required": [
+        "attempt_id",
+        "segment_id",
+        "receipt",
+        "crop_score",
+        "operation_id",
+        "model",
+        "text",
+        "confidence",
+        "category"
+      ],
+      "additionalProperties": false
+    },
+    "plate_claims": {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "enum": [
+            "read",
+            "unreadable",
+            "omitted"
+          ]
+        },
+        "omission_reason": {
+          "enum": [
+            null,
+            "no_detection",
+            "rejected_crop",
+            "ambiguous_association",
+            "unassociated_crop",
+            "disabled_capability",
+            "unsupported_capability",
+            "failure_before_model",
+            "unsettled_operation"
+          ]
+        },
+        "selected": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/selection"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "outcome",
+        "omission_reason",
+        "selected"
+      ],
+      "additionalProperties": false
+    },
+    "plate.batch": {
+      "type": "object",
+      "properties": {
+        "life": {
+          "$ref": "#/$defs/life"
+        },
+        "batch_id": {
+          "type": "string",
+          "format": "uuid",
+          "maxLength": 36
+        },
+        "revision": {
+          "enum": [
+            0,
+            1
+          ]
+        },
+        "transcript": {
+          "$ref": "#/$defs/transcript"
+        }
+      },
+      "required": [
+        "life",
+        "batch_id",
+        "revision",
+        "transcript"
+      ],
+      "additionalProperties": false
+    },
+    "plate.terminal": {
+      "type": "object",
+      "properties": {
+        "life": {
+          "$ref": "#/$defs/life"
+        },
+        "batch_id": {
+          "type": "string",
+          "format": "uuid",
+          "maxLength": 36
+        },
+        "revision": {
+          "enum": [
+            0,
+            1
+          ]
+        },
+        "transcript": {
+          "$ref": "#/$defs/transcript"
+        },
+        "claims": {
+          "$ref": "#/$defs/plate_claims"
+        },
+        "provenance_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "life",
+        "batch_id",
+        "revision",
+        "transcript",
+        "claims",
+        "provenance_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "vehicle.closed.plate": {
+      "type": "object",
+      "properties": {
+        "life": {
+          "$ref": "#/$defs/life"
+        },
+        "delivery_version": {
+          "const": "natural-db1-bundle-v1"
+        },
+        "colour_batch_id": {
+          "type": "string",
+          "format": "uuid",
+          "maxLength": 36
+        },
+        "plate_batch_id": {
+          "type": "string",
+          "format": "uuid",
+          "maxLength": 36
+        },
+        "classes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "receipt": {
+                "$ref": "#/$defs/receipt"
+              },
+              "label": {
+                "enum": [
+                  "car",
+                  "van",
+                  "bus",
+                  "truck",
+                  "motorcycle",
+                  "bicycle",
+                  "unknown"
+                ]
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "required": [
+              "receipt",
+              "label",
+              "confidence"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 128
+        },
+        "plate": {
+          "enum": [
+            "enabled",
+            "disabled",
+            "unsupported"
+          ]
+        },
+        "manufacturer": {
+          "const": "unsupported"
+        }
+      },
+      "required": [
+        "life",
+        "delivery_version",
+        "colour_batch_id",
+        "plate_batch_id",
+        "classes",
+        "plate",
+        "manufacturer"
+      ],
+      "additionalProperties": false
+    },
+    "db1.delivery.v1": {
+      "type": "object",
+      "properties": {
+        "life": {
+          "$ref": "#/$defs/life"
+        },
+        "closed": {
+          "$ref": "#/$defs/vehicle.closed.plate"
+        },
+        "colour": {
+          "$ref": "#/$defs/colour.terminal"
+        },
+        "plate": {
+          "$ref": "#/$defs/plate.terminal"
+        },
+        "bundle": {
+          "type": "object"
+        },
+        "bundle_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "life",
+        "closed",
+        "colour",
+        "plate",
+        "bundle",
+        "bundle_sha256"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "vehicle-redis-plate-v1"
+        },
+        "policy_version": {
+          "const": "plate-local-v1"
+        },
+        "event_id": {
+          "type": "string",
+          "format": "uuid",
+          "maxLength": 36
+        },
+        "org_id": {
+          "type": "string",
+          "format": "uuid",
+          "maxLength": 36
+        },
+        "kind": {
+          "const": "plate.batch"
+        },
+        "body_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "body": {
+          "$ref": "#/$defs/plate.batch"
+        }
+      },
+      "required": [
+        "schema_version",
+        "policy_version",
+        "event_id",
+        "org_id",
+        "kind",
+        "body_sha256",
+        "body"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "vehicle-redis-plate-v1"
+        },
+        "policy_version": {
+          "const": "plate-local-v1"
+        },
+        "event_id": {
+          "type": "string",
+          "format": "uuid",
+          "maxLength": 36
+        },
+        "org_id": {
+          "type": "string",
+          "format": "uuid",
+          "maxLength": 36
+        },
+        "kind": {
+          "const": "plate.terminal"
+        },
+        "body_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "body": {
+          "$ref": "#/$defs/plate.terminal"
+        }
+      },
+      "required": [
+        "schema_version",
+        "policy_version",
+        "event_id",
+        "org_id",
+        "kind",
+        "body_sha256",
+        "body"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "vehicle-redis-plate-v1"
+        },
+        "policy_version": {
+          "const": "plate-local-v1"
+        },
+        "event_id": {
+          "type": "string",
+          "format": "uuid",
+          "maxLength": 36
+        },
+        "org_id": {
+          "type": "string",
+          "format": "uuid",
+          "maxLength": 36
+        },
+        "kind": {
+          "const": "vehicle.closed.plate"
+        },
+        "body_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "body": {
+          "$ref": "#/$defs/vehicle.closed.plate"
+        }
+      },
+      "required": [
+        "schema_version",
+        "policy_version",
+        "event_id",
+        "org_id",
+        "kind",
+        "body_sha256",
+        "body"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "const": "vehicle-redis-plate-v1"
+        },
+        "policy_version": {
+          "const": "plate-local-v1"
+        },
+        "event_id": {
+          "type": "string",
+          "format": "uuid",
+          "maxLength": 36
+        },
+        "org_id": {
+          "type": "string",
+          "format": "uuid",
+          "maxLength": 36
+        },
+        "kind": {
+          "const": "db1.delivery.v1"
+        },
+        "body_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "body": {
+          "$ref": "#/$defs/db1.delivery.v1"
+        }
+      },
+      "required": [
+        "schema_version",
+        "policy_version",
+        "event_id",
+        "org_id",
+        "kind",
+        "body_sha256",
+        "body"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

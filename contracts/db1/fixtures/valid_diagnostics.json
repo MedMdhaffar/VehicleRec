@@ -1,0 +1,317 @@
+{
+  "cases": [
+    {
+      "id": "row_finalized",
+      "diagnostic": {
+        "schema_version": "db1-diagnostics-v1",
+        "record_type": "row",
+        "row_kind": "fact_plate_read",
+        "row_uid": "20000000-0000-4000-8000-000000000001",
+        "run_id": "fixture-run-a",
+        "track_id": 1,
+        "reason": "row_finalized",
+        "time_basis": "host_frame_receipt",
+        "frame_index": 44,
+        "media_pts": null,
+        "raw_tracker": {
+          "raw_id": 7,
+          "epoch": 1
+        },
+        "association": {
+          "status": "associated",
+          "candidate_track_ids": [
+            1
+          ],
+          "selected_track_id": 1,
+          "selected_score": 0.95,
+          "runner_up_score": null,
+          "profile": "vehicle_plate_geometry_v0"
+        },
+        "selected": {
+          "attempt_uid": "21000000-0000-4000-8000-000000000001",
+          "route": "local_private",
+          "model_name": "plate_ocr",
+          "model_version": 1,
+          "attempts": 2,
+          "samples": null
+        },
+        "error_code": null,
+        "media_status": "stored",
+        "payload_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "id": "omit_no_detection",
+      "diagnostic": {
+        "schema_version": "db1-diagnostics-v1",
+        "record_type": "omission",
+        "row_kind": "fact_plate_read",
+        "row_uid": null,
+        "run_id": "fixture-run-a",
+        "track_id": 1,
+        "reason": "no_detection",
+        "time_basis": "host_frame_receipt",
+        "frame_index": 50,
+        "media_pts": null,
+        "raw_tracker": {
+          "raw_id": 7,
+          "epoch": 1
+        },
+        "association": null,
+        "selected": null,
+        "error_code": null,
+        "media_status": "not_requested",
+        "payload_sha256": null
+      }
+    },
+    {
+      "id": "omit_rejected_crop",
+      "diagnostic": {
+        "schema_version": "db1-diagnostics-v1",
+        "record_type": "omission",
+        "row_kind": "fact_plate_read",
+        "row_uid": null,
+        "run_id": "fixture-run-a",
+        "track_id": 1,
+        "reason": "rejected_crop",
+        "time_basis": "host_frame_receipt",
+        "frame_index": 50,
+        "media_pts": null,
+        "raw_tracker": {
+          "raw_id": 7,
+          "epoch": 1
+        },
+        "association": null,
+        "selected": null,
+        "error_code": null,
+        "media_status": "not_requested",
+        "payload_sha256": null
+      }
+    },
+    {
+      "id": "omit_ambiguous_association",
+      "diagnostic": {
+        "schema_version": "db1-diagnostics-v1",
+        "record_type": "omission",
+        "row_kind": "fact_plate_read",
+        "row_uid": null,
+        "run_id": "fixture-run-a",
+        "track_id": 1,
+        "reason": "ambiguous_association",
+        "time_basis": "host_frame_receipt",
+        "frame_index": 23,
+        "media_pts": null,
+        "raw_tracker": {
+          "raw_id": 7,
+          "epoch": 1
+        },
+        "association": {
+          "status": "ambiguous",
+          "candidate_track_ids": [
+            1,
+            2
+          ],
+          "selected_track_id": null,
+          "selected_score": 0.9,
+          "runner_up_score": 0.85,
+          "profile": "vehicle_plate_geometry_v0"
+        },
+        "selected": null,
+        "error_code": null,
+        "media_status": "not_requested",
+        "payload_sha256": null
+      }
+    },
+    {
+      "id": "omit_unassociated_crop",
+      "diagnostic": {
+        "schema_version": "db1-diagnostics-v1",
+        "record_type": "omission",
+        "row_kind": "fact_plate_read",
+        "row_uid": null,
+        "run_id": "fixture-run-a",
+        "track_id": 1,
+        "reason": "unassociated_crop",
+        "time_basis": "host_replay_receipt",
+        "frame_index": 23,
+        "media_pts": 1.533,
+        "raw_tracker": {
+          "raw_id": 7,
+          "epoch": 1
+        },
+        "association": {
+          "status": "unassociated",
+          "candidate_track_ids": [],
+          "selected_track_id": null,
+          "selected_score": null,
+          "runner_up_score": null,
+          "profile": "vehicle_plate_geometry_v0"
+        },
+        "selected": null,
+        "error_code": null,
+        "media_status": "not_requested",
+        "payload_sha256": null
+      }
+    },
+    {
+      "id": "omit_disabled_capability",
+      "diagnostic": {
+        "schema_version": "db1-diagnostics-v1",
+        "record_type": "omission",
+        "row_kind": "fact_vehicle_colour",
+        "row_uid": null,
+        "run_id": "fixture-run-a",
+        "track_id": 1,
+        "reason": "disabled_capability",
+        "time_basis": "host_frame_receipt",
+        "frame_index": null,
+        "media_pts": null,
+        "raw_tracker": null,
+        "association": null,
+        "selected": null,
+        "error_code": null,
+        "media_status": "not_requested",
+        "payload_sha256": null
+      }
+    },
+    {
+      "id": "omit_unsupported_capability",
+      "diagnostic": {
+        "schema_version": "db1-diagnostics-v1",
+        "record_type": "omission",
+        "row_kind": "fact_vehicle_make",
+        "row_uid": null,
+        "run_id": "fixture-run-a",
+        "track_id": 1,
+        "reason": "unsupported_capability",
+        "time_basis": "host_frame_receipt",
+        "frame_index": null,
+        "media_pts": null,
+        "raw_tracker": null,
+        "association": null,
+        "selected": null,
+        "error_code": null,
+        "media_status": "not_requested",
+        "payload_sha256": null
+      }
+    },
+    {
+      "id": "omit_failure_before_model",
+      "diagnostic": {
+        "schema_version": "db1-diagnostics-v1",
+        "record_type": "omission",
+        "row_kind": "fact_plate_read",
+        "row_uid": null,
+        "run_id": "fixture-run-a",
+        "track_id": 1,
+        "reason": "failure_before_model",
+        "time_basis": "host_frame_receipt",
+        "frame_index": 33,
+        "media_pts": null,
+        "raw_tracker": {
+          "raw_id": 7,
+          "epoch": 1
+        },
+        "association": {
+          "status": "associated",
+          "candidate_track_ids": [
+            1
+          ],
+          "selected_track_id": 1,
+          "selected_score": 0.92,
+          "runner_up_score": null,
+          "profile": "vehicle_plate_geometry_v0"
+        },
+        "selected": {
+          "attempt_uid": null,
+          "route": null,
+          "model_name": null,
+          "model_version": null,
+          "attempts": 1,
+          "samples": null
+        },
+        "error_code": "MODEL_NOT_STARTED",
+        "media_status": "not_requested",
+        "payload_sha256": null
+      }
+    },
+    {
+      "id": "omit_unsettled_operation",
+      "diagnostic": {
+        "schema_version": "db1-diagnostics-v1",
+        "record_type": "omission",
+        "row_kind": "fact_plate_read",
+        "row_uid": null,
+        "run_id": "fixture-run-a",
+        "track_id": 1,
+        "reason": "unsettled_operation",
+        "time_basis": "host_frame_receipt",
+        "frame_index": 33,
+        "media_pts": null,
+        "raw_tracker": {
+          "raw_id": 7,
+          "epoch": 1
+        },
+        "association": {
+          "status": "associated",
+          "candidate_track_ids": [
+            1
+          ],
+          "selected_track_id": 1,
+          "selected_score": 0.92,
+          "runner_up_score": null,
+          "profile": "vehicle_plate_geometry_v0"
+        },
+        "selected": null,
+        "error_code": "CLOSURE_DEADLINE_EXCEEDED",
+        "media_status": "not_requested",
+        "payload_sha256": null,
+        "settlement": {
+          "incomplete": true,
+          "attempts": 2,
+          "unresolved_attempts": 1
+        }
+      }
+    },
+    {
+      "id": "omit_candidate_policy_before_submission",
+      "diagnostic": {
+        "schema_version": "db1-diagnostics-v1",
+        "record_type": "omission",
+        "row_kind": "fact_plate_read",
+        "row_uid": null,
+        "run_id": "fixture-run-a",
+        "track_id": 1,
+        "reason": "failure_before_model",
+        "time_basis": "host_frame_receipt",
+        "frame_index": 33,
+        "media_pts": null,
+        "raw_tracker": {
+          "raw_id": 7,
+          "epoch": 1
+        },
+        "association": {
+          "status": "associated",
+          "candidate_track_ids": [
+            1
+          ],
+          "selected_track_id": 1,
+          "selected_score": 0.92,
+          "runner_up_score": null,
+          "profile": "vehicle_plate_geometry_v0"
+        },
+        "selected": {
+          "attempt_uid": null,
+          "route": null,
+          "model_name": null,
+          "model_version": null,
+          "attempts": 0,
+          "samples": null
+        },
+        "error_code": "CANDIDATE_POLICY_NOT_SUBMITTED",
+        "media_status": "not_requested",
+        "payload_sha256": null
+      }
+    }
+  ]
+}

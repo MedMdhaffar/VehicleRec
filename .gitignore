@@ -1,1 +1,12 @@
 .env
+.venv/
+.venv-manufacturer/
+__pycache__/
+*.py[cod]
+vehicle/media/
+vehicle/private-audits/
+vehicle/db.sqlite3
+local_output/
+test_output/
+models/
+*.local.json

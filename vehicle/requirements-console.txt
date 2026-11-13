@@ -1,0 +1,23 @@
+# Console runtime only; no TensorRT engine export, provider or training stack.
+# Python 3.11. Install only after inspecting run_vehicle_console.sh --check.
+--extra-index-url https://download.pytorch.org/whl/cu128
+torch==2.11.0+cu128
+torchvision==0.26.0+cu128
+Django==5.2.17
+djangorestframework==3.18.1
+django-cors-headers==4.9.0
+python-dotenv==1.2.2
+numpy==2.3.5
+opencv-python==4.13.0.92
+ultralytics==8.4.46
+lap==0.5.13
+redis==7.4.0
+jsonschema==4.26.0
+psycopg[binary]==3.3.4
+paddleocr==3.7.0
+paddlepaddle==3.3.1
+paddlex==3.7.1
+Pillow==12.2.0
+PyYAML==6.0.2
+requests==2.33.1
+pydantic==2.13.3

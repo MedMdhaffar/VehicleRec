@@ -53,16 +53,29 @@ class PrototypePlatePipeline:
         track_id: str | None = None,
         sample_id: str | None = None,
         quality: dict | None = None,
+        receipt=None,
+        execution_recorder=None,
+        persist_review: bool = True,
     ) -> UnifiedPlateResult:
         total_started = time.perf_counter()
         local_timing: dict[str, float] = {}
+        reader = self.reader
+        if execution_recorder is not None:
+            delegate = reader
+
+            class RecordingReader:
+                def read_result(self, crop):
+                    execution_recorder('private_local')
+                    return delegate.read_result(crop)
+
+            reader = RecordingReader()
         local = analyze_plate_crop(
-            detection, self.reader, self.marker_localizer, timing=local_timing
+            detection, reader, self.marker_localizer, timing=local_timing
         )
         route_started = time.perf_counter()
         decision = route_plate(detection.crop, local)
         routing_ms = (time.perf_counter() - route_started) * 1000
-        now = datetime.now(timezone.utc).isoformat()
+        now = (receipt.utc if receipt is not None else datetime.now(timezone.utc)).isoformat()
         identifier = sample_id or str(uuid.uuid4())
         marker = MarkerEvidence(
             detected=local.marker_detected, reliable=local.marker_reliable,
@@ -83,7 +96,12 @@ class PrototypePlatePipeline:
                 evidence={"local": local.model_dump(mode="json"), "quality": quality or {}},
             )
         elif decision.route == "agent":
-            outcome = self.agent.analyze(detection.crop); api_calls = outcome.api_calls
+            if execution_recorder is None:
+                outcome = self.agent.analyze(detection.crop)
+            else:
+                outcome = self.agent.analyze(detection.crop,
+                            on_execution=lambda: execution_recorder('agent'))
+            api_calls = outcome.api_calls
             prediction = outcome.prediction
             accepted = outcome.status == "accepted" and prediction is not None
             result = UnifiedPlateResult(
@@ -103,7 +121,13 @@ class PrototypePlatePipeline:
                     image_preparation_ms=outcome.preparation_ms, api_ms=outcome.api_ms,
                     agent_total_ms=outcome.total_ms,
                 ),
-                evidence={"local": local.model_dump(mode="json"), "agent_evidence": prediction.evidence_summary if prediction else "", "quality": quality or {}},
+                evidence={
+                    "local": local.model_dump(mode="json"),
+                    "agent_evidence": prediction.evidence_summary if prediction else "",
+                    "quality": quality or {},
+                    **({"text_complete": prediction.text_complete if prediction else False}
+                       if execution_recorder is not None else {}),
+                },
             )
         else:
             result = UnifiedPlateResult(
@@ -116,6 +140,6 @@ class PrototypePlatePipeline:
                 evidence={"local": local.model_dump(mode="json"), "quality": quality or {}},
             )
         result.timing.total_ms = (time.perf_counter() - total_started) * 1000
-        stored = self.store.capture(result, detection.crop)
+        stored = self.store.capture(result, detection.crop) if persist_review else result
         self.counters.record(decision.route, api_calls)
         return stored

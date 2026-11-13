@@ -1,0 +1,192 @@
+{
+  "synthetic": true,
+  "valid": [
+    "examples/valid/known_results.json",
+    "examples/valid/no_usable_plate.json",
+    "examples/valid/unavailable_capabilities.json",
+    "examples/valid/failed_inference.json",
+    "examples/valid/unresolved_text_known_category.json",
+    "examples/valid/disabled_category.json",
+    "examples/valid/agent_colour_override.json",
+    "examples/valid/known_text_disabled_category.json",
+    "examples/valid/known_null_scores_unmeasured_counts.json",
+    "examples/valid/agent_multiple_crops_with_retries.json",
+    "examples/valid/agent_only_subset_of_crops.json",
+    "examples/valid/known_agent_null_scores_unmeasured_counts.json",
+    "examples/valid/known_agent_null_scores_measured_calls.json",
+    "examples/valid/unmeasured_recognition_attempts.json",
+    "examples/valid/unmeasured_agent_api_calls.json",
+    "examples/valid/unmeasured_agent_retries.json",
+    "examples/valid/single_frame_equivalent_utc_instants.json",
+    "examples/valid/failed_inference_without_selected_crop.json"
+  ],
+  "invalid": [
+    {
+      "path": "examples/invalid/known_text_null.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/unknown_with_score.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/failed_without_error.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/missing_manufacturer_block.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/missing_category_state.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/unpaired_metric.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/unsupported_with_value.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/disabled_but_known.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/wrong_type_metric.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/source_capture_deferred.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/bad_utc.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/mutable_run_total_in_envelope.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/crop_outside_interval.json",
+      "expected": "application_reject"
+    },
+    {
+      "path": "examples/invalid/reversed_frames.json",
+      "expected": "application_reject"
+    },
+    {
+      "path": "examples/invalid/too_many_observed_frames.json",
+      "expected": "application_reject"
+    },
+    {
+      "path": "examples/invalid/event_at_mismatch.json",
+      "expected": "application_reject"
+    },
+    {
+      "path": "examples/invalid/reversed_utc.json",
+      "expected": "application_reject"
+    },
+    {
+      "path": "examples/invalid/unregistered_manufacturer.json",
+      "expected": "application_reject"
+    },
+    {
+      "path": "examples/invalid/incorrect_retry_count.json",
+      "expected": "application_reject"
+    },
+    {
+      "path": "examples/invalid/noncanonical_plate.json",
+      "expected": "application_reject"
+    },
+    {
+      "path": "examples/invalid/confidence_out_of_range.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/unknown_model_with_key.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/oversized_error_code.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/attempted_with_zero_count.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/latency_scope_inconsistent.json",
+      "expected": "application_reject"
+    },
+    {
+      "path": "examples/invalid/agent_initial_calls_exceed_attempts.json",
+      "expected": "application_reject",
+      "semantic_error": "initial agent calls must fit submitted crop attempts"
+    },
+    {
+      "path": "examples/invalid/agent_calls_all_retries.json",
+      "expected": "application_reject",
+      "semantic_error": "initial agent calls must fit submitted crop attempts"
+    },
+    {
+      "path": "examples/invalid/agent_retries_exceed_calls.json",
+      "expected": "application_reject",
+      "semantic_error": "initial agent calls must fit submitted crop attempts"
+    },
+    {
+      "path": "examples/invalid/agent_text_without_calls.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/agent_category_without_calls.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/known_text_without_crop.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/known_category_without_crop.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/single_frame_distinct_instants.json",
+      "expected": "application_reject",
+      "semantic_error": "single-frame receipt instants must match"
+    },
+    {
+      "path": "examples/invalid/single_frame_nonzero_duration.json",
+      "expected": "application_reject",
+      "semantic_error": "single-frame duration must be zero"
+    },
+    {
+      "path": "examples/invalid/single_frame_multiple_observations.json",
+      "expected": "application_reject",
+      "semantic_error": "single-frame observed count must be one"
+    },
+    {
+      "path": "examples/invalid/event_at_equal_instant_different_text.json",
+      "expected": "application_reject",
+      "semantic_error": "event_at must equal finalized_at"
+    },
+    {
+      "path": "examples/invalid/whitespace_input_source.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/whitespace_service_name.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/whitespace_model_artifact_ref.json",
+      "expected": "schema_reject"
+    },
+    {
+      "path": "examples/invalid/whitespace_model_component.json",
+      "expected": "schema_reject"
+    }
+  ]
+}

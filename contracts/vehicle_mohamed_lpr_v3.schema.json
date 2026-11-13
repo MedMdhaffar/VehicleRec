@@ -1,0 +1,888 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Isolated Mohamed LPR Engine/Plate scalar contract v3; local only",
+  "$comment": "No transport, catalogue or DB1 schema. Apply codec and admission checks in addition to JSON Schema.",
+  "$defs": {
+    "crop": {
+      "type": "object",
+      "properties": {
+        "org_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "camera_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "session_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "vehicle_lifetime_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "plate_track_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "plate_track_epoch": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "association_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "candidate_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "frame_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "crop_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "frame_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "crop_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100000
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100000
+        },
+        "generation": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100000
+        }
+      },
+      "required": [
+        "org_id",
+        "run_id",
+        "camera_id",
+        "session_id",
+        "vehicle_lifetime_id",
+        "plate_track_id",
+        "plate_track_epoch",
+        "association_id",
+        "candidate_id",
+        "frame_id",
+        "crop_id",
+        "frame_sha256",
+        "crop_sha256",
+        "width",
+        "height",
+        "generation"
+      ],
+      "additionalProperties": false
+    },
+    "thresholds": {
+      "type": "object",
+      "properties": {
+        "whole_ocr": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "private_ocr": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "marker_reliable": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "private_marker": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "regional_ocr": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "whole_ocr",
+        "private_ocr",
+        "marker_reliable",
+        "private_marker",
+        "regional_ocr"
+      ],
+      "additionalProperties": false
+    },
+    "dependency": {
+      "type": "object",
+      "properties": {
+        "operation_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "result_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "operation_id",
+        "result_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "model_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "runtime_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "device": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "artifact_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "config_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "preprocessing_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "model_id",
+        "runtime_id",
+        "device",
+        "artifact_sha256",
+        "config_sha256",
+        "preprocessing_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "reference_score": {
+      "type": "object",
+      "properties": {
+        "reference_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "category": {
+          "enum": [
+            "tunis",
+            "idara",
+            "shorta"
+          ]
+        },
+        "similarity": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "reference_id",
+        "category",
+        "similarity"
+      ],
+      "additionalProperties": false
+    },
+    "reference_index": {
+      "type": "object",
+      "properties": {
+        "index_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "index_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              {
+                "enum": [
+                  "tunis",
+                  "idara",
+                  "shorta"
+                ]
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "minItems": 1,
+          "maxItems": 64
+        }
+      },
+      "required": [
+        "index_id",
+        "index_sha256",
+        "entries"
+      ],
+      "additionalProperties": false
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "vehicle-mohamed-lpr-v3"
+        },
+        "policy_version": {
+          "const": "mohamed-lpr-plate-policy-phase1-v1"
+        },
+        "operation_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6
+        },
+        "crop": {
+          "$ref": "#/$defs/crop"
+        },
+        "role": {
+          "enum": [
+            "category_ocr",
+            "visual",
+            "registration",
+            "marker",
+            "left",
+            "right"
+          ]
+        },
+        "tunis_mode": {
+          "enum": [
+            "legacy_whole",
+            "marker_first"
+          ]
+        },
+        "thresholds": {
+          "$ref": "#/$defs/thresholds"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dependency"
+          },
+          "minItems": 0,
+          "maxItems": 4
+        },
+        "region_xyxy": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100000
+          },
+          "minItems": 4,
+          "maxItems": 4
+        }
+      },
+      "required": [
+        "version",
+        "policy_version",
+        "operation_id",
+        "sequence",
+        "crop",
+        "role",
+        "tunis_mode",
+        "thresholds",
+        "dependencies",
+        "region_xyxy"
+      ],
+      "additionalProperties": false
+    },
+    "result": {
+      "type": "object",
+      "properties": {
+        "request": {
+          "$ref": "#/$defs/request"
+        },
+        "execution_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "executor_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "outcome": {
+          "enum": [
+            "succeeded",
+            "failed",
+            "unknown",
+            "missing"
+          ]
+        },
+        "retired": {
+          "const": true
+        },
+        "provenance": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/provenance"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "error_code": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "raw_text": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 4096
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "detected": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bbox": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100000
+              },
+              "minItems": 4,
+              "maxItems": 4
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "scores": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reference_score"
+          },
+          "minItems": 0,
+          "maxItems": 64
+        },
+        "reference_index": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/reference_index"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "request",
+        "execution_id",
+        "executor_ref",
+        "outcome",
+        "retired",
+        "provenance",
+        "error_code",
+        "raw_text",
+        "confidence",
+        "detected",
+        "bbox",
+        "scores",
+        "reference_index"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "outcome": {
+                "const": "succeeded"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "provenance": {
+                "$ref": "#/$defs/provenance"
+              },
+              "error_code": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "error_code": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 256
+              },
+              "raw_text": {
+                "type": "null"
+              },
+              "confidence": {
+                "type": "null"
+              },
+              "detected": {
+                "type": "null"
+              },
+              "bbox": {
+                "type": "null"
+              },
+              "reference_index": {
+                "type": "null"
+              },
+              "scores": {
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "request": {
+                "properties": {
+                  "role": {
+                    "const": "category_ocr"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "detected": {
+                "type": "null"
+              },
+              "bbox": {
+                "type": "null"
+              },
+              "scores": {
+                "maxItems": 0
+              },
+              "reference_index": {
+                "type": "null"
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "outcome": {
+                      "const": "succeeded"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "raw_text": {
+                      "type": "string",
+                      "maxLength": 4096
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "request": {
+                "properties": {
+                  "role": {
+                    "const": "registration"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "detected": {
+                "type": "null"
+              },
+              "bbox": {
+                "type": "null"
+              },
+              "scores": {
+                "maxItems": 0
+              },
+              "reference_index": {
+                "type": "null"
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "outcome": {
+                      "const": "succeeded"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "raw_text": {
+                      "type": "string",
+                      "maxLength": 4096
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "request": {
+                "properties": {
+                  "role": {
+                    "const": "left"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "detected": {
+                "type": "null"
+              },
+              "bbox": {
+                "type": "null"
+              },
+              "scores": {
+                "maxItems": 0
+              },
+              "reference_index": {
+                "type": "null"
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "outcome": {
+                      "const": "succeeded"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "raw_text": {
+                      "type": "string",
+                      "maxLength": 4096
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "request": {
+                "properties": {
+                  "role": {
+                    "const": "right"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "detected": {
+                "type": "null"
+              },
+              "bbox": {
+                "type": "null"
+              },
+              "scores": {
+                "maxItems": 0
+              },
+              "reference_index": {
+                "type": "null"
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "outcome": {
+                      "const": "succeeded"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "raw_text": {
+                      "type": "string",
+                      "maxLength": 4096
+                    },
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "request": {
+                "properties": {
+                  "role": {
+                    "const": "visual"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "raw_text": {
+                "type": "null"
+              },
+              "confidence": {
+                "type": "null"
+              },
+              "detected": {
+                "type": "null"
+              },
+              "bbox": {
+                "type": "null"
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "outcome": {
+                      "const": "succeeded"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "scores": {
+                      "minItems": 1
+                    },
+                    "reference_index": {
+                      "$ref": "#/$defs/reference_index"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "request": {
+                "properties": {
+                  "role": {
+                    "const": "marker"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "raw_text": {
+                "type": "null"
+              },
+              "scores": {
+                "maxItems": 0
+              },
+              "reference_index": {
+                "type": "null"
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "outcome": {
+                      "const": "succeeded"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "confidence": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "detected": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "vehicle-mohamed-lpr-v3"
+        },
+        "kind": {
+          "const": "request"
+        },
+        "body": {
+          "$ref": "#/$defs/request"
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "body"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "vehicle-mohamed-lpr-v3"
+        },
+        "kind": {
+          "const": "result"
+        },
+        "body": {
+          "$ref": "#/$defs/result"
+        }
+      },
+      "required": [
+        "version",
+        "kind",
+        "body"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

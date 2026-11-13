@@ -1,114 +1,153 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import "./App.css";
+import { cleanupLabel, holdsActiveSlot } from "./runLifecycle.js";
+import { cropPath, plateReasonLabel, sourceFrame } from "./cropEvidence.js";
+import { samplingDefaults, validInterval, samplingLabel } from "./frameSampling.js";
 
-const API = (import.meta.env.VITE_API_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
-const apiUrl = (path) => `${API}${path}`;
+// The dev server proxies API requests so one SSH forward serves the console.
+// Production builds retain the configured deployment API origin.
+const API = (import.meta.env.DEV ? "" : (import.meta.env.VITE_API_URL || "")).replace(/\/$/, "");
+const endpoint = (path) => `${API}/api/t1/runs/${path}`;
+const label = (value) => value ? value.replaceAll("_", " ").replace(/\b\w/g, (c) => c.toUpperCase()) : "Unknown";
+const deliveryLabel = { not_configured: "Not configured", not_attempted: "Not attempted", acknowledged: "Acknowledged", committed: "Committed", no_deliveries: "No deliveries", pending: "Pending", disabled: "Disabled" };
 
-function Metric({ label, value }) {
-  return <div className="metric"><span>{label}</span><strong>{value ?? "—"}</strong></div>;
+function Brand({ result }) {
+  const status = result?.status;
+  const names = { disabled: "Disabled", unknown: "Unknown", timed_out: "Timed out", malformed: "Unavailable", failed: "Unavailable", execution_uncertain: "Uncertain" };
+  const make = result?.make;
+  const name = status === "accepted" ? (["bmw", "gmc", "mg", "byd"].includes(make) ? make.toUpperCase() : label(make)) : (names[status] || "Pending");
+  return <div className="brand-result"><strong>{name}</strong>{status !== "disabled" && <span className="review-tag">Review only</span>}</div>;
 }
 
-function ResultsTable({ rows = [] }) {
-  if (!rows.length) return <div className="empty">Recognized plates will appear here.</div>;
-  return <div className="table-wrap"><table><thead><tr><th>Track</th><th>Plate</th><th>Category</th><th>Confidence</th><th>Status</th></tr></thead><tbody>
-    {rows.map((row) => <tr key={row.track_id}><td>#{row.track_id}</td><td className="plate">{row.plate_text || row.text || "Pending"}</td><td>{row.plate_category || row.category}</td><td>{Math.round((row.confidence || 0) * 100)}%</td><td><span className={`tag ${row.status}`}>{row.status}</span></td></tr>)}
-  </tbody></table></div>;
+function TrackCrop({ runId, trackId, kind, crop }) {
+  const path = cropPath(runId, trackId, kind, crop);
+  const [failedPath, setFailedPath] = useState(null);
+  const available = path && failedPath !== path;
+  const origin = kind === "plate" ? "Selected plate" : crop?.source === "manufacturer" ? "Manufacturer input" : "Vehicle observation";
+  return <div className={`track-crop ${kind}`}>
+    {available ? <img src={`${API}${path}`} alt={`${origin} crop for vehicle track ${trackId}`} loading="lazy" onError={() => setFailedPath(path)} /> : <span className="crop-missing">Crop unavailable</span>}
+    {available && <small>{origin}</small>}<small>{sourceFrame(crop?.frame)}</small>
+  </div>;
+}
+
+function PlateCrop({ row }) {
+  const plate = row.plate;
+  if (cropPath(row.run_id, row.track_id, "plate", plate.crop)) return <TrackCrop runId={row.run_id} trackId={row.track_id} kind="plate" crop={plate.crop} />;
+  return <div className="plate-crop-evidence"><span>{plateReasonLabel(plate)}</span><small>{sourceFrame(plate.diagnostic?.frame)}</small></div>;
 }
 
 function App() {
-  const [mode, setMode] = useState("video");
-  const [backend, setBackend] = useState("checking");
+  const [kind, setKind] = useState("mp4");
   const [file, setFile] = useState(null);
-  const [dragging, setDragging] = useState(false);
-  const [maxFrames, setMaxFrames] = useState("");
-  const [videoBusy, setVideoBusy] = useState(false);
-  const [videoResult, setVideoResult] = useState(null);
-  const [colorFile, setColorFile] = useState(null);
-  const [colorBusy, setColorBusy] = useState(false);
-  const [colorResult, setColorResult] = useState(null);
-  const [classFile, setClassFile] = useState(null);
-  const [classBusy, setClassBusy] = useState(false);
-  const [classResult, setClassResult] = useState(null);
-  const [rtsp, setRtsp] = useState({ status: "idle", results: [] });
-  const [rtspForm, setRtspForm] = useState({ url: "", camera_id: "entrance-1", max_seconds: "", record: true });
+  const [uri, setUri] = useState("");
+  const [transport, setTransport] = useState("tcp");
+  const [manufacturer, setManufacturer] = useState(false);
+  const [intervals, setIntervals] = useState(samplingDefaults);
+  const sampleEvery = intervals[kind];
+  const [maxSeconds, setMaxSeconds] = useState("");
+  const [runs, setRuns] = useState([]);
+  const [selected, setSelected] = useState("");
+  const [backend, setBackend] = useState("checking");
+  const [stack, setStack] = useState(null);
+  const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const inputRef = useRef(null);
+  const [previewFailed, setPreviewFailed] = useState(false);
+  const run = runs.find((r) => r.run_id === selected) || (!selected ? runs[0] : null);
+  const active = runs.find(holdsActiveSlot);
 
   useEffect(() => {
-    axios.get(apiUrl("/api/license-plate/health/"))
-      .then(() => setBackend("online")).catch(() => setBackend("offline"));
+    const controller = new AbortController();
+    let alive = true;
+    async function poll() {
+      try {
+        const response = await fetch(endpoint(""), { signal: controller.signal, cache: "no-store" });
+        if (!response.ok) throw new Error("backend unavailable");
+        const data = await response.json();
+        const stackResponse = await fetch(`${API}/api/t1/stack/`, { signal: controller.signal, cache: "no-store" });
+        const stackData = stackResponse.ok ? await stackResponse.json() : null;
+        if (alive) { setRuns(data.runs); setBackend("online"); setStack(stackData); }
+      } catch { if (alive) setBackend("offline"); }
+    }
+    poll();
+    const timer = setInterval(poll, 900);
+    return () => { alive = false; controller.abort(); clearInterval(timer); };
   }, []);
-  useEffect(() => {
-    if (mode !== "rtsp") return undefined;
-    const poll = () => axios.get(apiUrl("/api/license-plate/rtsp/"))
-      .then(({ data }) => setRtsp(data)).catch(() => {});
-    poll(); const id = setInterval(poll, 1200); return () => clearInterval(id);
-  }, [mode]);
 
-  const videoRows = useMemo(() => Object.entries(videoResult?.tracks || {}).map(([track_id, row]) => ({ track_id, ...row })), [videoResult]);
-  async function analyzeVideo(event) {
+  async function start(event) {
     event.preventDefault();
-    if (!file) return setError("Choose a video before starting the analysis.");
-    setError(""); setVideoBusy(true); setVideoResult(null);
-    const data = new FormData(); data.append("video", file); if (maxFrames) data.append("max_frames", maxFrames);
-    try { setVideoResult((await axios.post(apiUrl("/api/license-plate/analyze/"), data)).data); }
-    catch (requestError) { setError(requestError.response?.data?.error || "The video analysis failed."); }
-    finally { setVideoBusy(false); }
+    if (kind === "mp4" && !file) return setError("Choose an MP4 before starting.");
+    if (kind === "rtsp" && !uri) return setError("Enter the camera URI for this Start.");
+    if (!validInterval(sampleEvery)) return setError("Analyze every Nth frame must be an integer of at least 1.");
+    setBusy(true); setError(""); setPreviewFailed(false);
+    let body;
+    const headers = {};
+    if (kind === "mp4") {
+      body = new FormData();
+      body.append("video", file); body.append("source_kind", kind);
+      body.append("manufacturer_enabled", String(manufacturer));
+      body.append("sample_every", String(Number(sampleEvery)));
+      if (maxSeconds !== "") body.append("max_seconds", String(maxSeconds));
+    } else {
+      headers["Content-Type"] = "application/json";
+      body = JSON.stringify({ source_kind: kind, rtsp_uri: uri, rtsp_transport: transport, manufacturer_enabled: manufacturer, sample_every: Number(sampleEvery), max_seconds: maxSeconds === "" ? null : Number(maxSeconds) });
+    }
+    // The URI is transient, body-only, and is never persisted in browser storage.
+    setUri("");
+    try {
+      const response = await fetch(endpoint(""), { method: "POST", headers, body });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Could not start the run.");
+      setRuns((previous) => [data, ...previous.filter((r) => r.run_id !== data.run_id)]);
+      setSelected(data.run_id);
+    } catch (failure) { setError(failure.message || "Could not start. Check the input, backend connection, and run limits."); }
+    finally { setBusy(false); }
   }
-  async function startRtsp(event) {
-    event.preventDefault(); setError("");
-    try { setRtsp((await axios.post(apiUrl("/api/license-plate/rtsp/"), rtspForm)).data); }
-    catch (requestError) { setError(requestError.response?.data?.error || "Could not start the camera."); }
+  async function stop() {
+    if (!run) return;
+    setBusy(true); setError("");
+    try {
+      const response = await fetch(endpoint(`${run.run_id}/stop/`), { method: "POST" });
+      if (!response.ok) throw new Error("stop failed");
+      const data = await response.json();
+      setRuns((previous) => previous.map((r) => r.run_id === data.run_id ? data : r));
+    } catch { setError("Could not request Stop. The run status will continue updating."); }
+    finally { setBusy(false); }
   }
-  async function stopRtsp() { setRtsp((await axios.post(apiUrl("/api/license-plate/rtsp/stop/"))).data); }
-  async function analyzeColor(event) {
-    event.preventDefault(); if (!colorFile) return setError("Choose a video before starting colour analysis.");
-    setError(""); setColorBusy(true); setColorResult(null); const data = new FormData(); data.append("video", colorFile);
-    try { setColorResult((await axios.post(apiUrl("/api/color/analyze/"), data)).data); }
-    catch (requestError) { setError(requestError.response?.data?.error || "The colour analysis failed."); }
-    finally { setColorBusy(false); }
-  }
-  async function analyzeClassification(event) {
-    event.preventDefault(); if (!classFile) return setError("Choose a video before starting classification.");
-    setError(""); setClassBusy(true); setClassResult(null); const data = new FormData(); data.append("video", classFile);
-    try { setClassResult((await axios.post(apiUrl("/api/classification-manufacturer/analyze/"), data)).data); }
-    catch (requestError) { setError(requestError.response?.data?.error || "The classification failed."); }
-    finally { setClassBusy(false); }
-  }
-  const preview = rtsp.running || rtsp.processed_frames ? `${apiUrl("/api/license-plate/rtsp/preview/")}?frame=${rtsp.processed_frames || 0}` : "";
-
-  return <div className="shell">
-    <aside><a className="brand" href="#top"><span className="brand-mark">V</span><span>VEHICLE<b>AI</b></span></a>
-      <nav><button className="nav-active"><span>⌁</span> License plates</button><button disabled><span>◇</span> Classification</button><button disabled><span>◐</span> Vehicle color</button></nav>
-      <div className="system"><p>System status</p><div><i className={backend}></i><span>Backend {backend}</span></div><small>License Plate Service</small></div>
+  const rows = run?.rows || [];
+  const running = holdsActiveSlot(run);
+  const cleanup = cleanupLabel(run);
+  return <div className="console-shell">
+    <aside className="sidebar"><a className="wordmark" href="#main"><span className="mark">W</span><span>WAYCON<small>VEHICLE INTELLIGENCE</small></span></a>
+      <div className="workspace-label">WORKSPACE</div><div className="nav-item"><span>▤</span> Vehicle Console <i /></div>
+      <div className="sidebar-note"><span className="signal-dot" /> T1 connected pipeline<p>One input. One vehicle identity.<br />Joined recognition results.</p></div>
+      <div className="backend-state"><span className={`signal-dot ${backend}`} /><span>Backend {backend}</span><small>Local processing</small></div>
     </aside>
-    <main id="top"><header><div><p className="eyebrow">Computer vision workspace</p><h1>License plate recognition</h1><p>Detect, track and recognize Tunisian plates from recorded video or a live camera feed.</p></div><div className="status-pill"><i></i> Service ready</div></header>
-      <div className="tabs"><button className={mode === "video" ? "active" : ""} onClick={() => { setMode("video"); setError(""); }}>License plates</button><button className={mode === "color" ? "active" : ""} onClick={() => { setMode("color"); setError(""); }}>Vehicle colour</button><button className={mode === "classification" ? "active" : ""} onClick={() => { setMode("classification"); setError(""); }}>Classification</button><button className={mode === "rtsp" ? "active" : ""} onClick={() => { setMode("rtsp"); setError(""); }}>Live RTSP camera</button></div>
-      {error && <div className="alert">{error}<button onClick={() => setError("")}>×</button></div>}
-      {mode === "video" ? <>
-        <section className="workspace-card"><div className="card-head"><div><span className="step">01</span><h2>Upload footage</h2></div><p>MP4, MOV, AVI, MKV or WebM</p></div>
-          <form onSubmit={analyzeVideo}><div className={`dropzone ${dragging ? "dragging" : ""} ${file ? "selected" : ""}`} onDragOver={(e) => { e.preventDefault(); setDragging(true); }} onDragLeave={() => setDragging(false)} onDrop={(e) => { e.preventDefault(); setDragging(false); setFile(e.dataTransfer.files[0]); }} onClick={() => inputRef.current?.click()}>
-            <input ref={inputRef} type="file" accept="video/*" hidden onChange={(e) => setFile(e.target.files[0])} /><div className="upload-icon">{file ? "✓" : "↑"}</div><strong>{file ? file.name : "Drop your video here"}</strong><span>{file ? `${(file.size / 1048576).toFixed(1)} MB · Ready to process` : "or click to browse from your computer"}</span></div>
-            <div className="controls"><label><span>Frame limit <em>optional</em></span><input type="number" min="1" placeholder="Process entire video" value={maxFrames} onChange={(e) => setMaxFrames(e.target.value)} /></label><button className="primary" disabled={!file || videoBusy}>{videoBusy ? <><b className="spinner"></b> Analyzing…</> : "Run recognition →"}</button></div></form>
-        </section>
-        {videoResult && <section className="results"><div className="results-head"><div><p className="eyebrow">Analysis complete</p><h2>Recognition results</h2></div><a className="secondary" href={apiUrl(videoResult.output_video_url)} target="_blank" rel="noreferrer">Open in new tab ↗</a></div><div className="metrics"><Metric label="Frames processed" value={videoResult.frames} /><Metric label="Unique tracks" value={videoResult.unique_tracks} /><Metric label="Plates recognized" value={videoResult.recognized_tracks} /><Metric label="Processing FPS" value={videoResult.processing_fps} /></div><div className="video-player"><video controls playsInline preload="metadata" src={apiUrl(videoResult.output_video_url)}><track kind="captions" /><p>Your browser cannot play this video. <a href={apiUrl(videoResult.output_video_url)}>Open the annotated video</a>.</p></video></div><ResultsTable rows={videoRows} /></section>}
-      </> : mode === "color" ? <>
-        <section className="workspace-card"><div className="card-head"><div><span className="step">01</span><h2>Upload vehicle footage</h2></div><p>MP4, MOV, AVI, MKV or WebM</p></div>
-          <form onSubmit={analyzeColor}><div className={`dropzone ${colorFile ? "selected" : ""}`} onClick={() => document.getElementById("color-file")?.click()}><input id="color-file" type="file" accept="video/*" hidden onChange={(e) => setColorFile(e.target.files[0])} /><div className="upload-icon">{colorFile ? "✓" : "↑"}</div><strong>{colorFile ? colorFile.name : "Drop your video here"}</strong><span>{colorFile ? "Ready to estimate vehicle colours" : "or click to browse from your computer"}</span></div><div className="controls"><span className="helper">Tracks vehicles and estimates dominant exterior colour over time.</span><button className="primary" disabled={!colorFile || colorBusy}>{colorBusy ? "Analyzing…" : "Estimate colours →"}</button></div></form>
-        </section>
-        {colorResult && <section className="results"><div className="results-head"><div><p className="eyebrow">Analysis complete</p><h2>Vehicle colour results</h2></div><a className="secondary" href={apiUrl(colorResult.output_video_url)} target="_blank" rel="noreferrer">Open annotated video ↗</a></div><div className="metrics"><Metric label="Frames processed" value={colorResult.frames} /><Metric label="Vehicles tracked" value={colorResult.vehicles?.length || 0} /><Metric label="Pipeline" value="HSV + temporal" /><Metric label="Output" value="Ready" /></div><div className="video-player"><video controls playsInline preload="metadata" src={apiUrl(colorResult.output_video_url)} /></div><ResultsTable rows={(colorResult.vehicles || []).map((item) => ({ ...item, plate_text: item.colour, plate_category: item.type, confidence: item.colour_confidence }))} /></section>}
-      </> : mode === "classification" ? <>
-        <section className="workspace-card"><div className="card-head"><div><span className="step">01</span><h2>Upload vehicle footage</h2></div><p>MP4, MOV, AVI, MKV or WebM</p></div>
-          <form onSubmit={analyzeClassification}><div className={`dropzone ${classFile ? "selected" : ""}`} onClick={() => document.getElementById("classification-file")?.click()}><input id="classification-file" type="file" accept="video/*" hidden onChange={(e) => setClassFile(e.target.files[0])} /><div className="upload-icon">{classFile ? "✓" : "↑"}</div><strong>{classFile ? classFile.name : "Drop your video here"}</strong><span>{classFile ? "Ready to classify vehicle types" : "or click to browse from your computer"}</span></div><div className="controls"><span className="helper">Detects and tracks cars, vans, buses, trucks, motorcycles and bicycles.</span><button className="primary" disabled={!classFile || classBusy}>{classBusy ? "Analyzing…" : "Classify vehicles →"}</button></div></form>
-        </section>
-        {classResult && <section className="results"><div className="results-head"><div><p className="eyebrow">Analysis complete</p><h2>Vehicle classification results</h2></div><a className="secondary" href={apiUrl(classResult.output_video_url)} target="_blank" rel="noreferrer">Open annotated video ↗</a></div><div className="metrics"><Metric label="Frames processed" value={classResult.frames_processed} /><Metric label="Vehicles tracked" value={classResult.tracks_detected} /><Metric label="Events" value={classResult.events?.length || 0} /><Metric label="Processing time" value={`${classResult.processing_seconds || 0}s`} /></div><div className="video-player"><video controls playsInline preload="metadata" src={apiUrl(classResult.output_video_url)} /></div><ResultsTable rows={(classResult.vehicles || []).map((item) => ({ ...item, plate_text: item.vehicle_type, plate_category: "vehicle", confidence: item.type_confidence, status: "final" }))} /></section>}
-      </> : <>
-        <section className="rtsp-grid"><div className="workspace-card camera-config"><div className="card-head"><div><span className="step">01</span><h2>Camera connection</h2></div><span className={`live-state ${rtsp.status}`}>{rtsp.status}</span></div>
-          <form onSubmit={startRtsp}><label><span>RTSP URL</span><input required type="password" autoComplete="off" placeholder="rtsp://user:password@camera:554/stream" value={rtspForm.url} onChange={(e) => setRtspForm({ ...rtspForm, url: e.target.value })} /></label><div className="form-row"><label><span>Camera ID</span><input value={rtspForm.camera_id} onChange={(e) => setRtspForm({ ...rtspForm, camera_id: e.target.value })} /></label><label><span>Run time <em>seconds, optional</em></span><input type="number" min="1" placeholder="Unlimited" value={rtspForm.max_seconds} onChange={(e) => setRtspForm({ ...rtspForm, max_seconds: e.target.value })} /></label></div><label className="checkbox"><input type="checkbox" checked={rtspForm.record} onChange={(e) => setRtspForm({ ...rtspForm, record: e.target.checked })} /><span>Record annotated stream</span></label><div className="camera-actions"><button className="primary" disabled={rtsp.running}>Connect camera →</button><button type="button" className="danger" disabled={!rtsp.running} onClick={stopRtsp}>Stop session</button></div></form>
-        </div><div className="monitor"><div className="monitor-bar"><span><i className={rtsp.running ? "pulse" : ""}></i>{rtsp.camera_id || "Camera preview"}</span><small>{rtsp.processed_frames || 0} frames</small></div>{preview ? <img src={preview} alt="Live annotated camera feed" onError={(e) => { e.currentTarget.style.visibility = "hidden"; }} onLoad={(e) => { e.currentTarget.style.visibility = "visible"; }} /> : <div className="no-signal"><span>⌁</span><strong>No camera connected</strong><small>Your annotated feed will appear here</small></div>}</div></section>
-        <section className="results live-results"><div className="results-head"><div><p className="eyebrow">Live detections</p><h2>Plate activity</h2></div>{rtsp.recording_url && <a className="secondary" href={apiUrl(rtsp.recording_url)}>Open recording ↗</a>}</div><div className="metrics"><Metric label="Frames" value={rtsp.processed_frames || 0} /><Metric label="Active tracks" value={rtsp.active_tracks || 0} /><Metric label="Recognized" value={rtsp.recognized_tracks || rtsp.tracks_recognized || 0} /><Metric label="Processing FPS" value={rtsp.processing_fps || 0} /></div><ResultsTable rows={rtsp.results} /></section>
-      </>}
-    </main></div>;
+    <main id="main"><header className="page-header"><div><div className="eyebrow">OPERATIONS / VEHICLES</div><h1>Vehicle Console<span>.</span></h1><p>Start a run. Follow every vehicle from frame to decision.</p></div><span className="environment">T1 · Local</span></header>
+      <div className={stack?.full_stack_ready ? "run-identity" : "error-banner"} role="status" aria-label="Stack readiness">{stack?.full_stack_ready ? "Full stack ready · Disposable DB1 demo writes · Manufacturer review only" : (stack?.error || "Checking full stack readiness…")}</div>
+      <div className="console-layout"><section className="panel source-panel"><div className="panel-title"><span className="step">01</span><h2>Input & controls</h2></div>
+        <form onSubmit={start}><div className="source-tabs" role="tablist" aria-label="Input source"><button type="button" role="tab" aria-selected={kind === "mp4"} className={kind === "mp4" ? "selected" : ""} disabled={!!active} onClick={() => setKind("mp4")}>Recorded MP4</button><button type="button" role="tab" aria-selected={kind === "rtsp"} className={kind === "rtsp" ? "selected" : ""} disabled={!!active} onClick={() => setKind("rtsp")}>RTSP camera</button></div>
+          {kind === "mp4" ? <label className="file-picker"><span className="file-symbol">↥</span><strong>{file?.name || "Choose footage"}</strong><span>{file ? `${(file.size / 1048576).toFixed(1)} MB · MP4` : "Select an MP4 from your computer"}</span><input aria-label="MP4 file" type="file" accept="video/mp4,.mp4" disabled={!!active} onChange={(e) => setFile(e.target.files[0] || null)} /></label> : <div className="camera-input"><label htmlFor="camera-uri">Camera URI</label><input id="camera-uri" aria-label="RTSP URI" required type="password" autoComplete="new-password" spellCheck={false} placeholder="Enter URI for this Start" disabled={!!active} value={uri} onChange={(e) => setUri(e.target.value)} /><p>Sent privately to the backend. Cleared on Start. Enter a new URI for each run.</p><label htmlFor="rtsp-transport">RTSP transport</label><select id="rtsp-transport" aria-label="RTSP transport" value={transport} disabled={!!active} onChange={(e) => setTransport(e.target.value)}><option value="tcp">TCP</option><option value="udp">UDP</option></select></div>}
+          <div className="run-limits"><label>Analyze every Nth frame<input aria-label="Analyze every Nth frame" type="number" min="1" step="1" required value={sampleEvery} disabled={!!active} onChange={(e) => setIntervals({ ...intervals, [kind]: e.target.value })} /></label><label>Timeout · optional seconds<input aria-label="Timeout" type="number" min="1" step="1" placeholder="No timeout" value={maxSeconds} disabled={!!active} onChange={(e) => setMaxSeconds(e.target.value)} /></label></div>
+          <div className="recognition-option"><div><label htmlFor="manufacturer-toggle">Manufacturer recognition</label><small>Local model · predictions are review only</small></div><input id="manufacturer-toggle" type="checkbox" role="switch" checked={manufacturer} disabled={!!active} onChange={(e) => setManufacturer(e.target.checked)} /></div>
+          <div className="action-row"><button className="start-button" type="submit" disabled={busy || !!active || backend !== "online" || (stack?.mode === "fixture" && !stack.full_stack_ready) || (kind === "mp4" && !file)}>▶ Start run</button><button className="stop-button" type="button" onClick={stop} disabled={busy || !running}>■ Stop</button></div>
+          <p className="bounded-note">MP4 runs through EOF. Stop or an optional timeout ends a partial run.</p>
+        </form>
+      </section>
+      <section className="panel preview-panel"><div className="panel-title"><span className="step">02</span><h2>Backend preview</h2><span className={`run-badge ${run?.status || "idle"}`}>{label(run?.status || "idle")}</span></div>
+        <div className="preview-stage">{run?.preview_revision > 0 && !previewFailed ? <img key={run.run_id} src={endpoint(`${run.run_id}/preview/?revision=${run.preview_revision}`)} alt={`Backend frame preview for run ${run.run_id}`} onError={() => setPreviewFailed(true)} /> : <div className="preview-empty"><span>⌗</span><strong>{running ? "Preparing your feed" : "Ready when you are"}</strong><p>{running ? run.phase : "Your backend frame preview appears here after Start."}</p></div>}<div className="preview-caption"><span>{run ? `${run.source_kind.toUpperCase()} · ${run.source_kind === "rtsp" ? "Live source frames" : "Backend frames"}` : "NO ACTIVE INPUT"}</span><span>{run ? `${run.decoded_frames ?? run.frames} decoded · ${run.analyzed_frames ?? run.frames} analyzed` : "—"}</span></div></div>
+        <div className="run-progress" aria-live="polite"><span className={running ? "activity-dot" : ""} />{run?.phase || "Choose an input to begin."}</div>
+      </section></div>
+      {run && <div className="run-identity" aria-label="Frame counters"><span>Decoded: {run.decoded_frames ?? run.frames}</span><span>Analyzed: {run.analyzed_frames ?? run.frames}</span><span>Sampling skips: {run.sampling_skips ?? "Unknown (historical)"}</span>{run.source_kind === "rtsp" && <span>Overload drops: {run.overload_drops ?? "Unknown (historical)"}</span>}<span>{run.sample_every ? `Every ${run.sample_every} frame(s)` : "Historical frame-limit run"}</span><span>{run.end_reason ? `${run.full_video_complete ? "Full video complete" : "Partial / stream ended"} · ${label(run.end_reason)}` : ""}</span></div>}
+      {error && <div className="error-banner" role="alert">{error}<button aria-label="Dismiss error" onClick={() => setError("")}>×</button></div>}
+      {run?.error_code && <div className="error-banner" role="alert">{run.error_code === "input_unavailable" ? "The input could not be opened. Check the camera connection and start a new run." : "The backend could not finish this run. Its status and completed results are retained."}</div>}
+      {run?.error_code === "db1_delivery_failed" && <div className="error-banner" role="alert">DB1 delivery failed. The full stack is not ready. Commit and ACK states show the last confirmed boundary.</div>}
+      <section className="delivery-strip" aria-label="Delivery states"><div><span>POSTGRESQL COMMIT</span><strong>{deliveryLabel[run?.delivery.postgres_commit] || "Not configured"}</strong></div><div><span>REDIS DB1 ACK</span><strong>{deliveryLabel[run?.delivery.redis_ack] || "Not attempted"}</strong></div><div><span>MANUFACTURER REVIEW HANDOFF</span><strong>{run ? deliveryLabel[run.delivery.review_ack] : "—"}</strong></div><p>Recognition and database delivery are separate. Manufacturer predictions remain review only.</p></section>
+      <section className="panel results-panel"><div className="results-heading"><div><div className="eyebrow">JOINED BY VEHICLE TRACK</div><h2>Vehicle activity <span className="count">{rows.length}</span></h2></div><label className="run-select">Run history<select aria-label="Run history" value={run?.run_id || ""} onChange={(e) => { setSelected(e.target.value); setPreviewFailed(false); }}><option value="" disabled>No runs yet</option>{runs.map((r) => <option key={r.run_id} value={r.run_id}>{r.source_kind.toUpperCase()} · {r.run_id.slice(0,8)} · {label(r.status)} · {samplingLabel(r)}</option>)}</select></label></div>
+        {run && <div className="run-identity"><span>RUN</span><code>{run.run_id}</code><span>·</span><span>{new Date(run.started_at).toLocaleString()}</span><span>· Manufacturer {run.manufacturer_enabled ? "on" : "off"} for this run</span></div>}
+        <div className="table-scroll"><table><thead><tr><th>Vehicle track</th><th>Type</th><th>Colour</th><th>Plate decision</th><th>Manufacturer</th><th>PostgreSQL commit</th><th>Redis DB1 ACK</th></tr></thead><tbody>{rows.map((row) => <tr key={`${row.run_id}:${row.track_id}`} data-track-id={row.track_id}><td><strong className="track-id">#{row.track_id}</strong><small>Frames {row.first_frame}–{row.last_frame}</small><TrackCrop runId={row.run_id} trackId={row.track_id} kind="vehicle" crop={row.vehicle_crop} /></td><td>{label(row.vehicle_type)}</td><td><span className="colour-label"><i style={{ background: row.colour.label || "transparent" }} />{label(row.colour.label)}</span><small>{row.colour.status === "undecided" ? "Undecided" : ""}</small></td><td><span className={`decision ${row.plate.status}`}>{label(row.plate.status)}</span>{row.plate.category && <small>{label(row.plate.category)}</small>}<PlateCrop row={row} /></td><td><Brand result={row.manufacturer} /></td><td className="delivery-cell">{deliveryLabel[row.delivery.postgres_commit]}</td><td className="delivery-cell">{deliveryLabel[row.delivery.redis_ack]}</td></tr>)}</tbody></table>{!rows.length && <div className="results-empty"><span>◎</span><h3>{running ? "Following vehicle tracks…" : "No vehicle results yet"}</h3><p>{running ? "Results arrive as the backend closes and joins each vehicle lifetime." : "Run an MP4 or RTSP source to see actual backend decisions."}</p></div>}</div>
+        <footer className="results-footer"><span>One row per vehicle lifetime · No generated confidence scores</span><span role="status" className={cleanup === "Cleanup needs attention" ? "cleanup-warning" : ""}>{cleanup}</span></footer>
+      </section><footer className="page-footer"><span>WAYCON / VEHICLE INTELLIGENCE</span><span>MP4 + RTSP · T1 backend</span></footer>
+    </main>
+  </div>;
 }
 export default App;

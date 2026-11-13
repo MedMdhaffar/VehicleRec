@@ -1,0 +1,6 @@
+{
+  "postgres_mode": "owned",
+  "pg_port": 0,
+  "device": "cuda:0",
+  "expected_gpu": "RTX 5080"
+}

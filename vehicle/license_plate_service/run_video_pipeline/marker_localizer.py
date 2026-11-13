@@ -28,7 +28,8 @@ class MarkerLocalization:
 class TounesMarkerLocalizer:
     """YOLO تونس word localizer using its required direct 512-square stretch."""
 
-    def __init__(self, model_path: str = config.WORD_DETECTOR_PATH):
+    def __init__(self, model_path: str = config.WORD_DETECTOR_PATH, *, device: str | None = None):
+        self.device = device
         self.model_path = str(model_path)
         self._model = None
         self._lock = threading.Lock()
@@ -119,6 +120,7 @@ class TounesMarkerLocalizer:
                         conf=inference_conf,
                         imgsz=config.WORD_IMGSZ,
                         verbose=False,
+                        **({"device": self.device} if self.device is not None else {}),
                     )
                 for index, result in zip(valid_indices, results):
                     batch_output[index] = self._decode(result, batch[index])

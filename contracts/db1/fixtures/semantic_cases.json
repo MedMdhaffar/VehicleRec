@@ -1,0 +1,779 @@
+{
+  "identity": [
+    {
+      "id": "raw_id_reuse_same_epoch_new_lifetime",
+      "lifetimes": [
+        {
+          "epoch": 1,
+          "raw_track_id": 7,
+          "lifetime_sequence": 1
+        },
+        {
+          "epoch": 1,
+          "raw_track_id": 7,
+          "lifetime_sequence": 2
+        }
+      ],
+      "expected_track_ids": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "reconnect_epoch_gets_fresh_id",
+      "lifetimes": [
+        {
+          "epoch": 1,
+          "raw_track_id": 7,
+          "lifetime_sequence": 1
+        },
+        {
+          "epoch": 2,
+          "raw_track_id": 7,
+          "lifetime_sequence": 1
+        }
+      ],
+      "expected_track_ids": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "allocator_continues_from_high_water",
+      "start": 9223372036854775806,
+      "lifetimes": [
+        {
+          "epoch": 9,
+          "raw_track_id": 1,
+          "lifetime_sequence": 1
+        },
+        {
+          "epoch": 9,
+          "raw_track_id": 2,
+          "lifetime_sequence": 1
+        }
+      ],
+      "expected_track_ids": [
+        9223372036854775806,
+        9223372036854775807
+      ]
+    },
+    {
+      "id": "duplicate_lifetime_rejected",
+      "lifetimes": [
+        {
+          "epoch": 1,
+          "raw_track_id": 7,
+          "lifetime_sequence": 1
+        },
+        {
+          "epoch": 1,
+          "raw_track_id": 7,
+          "lifetime_sequence": 1
+        }
+      ],
+      "expected_error": "duplicate raw lifetime"
+    },
+    {
+      "id": "allocator_overflow_rejected",
+      "start": 9223372036854775807,
+      "lifetimes": [
+        {
+          "epoch": 1,
+          "raw_track_id": 7,
+          "lifetime_sequence": 1
+        },
+        {
+          "epoch": 1,
+          "raw_track_id": 8,
+          "lifetime_sequence": 1
+        }
+      ],
+      "expected_error": "exhausted"
+    }
+  ],
+  "association": [
+    {
+      "id": "single_containing_vehicle",
+      "plate_bbox": [
+        40,
+        60,
+        60,
+        70
+      ],
+      "vehicles": [
+        {
+          "track_id": 1,
+          "bbox": [
+            0,
+            0,
+            100,
+            100
+          ]
+        }
+      ],
+      "expected_status": "associated",
+      "expected_track_id": 1
+    },
+    {
+      "id": "inclusive_boundary_and_exact_containment",
+      "plate_bbox": [
+        80,
+        80,
+        100,
+        100
+      ],
+      "vehicles": [
+        {
+          "track_id": 2,
+          "bbox": [
+            0,
+            0,
+            100,
+            100
+          ]
+        }
+      ],
+      "expected_status": "associated",
+      "expected_track_id": 2
+    },
+    {
+      "id": "containment_exactly_threshold",
+      "plate_bbox": [
+        90,
+        80,
+        110,
+        100
+      ],
+      "vehicles": [
+        {
+          "track_id": 2,
+          "bbox": [
+            0,
+            0,
+            106,
+            100
+          ]
+        }
+      ],
+      "expected_status": "associated",
+      "expected_track_id": 2
+    },
+    {
+      "id": "containment_just_below_threshold",
+      "plate_bbox": [
+        90,
+        80,
+        110.0001,
+        100
+      ],
+      "vehicles": [
+        {
+          "track_id": 2,
+          "bbox": [
+            0,
+            0,
+            106,
+            100
+          ]
+        }
+      ],
+      "expected_status": "unassociated",
+      "expected_track_id": null
+    },
+    {
+      "id": "zero_area_plate",
+      "plate_bbox": [
+        50,
+        50,
+        50,
+        60
+      ],
+      "vehicles": [
+        {
+          "track_id": 1,
+          "bbox": [
+            0,
+            0,
+            100,
+            100
+          ]
+        }
+      ],
+      "expected_status": "unassociated",
+      "expected_track_id": null
+    },
+    {
+      "id": "ambiguous_equal_candidates",
+      "plate_bbox": [
+        45,
+        70,
+        55,
+        80
+      ],
+      "vehicles": [
+        {
+          "track_id": 1,
+          "bbox": [
+            0,
+            0,
+            100,
+            100
+          ]
+        },
+        {
+          "track_id": 2,
+          "bbox": [
+            0,
+            0,
+            100,
+            100
+          ]
+        }
+      ],
+      "expected_status": "ambiguous",
+      "expected_track_id": null
+    },
+    {
+      "id": "winner_margin_exact_default_boundary_accepted",
+      "plate_bbox": [
+        45,
+        70,
+        55,
+        80
+      ],
+      "vehicles": [
+        {
+          "track_id": 1,
+          "bbox": [
+            0,
+            0,
+            100,
+            100
+          ]
+        },
+        {
+          "track_id": 2,
+          "bbox": [
+            -229.66629547095766,
+            0,
+            100,
+            100
+          ]
+        }
+      ],
+      "expected_status": "associated",
+      "expected_track_id": 1
+    }
+  ],
+  "plate_selection": [
+    {
+      "id": "skip_higher_score_without_executed_model",
+      "attempts": [
+        {
+          "attempt_id": "a",
+          "submission_ordinal": 1,
+          "submitted": true,
+          "associated": true,
+          "crop_accepted": true,
+          "crop_score": 1000,
+          "ts": "2026-10-08T10:00:00Z",
+          "executed_model": null
+        },
+        {
+          "attempt_id": "b",
+          "submission_ordinal": 2,
+          "submitted": true,
+          "associated": true,
+          "crop_accepted": true,
+          "crop_score": 900,
+          "ts": "2026-10-08T10:00:01Z",
+          "executed_model": {
+            "model_name": "plate_ocr",
+            "version": 1,
+            "task": "ocr"
+          }
+        }
+      ],
+      "expected_attempt_id": "b",
+      "expected_omission": null
+    },
+    {
+      "id": "highest_eligible_score",
+      "attempts": [
+        {
+          "attempt_id": "a",
+          "submission_ordinal": 1,
+          "submitted": true,
+          "associated": true,
+          "crop_accepted": true,
+          "crop_score": 800,
+          "ts": "2026-10-08T10:00:00Z",
+          "executed_model": {
+            "model_name": "plate_ocr",
+            "version": 1,
+            "task": "ocr"
+          }
+        },
+        {
+          "attempt_id": "b",
+          "submission_ordinal": 2,
+          "submitted": true,
+          "associated": true,
+          "crop_accepted": true,
+          "crop_score": 900,
+          "ts": "2026-10-08T10:00:01Z",
+          "executed_model": {
+            "model_name": "plate_agent_reference",
+            "version": 1,
+            "task": "vlm"
+          }
+        }
+      ],
+      "expected_attempt_id": "b",
+      "expected_omission": null
+    },
+    {
+      "id": "tie_uses_earliest_submission",
+      "attempts": [
+        {
+          "attempt_id": "a",
+          "submission_ordinal": 1,
+          "submitted": true,
+          "associated": true,
+          "crop_accepted": true,
+          "crop_score": 900,
+          "ts": "2026-10-08T10:00:00Z",
+          "executed_model": {
+            "model_name": "plate_ocr",
+            "version": 1,
+            "task": "ocr"
+          }
+        },
+        {
+          "attempt_id": "b",
+          "submission_ordinal": 2,
+          "submitted": true,
+          "associated": true,
+          "crop_accepted": true,
+          "crop_score": 900,
+          "ts": "2026-10-08T10:00:01Z",
+          "executed_model": {
+            "model_name": "plate_agent_reference",
+            "version": 1,
+            "task": "vlm"
+          }
+        }
+      ],
+      "expected_attempt_id": "a",
+      "expected_omission": null
+    },
+    {
+      "id": "nothing_with_truthful_model",
+      "attempts": [
+        {
+          "attempt_id": "a",
+          "submission_ordinal": 1,
+          "submitted": true,
+          "associated": true,
+          "crop_accepted": true,
+          "crop_score": 900,
+          "ts": "2026-10-08T10:00:00Z",
+          "executed_model": null
+        }
+      ],
+      "expected_attempt_id": null,
+      "expected_omission": "failure_before_model"
+    },
+    {
+      "id": "null_quality_executed",
+      "attempts": [
+        {
+          "attempt_id": "a",
+          "submission_ordinal": 1,
+          "submitted": true,
+          "associated": true,
+          "crop_accepted": true,
+          "crop_score": null,
+          "ts": "2026-10-08T10:00:00Z",
+          "executed_model": {
+            "model_name": "plate_ocr",
+            "version": 1,
+            "task": "ocr"
+          }
+        },
+        {
+          "attempt_id": "b",
+          "submission_ordinal": 2,
+          "submitted": true,
+          "associated": true,
+          "crop_accepted": true,
+          "crop_score": null,
+          "ts": "2026-10-08T10:00:01Z",
+          "executed_model": {
+            "model_name": "plate_agent_reference",
+            "version": 1,
+            "task": "vlm"
+          }
+        }
+      ],
+      "expected_attempt_id": "a",
+      "expected_omission": null
+    },
+    {
+      "id": "measured_zero_preferred",
+      "attempts": [
+        {
+          "attempt_id": "a",
+          "submission_ordinal": 1,
+          "submitted": true,
+          "associated": true,
+          "crop_accepted": true,
+          "crop_score": null,
+          "ts": "2026-10-08T10:00:00Z",
+          "executed_model": {
+            "model_name": "plate_ocr",
+            "version": 1,
+            "task": "ocr"
+          }
+        },
+        {
+          "attempt_id": "b",
+          "submission_ordinal": 2,
+          "submitted": true,
+          "associated": true,
+          "crop_accepted": true,
+          "crop_score": 0,
+          "ts": "2026-10-08T10:00:01Z",
+          "executed_model": {
+            "model_name": "plate_agent_reference",
+            "version": 1,
+            "task": "vlm"
+          }
+        }
+      ],
+      "expected_attempt_id": "b",
+      "expected_omission": null
+    },
+    {
+      "id": "invalid_quality_skipped",
+      "attempts": [
+        {
+          "attempt_id": "a",
+          "submission_ordinal": 1,
+          "submitted": true,
+          "associated": true,
+          "crop_accepted": true,
+          "crop_score": -1,
+          "ts": "2026-10-08T10:00:00Z",
+          "executed_model": {
+            "model_name": "plate_ocr",
+            "version": 1,
+            "task": "ocr"
+          }
+        },
+        {
+          "attempt_id": "b",
+          "submission_ordinal": 2,
+          "submitted": true,
+          "associated": true,
+          "crop_accepted": true,
+          "crop_score": null,
+          "ts": "2026-10-08T10:00:01Z",
+          "executed_model": {
+            "model_name": "plate_agent_reference",
+            "version": 1,
+            "task": "vlm"
+          }
+        }
+      ],
+      "expected_attempt_id": "b",
+      "expected_omission": null
+    }
+  ],
+  "time": [
+    {
+      "id": "africa_tunis_crosses_midnight",
+      "ts": "2026-10-08T23:30:00Z",
+      "timezone": "Africa/Tunis",
+      "expected_date_key": 20261009
+    },
+    {
+      "id": "vehicle_earlier_own_date",
+      "ts": "2026-10-08T22:00:00Z",
+      "timezone": "Africa/Tunis",
+      "expected_date_key": 20261008
+    },
+    {
+      "id": "dst_zone_before_fallback",
+      "ts": "2026-11-01T05:30:00Z",
+      "timezone": "America/New_York",
+      "expected_date_key": 20261101
+    },
+    {
+      "id": "equivalent_timestamp_spellings",
+      "left": "2026-10-08T23:30:00Z",
+      "right": "2026-10-09T00:30:00+01:00",
+      "expected_equivalent": true
+    }
+  ],
+  "clock": [
+    {
+      "id": "normal_paired_delta",
+      "previous_utc": "2026-10-08T10:00:00Z",
+      "previous_monotonic": 100,
+      "current_utc": "2026-10-08T10:00:10Z",
+      "current_monotonic": 110,
+      "expected_discontinuity": false
+    },
+    {
+      "id": "exact_five_second_boundary_allowed",
+      "previous_utc": "2026-10-08T10:00:00Z",
+      "previous_monotonic": 100,
+      "current_utc": "2026-10-08T10:00:15Z",
+      "current_monotonic": 110,
+      "expected_discontinuity": false
+    },
+    {
+      "id": "above_five_second_boundary_rejected",
+      "previous_utc": "2026-10-08T10:00:00Z",
+      "previous_monotonic": 100,
+      "current_utc": "2026-10-08T10:00:15.000001Z",
+      "current_monotonic": 110,
+      "expected_discontinuity": true
+    },
+    {
+      "id": "utc_regression",
+      "previous_utc": "2026-10-08T10:00:00Z",
+      "previous_monotonic": 100,
+      "current_utc": "2026-10-08T09:59:59Z",
+      "current_monotonic": 101,
+      "expected_discontinuity": true
+    },
+    {
+      "id": "monotonic_regression",
+      "previous_utc": "2026-10-08T10:00:00Z",
+      "previous_monotonic": 100,
+      "current_utc": "2026-10-08T10:00:01Z",
+      "current_monotonic": 99,
+      "expected_discontinuity": true
+    }
+  ],
+  "retry": [
+    {
+      "id": "reordered_keys_equivalent_numbers_and_timestamps",
+      "base_case": "plate_read_local_selected_attempt",
+      "variant": "reorder_equivalent",
+      "expected_natural_equal": true,
+      "expected_sql_equal": true,
+      "expected_classification": "identical"
+    },
+    {
+      "id": "explicit_null_vs_missing_conflict",
+      "base_case": "plate_unreadable_truthful_selected_model",
+      "variant": "remove_explicit_null",
+      "expected_natural_equal": false,
+      "expected_sql_equal": true,
+      "expected_classification": "conflict"
+    },
+    {
+      "id": "changed_natural_score_conflict",
+      "base_case": "plate_read_local_selected_attempt",
+      "variant": "change_natural_score",
+      "expected_natural_equal": false,
+      "expected_sql_equal": true,
+      "expected_classification": "conflict"
+    },
+    {
+      "id": "changed_resolved_key_conflict",
+      "base_case": "plate_read_local_selected_attempt",
+      "variant": "change_sql_model_key",
+      "expected_natural_equal": true,
+      "expected_sql_equal": false,
+      "expected_classification": "conflict"
+    }
+  ],
+  "normalization": [
+    {
+      "id": "preserve_grouped_digits_and_marker",
+      "input": " \u0660\u0660\u0661 \u062a\u0648\u0646\u0633 \u0660\u0660\u0660\u0667 ",
+      "expected": "001 \u062a\u0648\u0646\u0633 0007"
+    },
+    {
+      "id": "preserve_punctuation",
+      "input": "ab-\u0660\u0660\u0661",
+      "expected": "AB-001"
+    },
+    {
+      "id": "reject_unreadable_placeholder",
+      "input": "12?34",
+      "expected_error": "placeholder"
+    }
+  ],
+  "omission": [
+    {
+      "id": "no_detection",
+      "state": {
+        "capability": "enabled",
+        "association": null,
+        "detections": 0,
+        "admitted_crops": 0,
+        "models_executed": 0
+      },
+      "expected": "no_detection"
+    },
+    {
+      "id": "rejected_crop",
+      "state": {
+        "capability": "enabled",
+        "association": null,
+        "detections": 2,
+        "admitted_crops": 0,
+        "models_executed": 0
+      },
+      "expected": "rejected_crop"
+    },
+    {
+      "id": "ambiguous_association",
+      "state": {
+        "capability": "enabled",
+        "association": "ambiguous",
+        "detections": 1,
+        "admitted_crops": 1,
+        "models_executed": 0
+      },
+      "expected": "ambiguous_association"
+    },
+    {
+      "id": "unassociated_crop",
+      "state": {
+        "capability": "enabled",
+        "association": "unassociated",
+        "detections": 1,
+        "admitted_crops": 1,
+        "models_executed": 0
+      },
+      "expected": "unassociated_crop"
+    },
+    {
+      "id": "disabled_capability",
+      "state": {
+        "capability": "disabled",
+        "association": null,
+        "detections": 0,
+        "admitted_crops": 0,
+        "models_executed": 0
+      },
+      "expected": "disabled_capability"
+    },
+    {
+      "id": "unsupported_capability",
+      "state": {
+        "capability": "unsupported",
+        "association": null,
+        "detections": 0,
+        "admitted_crops": 0,
+        "models_executed": 0
+      },
+      "expected": "unsupported_capability"
+    },
+    {
+      "id": "failure_before_model",
+      "state": {
+        "capability": "enabled",
+        "association": "associated",
+        "detections": 1,
+        "admitted_crops": 1,
+        "models_executed": 0
+      },
+      "expected": "failure_before_model"
+    }
+  ],
+  "canonical_numbers": [
+    {
+      "id": "distinct_beyond_context",
+      "left": "0.12345678901234567890123456781",
+      "right": "0.12345678901234567890123456782",
+      "equal": false
+    },
+    {
+      "id": "low_precision_exact",
+      "left": "1.234567891",
+      "right": "1.234567892",
+      "equal": false,
+      "precision": 2
+    },
+    {
+      "id": "equivalent_integer",
+      "left": "1",
+      "right": "1.0",
+      "equal": true
+    },
+    {
+      "id": "signed_zero",
+      "left": "-0.00",
+      "right": "0",
+      "equal": true
+    },
+    {
+      "id": "large_bounded_exponent",
+      "left": "1e100000"
+    },
+    {
+      "id": "exponent_limit",
+      "left": "1e100001",
+      "expected_error": "exceeds"
+    },
+    {
+      "id": "digit_limit",
+      "left": "11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+      "expected_error": "exceeds"
+    },
+    {
+      "id": "tiny_bounded_exponent",
+      "left": "1e-100000"
+    },
+    {
+      "id": "negative_exponent_limit",
+      "left": "1e-100001",
+      "expected_error": "exceeds"
+    },
+    {
+      "id": "zero_exponent_limit",
+      "left": "0e100001",
+      "expected_error": "exceeds"
+    }
+  ],
+  "timestamp_precision": [
+    {
+      "id": "six_digits_offset_equivalence",
+      "left": "2026-10-08T10:00:00.123456Z",
+      "right": "2026-10-08T11:00:00.123456+01:00"
+    },
+    {
+      "id": "reject_seven_digits",
+      "left": "2026-10-08T10:00:00.1234567Z",
+      "expected_error": "six fractional"
+    },
+    {
+      "id": "reject_naive",
+      "left": "2026-10-08T10:00:00",
+      "expected_error": "explicit-offset"
+    },
+    {
+      "id": "reject_offset_seconds",
+      "left": "2026-10-08T10:00:00+01:00:01",
+      "expected_error": "explicit-offset"
+    },
+    {
+      "id": "reject_offset_minute_overflow",
+      "left": "2026-10-08T10:00:00+00:99",
+      "expected_error": "explicit-offset"
+    },
+    {
+      "id": "reject_even_zero_seventh_digit",
+      "left": "2026-10-08T10:00:00.0000000Z",
+      "expected_error": "six fractional"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "version": "db1-catalogue-requirements-v0",
+  "status": "review_candidate_not_frozen",
+  "fixture_keys_are_synthetic": true,
+  "provisional_service_configuration": {
+    "association_profile": "vehicle_plate_geometry_v0",
+    "minimum_plate_containment": 0.8,
+    "minimum_winner_margin": 0.1,
+    "containment_weight": 0.7,
+    "distance_weight": 0.3,
+    "empirically_validated": false,
+    "clock_profile": "paired_receipt_clock_v0",
+    "clock_divergence_tolerance_seconds": 5,
+    "supervisor_requirement": false
+  },
+  "shared_classes": [
+    {"name": "bicycle", "class_group": "vehicle", "availability": "seeded", "synthetic_fixture_key": 3101},
+    {"name": "car", "class_group": "vehicle", "availability": "seeded", "synthetic_fixture_key": 3102},
+    {"name": "motorcycle", "class_group": "vehicle", "availability": "seeded", "synthetic_fixture_key": 3103},
+    {"name": "bus", "class_group": "vehicle", "availability": "seeded", "synthetic_fixture_key": 3104},
+    {"name": "truck", "class_group": "vehicle", "availability": "seeded", "synthetic_fixture_key": 3105},
+    {"name": "van", "class_group": "vehicle", "availability": "platform_addition_required", "synthetic_fixture_key": 3106},
+    {"name": "unknown", "class_group": "vehicle", "availability": "platform_addition_required", "synthetic_fixture_key": 3107}
+  ],
+  "vehicle_colours": [
+    {"name": "white", "availability": "seeded", "synthetic_fixture_key": 4101},
+    {"name": "black", "availability": "seeded", "synthetic_fixture_key": 4102},
+    {"name": "red", "availability": "seeded", "synthetic_fixture_key": 4103},
+    {"name": "blue", "availability": "seeded", "synthetic_fixture_key": 4104},
+    {"name": "green", "availability": "seeded", "synthetic_fixture_key": 4105},
+    {"name": "yellow", "availability": "seeded", "synthetic_fixture_key": 4106},
+    {"name": "silver/gray", "availability": "vehicle_catalogue_addition_required", "synthetic_fixture_key": 4107},
+    {"name": "brown/beige", "availability": "vehicle_catalogue_addition_required", "synthetic_fixture_key": 4108},
+    {"name": "orange", "availability": "vehicle_catalogue_addition_required", "synthetic_fixture_key": 4109},
+    {"name": "purple", "availability": "vehicle_catalogue_addition_required", "synthetic_fixture_key": 4110}
+  ],
+  "prohibited_colour_collapses": {
+    "silver/gray": ["grey", "silver"],
+    "brown/beige": ["brown", "beige"]
+  },
+  "plate_categories": [
+    {"producer_name": "private", "db1_seed_candidate": "TN", "mapping_status": "prohibited_without_domain_definition"},
+    {"producer_name": "temporary", "db1_seed_candidate": "RS", "mapping_status": "prohibited_without_domain_definition"},
+    {"producer_name": "foreign", "db1_seed_candidate": "foreign", "mapping_status": "domain_validation_required"},
+    {"producer_name": "diplomatic", "db1_seed_candidate": "diplomatic", "mapping_status": "domain_validation_required"},
+    {"producer_name": "military", "db1_seed_candidate": null, "mapping_status": "domain_definition_and_catalogue_addition_required"},
+    {"producer_name": "other", "db1_seed_candidate": null, "mapping_status": "domain_definition_and_catalogue_addition_required"},
+    {"producer_name": "unknown", "db1_seed_candidate": null, "mapping_status": "store_null_key"}
+  ],
+  "normalization_aliases": {
+    "camper": "van",
+    "cyclist": "bicycle",
+    "tractor": "truck"
+  },
+  "notes": [
+    "Synthetic fixture keys are test-only and are not DB1 seed identities.",
+    "Person is excluded from fact_vehicle even though dim_class contains person.",
+    "A null colour/category key represents no admitted decision; no unknown member is assumed."
+  ]
+}
